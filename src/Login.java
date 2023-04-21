@@ -21,7 +21,7 @@ public class Login extends javax.swing.JFrame {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        System.out.println(admins.get(0).getPassword());
+        System.out.println(admins.get(0).getUsername() + admins.get(0).getPassword());
     }
 
     
