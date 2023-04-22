@@ -1,8 +1,8 @@
-CREATE DATABASE WaterBilling;
+CREATE DATABASE IF NOT EXISTS WaterBilling;
 
 USE WaterBilling;
 
-CREATE TABLE Administrator(
+CREATE TABLE IF NOT EXISTS Administrator(
 	id INT PRIMARY KEY AUTO_INCREMENT, 
 	username VARCHAR(25) UNIQUE, 
 	password VARCHAR(25)
@@ -10,7 +10,7 @@ CREATE TABLE Administrator(
 
 INSERT INTO Administrator (username, password) VALUES ('admin', 'admin');
 
-CREATE TABLE Staff(
+CREATE TABLE IF NOT EXISTS Staff(
 	id INT PRIMARY KEY AUTO_INCREMENT , 
 	username VARCHAR(25) UNIQUE, 
 	password VARCHAR(25)

@@ -21,8 +21,7 @@ public class DatabaseConnection {
             
             scriptRunner.runScript(reader);
             
-        } catch (Exception e){
-            System.out.println("Error");
+        } catch (Exception e){            
         }
         return connect;  
     }
