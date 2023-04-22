@@ -1,8 +1,8 @@
-class AdministratorData {
+class StaffData {
     private int id;
     private String username, password;
 
-    public AdministratorData(int id, String username, String password) {
+    public StaffData(int id, String username, String password) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -33,37 +33,39 @@ class AdministratorData {
     }        
 }
 
-public class Administrator extends javax.swing.JFrame {
+public class Staff extends javax.swing.JFrame {
 
-    public Administrator() {
+    
+    public Staff() {
         initComponents();
     }
+
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        administratorLabel = new javax.swing.JLabel();
+        staffLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        administratorLabel.setText("Administrator");
+        staffLabel.setText("Staff");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(154, 154, 154)
-                .addComponent(administratorLabel)
-                .addContainerGap(173, Short.MAX_VALUE))
+                .addGap(182, 182, 182)
+                .addComponent(staffLabel)
+                .addContainerGap(194, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(27, 27, 27)
-                .addComponent(administratorLabel)
-                .addContainerGap(257, Short.MAX_VALUE))
+                .addGap(22, 22, 22)
+                .addComponent(staffLabel)
+                .addContainerGap(262, Short.MAX_VALUE))
         );
 
         pack();
@@ -71,6 +73,6 @@ public class Administrator extends javax.swing.JFrame {
         
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel administratorLabel;
+    private javax.swing.JLabel staffLabel;
     // End of variables declaration//GEN-END:variables
 }

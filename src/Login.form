@@ -63,14 +63,8 @@
   </Layout>
   <SubComponents>
     <Component class="javax.swing.JTextField" name="passwordTextField">
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="passwordTextFieldActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="usernameTextField">
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="usernameTextFieldActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="loginButton">
       <Properties>
@@ -85,7 +79,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Segoe UI" size="18" style="0"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Sign In"/>
+        <Property name="text" type="java.lang.String" value="Log In"/>
       </Properties>
     </Component>
   </SubComponents>

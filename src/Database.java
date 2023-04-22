@@ -12,7 +12,7 @@ public class Database {
             
             connect = DriverManager.getConnection("jdbc:mysql://localhost/waterbillingsystem", "root", "root");
             
-            System.out.println("Connected");
+            System.out.println("Database Connected");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
