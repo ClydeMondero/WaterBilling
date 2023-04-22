@@ -5,25 +5,31 @@ import java.util.logging.Logger;
 
 public class Login extends javax.swing.JFrame {        
     
-    static ArrayList<Administrator> admins = new ArrayList<>();
+    static ArrayList<AdministratorData> administratorDatas = new ArrayList<>();
+    static ArrayList<StaffData> staffDatas = new ArrayList<>();
     
     public Login() {
         initComponents();
-        Connection connect = Database.connectDatabase();
+        Connection connect = DatabaseConnection.connectDatabase();
         
         
         try {
             Statement statement = connect.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM Administrator");
+            ResultSet selectAdministrator = statement.executeQuery("SELECT * FROM Administrator");
+                        
+            while(selectAdministrator.next()){
+                administratorDatas.add(new AdministratorData(selectAdministrator.getInt("id"), selectAdministrator.getString("username"), selectAdministrator.getString("password")));
+            }
             
-            while(resultSet.next()){
-                admins.add(new Administrator(resultSet.getInt("id"), resultSet.getString("username"), resultSet.getString("password")));
+            ResultSet selectStaff = statement.executeQuery("SELECT * FROM Staff");
+            
+            while(selectStaff.next()){
+                staffDatas.add(new StaffData(selectStaff.getInt("id"), selectStaff.getString("username"), selectStaff.getString("password")));
             }
         } catch (SQLException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        System.out.println(admins.get(0).getUsername() + admins.get(0).getPassword());
+                
     }
 
     
@@ -38,18 +44,6 @@ public class Login extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        passwordTextField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                passwordTextFieldActionPerformed(evt);
-            }
-        });
-
-        usernameTextField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                usernameTextFieldActionPerformed(evt);
-            }
-        });
-
         loginButton.setText("Login");
         loginButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -58,7 +52,7 @@ public class Login extends javax.swing.JFrame {
         });
 
         signInLabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        signInLabel.setText("Sign In");
+        signInLabel.setText("Log In");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -96,20 +90,28 @@ public class Login extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void passwordTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordTextFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_passwordTextFieldActionPerformed
-
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
-        for (int i = 0; i < admins.size(); i++) {
-            if(usernameTextField.getText().equals(admins.get(i).getUsername()) && passwordTextField.getText().equals(admins.get(i).getPassword())){
-                System.out.println("Login Sucess!");
+        boolean loginStatus = false;
+        for (int i = 0; i < administratorDatas.size(); i++) {
+            if(usernameTextField.getText().equals(administratorDatas.get(i).getUsername()) && passwordTextField.getText().equals(administratorDatas.get(i).getPassword())){
+                loginStatus = true;
+                
+                new Administrator().setVisible(true);
             }
         }
+        for (int i = 0; i < staffDatas.size(); i++) {
+            if(usernameTextField.getText().equals(staffDatas.get(i).getUsername()) && passwordTextField.getText().equals(staffDatas.get(i).getPassword())){
+                loginStatus = true;
+                
+                new Staff().setVisible(true);
+            }
+        }
+        if(loginStatus){
+            System.out.println("Login Sucess");
+        }else{
+            System.out.println("Login Failed!");
+        }        
     }//GEN-LAST:event_loginButtonActionPerformed
-    private void usernameTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usernameTextFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_usernameTextFieldActionPerformed
 
     
     public static void main(String args[]) {
