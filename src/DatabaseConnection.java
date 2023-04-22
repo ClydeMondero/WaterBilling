@@ -1,8 +1,8 @@
 import java.io.*;
-import java.nio.file.*;
 import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.ibatis.jdbc.ScriptRunner;
 
 public class DatabaseConnection {
     
@@ -12,14 +12,18 @@ public class DatabaseConnection {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             
-            connect = DriverManager.getConnection("jdbc:mysql://localhost/waterbilling", "root", "root");
+            connect = DriverManager.getConnection("jdbc:mysql://localhost/", "root", "root");                        
             
-            System.out.println("Database Connected");                                                                   
+            System.out.println("Database Connected");  
             
-        } catch (ClassNotFoundException | SQLException ex) {                                
-            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, null, ex);
-        } 
-        
+            ScriptRunner scriptRunner = new ScriptRunner(connect);            
+            Reader reader = new BufferedReader(new FileReader("src/Database.sql"));
+            
+            scriptRunner.runScript(reader);
+            
+        } catch (Exception e){
+            System.out.println("Error");
+        }
         return connect;  
     }
 }

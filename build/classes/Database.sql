@@ -4,7 +4,7 @@ USE WaterBilling;
 
 CREATE TABLE Administrator(
 	id INT PRIMARY KEY AUTO_INCREMENT, 
-	username VARCHAR(25), 
+	username VARCHAR(25) UNIQUE, 
 	password VARCHAR(25)
 );
 
@@ -12,7 +12,7 @@ INSERT INTO Administrator (username, password) VALUES ('admin', 'admin');
 
 CREATE TABLE Staff(
 	id INT PRIMARY KEY AUTO_INCREMENT , 
-	username VARCHAR(25), 
+	username VARCHAR(25) UNIQUE, 
 	password VARCHAR(25)
 );
 
