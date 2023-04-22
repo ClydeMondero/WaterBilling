@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS Administrator(
 	password VARCHAR(25)
 );
 
-INSERT INTO Administrator (username, password) VALUES ('admin', 'admin');
+INSERT IGNORE INTO Administrator (username, password) VALUES ('admin', 'admin');
 
 CREATE TABLE IF NOT EXISTS Staff(
 	id INT PRIMARY KEY AUTO_INCREMENT , 
@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS Staff(
 	password VARCHAR(25)
 );
 
-INSERT INTO Staff (username, password) VALUES ('staff', 'staff');
+INSERT IGNORE INTO Staff (username, password) VALUES ('staff', 'staff');
 
 SELECT * FROM Administrator;
 
