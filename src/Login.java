@@ -10,7 +10,7 @@ public class Login extends javax.swing.JFrame {
     
     public Login() {
         initComponents();
-        Connection connect = Database.connectDatabase();
+        Connection connect = DatabaseConnection.connectDatabase();
         
         
         try {
