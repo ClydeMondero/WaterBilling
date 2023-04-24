@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 public class Login extends javax.swing.JFrame {        
     
@@ -108,9 +109,11 @@ public class Login extends javax.swing.JFrame {
             }
         }
         if(loginStatus){
-            System.out.println("Login Sucess");
+            JOptionPane.showMessageDialog(null, "Login Success!", "Login", JOptionPane.INFORMATION_MESSAGE);
         }else{
-            System.out.println("Login Failed!");
+            JOptionPane.showMessageDialog(null, "Login Failed!", "Login", JOptionPane.WARNING_MESSAGE);
+            usernameTextField.setText("");
+            passwordTextField.setText("");
         }        
     }//GEN-LAST:event_loginButtonActionPerformed
 
