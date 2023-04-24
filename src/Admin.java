@@ -11,9 +11,9 @@ import javax.swing.table.DefaultTableModel;
 
 class AdminData {
     private int id;
-    private String lastName, firstName, middleName, address, phonNumber;
-    
+    private String lastName, firstName, middleName, address, phonNumber;    
     private String username, password;
+    private String status;
 
     public AdminData(int id, String username, String password) {
         this.id = id;
@@ -21,7 +21,8 @@ class AdminData {
         this.password = password;
     }
     
-    public AdminData(int id, String lastName, String firstName, String middleName, String address, String phonNumber, String username, String password) {
+    public AdminData(int id, String lastName, String firstName, String middleName, String address, 
+            String phonNumber, String username, String password, String status) {
         this.id = id;
         this.lastName = lastName;
         this.firstName = firstName;
@@ -30,6 +31,7 @@ class AdminData {
         this.phonNumber = phonNumber;
         this.username = username;
         this.password = password;
+        this.status = status;
     }
 
     public int getId() {
@@ -95,6 +97,14 @@ class AdminData {
 
     public void setPassword(String password) {
         this.password = password;
+    }  
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }        
 }
 
@@ -251,11 +261,11 @@ public class Admin extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Id", "Usename"
+                "Id", "Usename", "Status"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false
+                false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -265,6 +275,7 @@ public class Admin extends javax.swing.JFrame {
         jScrollPane1.setViewportView(adminTable);
         if (adminTable.getColumnModel().getColumnCount() > 0) {
             adminTable.getColumnModel().getColumn(0).setResizable(false);
+            adminTable.getColumnModel().getColumn(2).setResizable(false);
         }
 
         adminUsernameLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -420,7 +431,7 @@ public class Admin extends javax.swing.JFrame {
 
     private void adminSaveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adminSaveButtonActionPerformed
         try {
-            PreparedStatement preparedStatement = connect.prepareStatement("INSERT IGNORE INTO Admin VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            PreparedStatement preparedStatement = connect.prepareStatement("INSERT IGNORE INTO Admin VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
             preparedStatement.setInt(1, Integer.parseInt(adminAccountIdTextField.getText()));
             preparedStatement.setString(2, adminLastNameTextField.getText());
             preparedStatement.setString(3, adminFirstNameTextField.getText());
@@ -429,6 +440,7 @@ public class Admin extends javax.swing.JFrame {
             preparedStatement.setString(6, adminPhoneNumberTextField.getText());
             preparedStatement.setString(7, adminUsernameTextField.getText());
             preparedStatement.setString(8, adminPasswordTextField.getText());
+            preparedStatement.setString(9, "Active");
 
             preparedStatement.executeUpdate();
 
@@ -462,18 +474,21 @@ public class Admin extends javax.swing.JFrame {
             while (selectAdministrator.next()) {
                 adminDatas.add(new AdminData(selectAdministrator.getInt("id"), selectAdministrator.getString("lastname"),
                         selectAdministrator.getString("firstname"), selectAdministrator.getString("middlename"), selectAdministrator.getString("address"),
-                        selectAdministrator.getString("phonenumber"), selectAdministrator.getString("username"), selectAdministrator.getString("password")));
+                        selectAdministrator.getString("phonenumber"), selectAdministrator.getString("username"), selectAdministrator.getString("password"), 
+                        selectAdministrator.getString("status")
+                ));
             }
         } catch (Exception ex) {
         }
         DefaultTableModel model = (DefaultTableModel) adminTable.getModel();
-        Object[] row = new Object[2];
+        Object[] row = new Object[3];
         
         model.setRowCount(0);
         
         for (int i = 0; i < adminDatas.size(); i++) {
             row[0] = adminDatas.get(i).getId();
             row[1] = adminDatas.get(i).getUsername();
+            row[2] = adminDatas.get(i).getStatus();
             model.addRow(row);
         }
     }

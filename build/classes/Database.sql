@@ -10,10 +10,11 @@ CREATE TABLE IF NOT EXISTS Admin(
         address VARCHAR(50),
         phonenumber VARCHAR(25),
 	username VARCHAR(25) UNIQUE, 
-	password VARCHAR(25)
+	password VARCHAR(25),
+        status ENUM('Active', 'Deactivated')
 );
 
-INSERT IGNORE INTO Admin (username, password) VALUES ('admin', 'admin');
+INSERT IGNORE INTO Admin (username, password, status) VALUES ('admin', 'admin', 'Active');
 
 CREATE TABLE IF NOT EXISTS Staff(
 	id INT PRIMARY KEY AUTO_INCREMENT , 
@@ -23,6 +24,6 @@ CREATE TABLE IF NOT EXISTS Staff(
 
 INSERT IGNORE INTO Staff (username, password) VALUES ('staff', 'staff');
 
-SELECT * FROM Administrator;
+SELECT * FROM Admin;
 
 SELECT * FROM Staff;

@@ -95,11 +95,14 @@ public class Login extends javax.swing.JFrame {
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
         boolean loginStatus = false;
         for (int i = 0; i < adminDatas.size(); i++) {
-            if(usernameTextField.getText().equals(adminDatas.get(i).getUsername()) && passwordTextField.getText().equals(adminDatas.get(i).getPassword())){
-                loginStatus = true;
-                this.dispose();
-                new Admin().setVisible(true);
+            if (usernameTextField.getText().equals(adminDatas.get(i).getUsername()) && adminDatas.get(i).getStatus().equals("Active")) {
+                if (usernameTextField.getText().equals(adminDatas.get(i).getUsername()) && passwordTextField.getText().equals(adminDatas.get(i).getPassword())) {
+                    loginStatus = true;
+                    this.dispose();
+                    new Admin().setVisible(true);
+                }
             }
+            
         }
         for (int i = 0; i < staffDatas.size(); i++) {
             if(usernameTextField.getText().equals(staffDatas.get(i).getUsername()) && passwordTextField.getText().equals(staffDatas.get(i).getPassword())){
