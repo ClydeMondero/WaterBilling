@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.PreparedStatement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
@@ -100,28 +101,16 @@ class AdminData {
 public class Admin extends javax.swing.JFrame {
 
     static ArrayList<AdminData> adminDatas = new ArrayList<>();
+    Connection connect = null;
     
     public Admin() {
         initComponents();
 
-        Connection connect = DatabaseConnection.connectDatabase();
-
-        try {
-            Statement statement = connect.createStatement();
-
-            ResultSet selectAdministrator = statement.executeQuery("SELECT * FROM Admin");
-
-            while (selectAdministrator.next()) {
-                adminDatas.add(new AdminData(selectAdministrator.getInt("id"), selectAdministrator.getString("lastname"),
-                        selectAdministrator.getString("firstname"), selectAdministrator.getString("middlename"), selectAdministrator.getString("address"),
-                        selectAdministrator.getString("phonenumber"), selectAdministrator.getString("username"), selectAdministrator.getString("password")));
-            }
-        } catch (Exception ex) {
-        }
+        connect = DatabaseConnection.connectDatabase();       
         
-        showDataInTable();
+        showDataAdminTable();
         
-        accountIdTextField.setText(Integer.toString(adminDatas.get(adminDatas.size()-1).getId() + 1));
+        adminAccountIdTextField.setText(Integer.toString(adminDatas.get(adminDatas.size()-1).getId() + 1));
     }           
     
     @SuppressWarnings("unchecked")
@@ -129,34 +118,34 @@ public class Admin extends javax.swing.JFrame {
     private void initComponents() {
 
         adminTabbedPane = new javax.swing.JTabbedPane();
-        homePane = new javax.swing.JPanel();
-        billingPane = new javax.swing.JTabbedPane();
-        clientPane = new javax.swing.JTabbedPane();
-        staffPane = new javax.swing.JTabbedPane();
-        adminPane = new javax.swing.JPanel();
+        homePanel = new javax.swing.JPanel();
+        billingPanel = new javax.swing.JPanel();
+        clientPanel = new javax.swing.JPanel();
+        staffPanel = new javax.swing.JPanel();
+        adminPanel = new javax.swing.JPanel();
         createAdminAccountLabel = new javax.swing.JLabel();
-        accountIdLabel = new javax.swing.JLabel();
-        lastNameLabel = new javax.swing.JLabel();
-        firstNameLabel = new javax.swing.JLabel();
-        middleInitialLabel = new javax.swing.JLabel();
-        addressLabel = new javax.swing.JLabel();
-        phoneNumberLabel = new javax.swing.JLabel();
-        accountIdTextField = new javax.swing.JTextField();
-        lastNameTextField = new javax.swing.JTextField();
-        firstNameTextField = new javax.swing.JTextField();
-        middleNameTextField = new javax.swing.JTextField();
-        addressTextField = new javax.swing.JTextField();
-        phoneNumberTextField = new javax.swing.JTextField();
-        createButton = new javax.swing.JButton();
-        cancelButton = new javax.swing.JButton();
+        adminAccountIdLabel = new javax.swing.JLabel();
+        adminLastNameLabel = new javax.swing.JLabel();
+        adminFirstNameLabel = new javax.swing.JLabel();
+        adminMiddleInitialLabel = new javax.swing.JLabel();
+        adminAddressLabel = new javax.swing.JLabel();
+        adminPhoneNumberLabel = new javax.swing.JLabel();
+        adminAccountIdTextField = new javax.swing.JTextField();
+        adminLastNameTextField = new javax.swing.JTextField();
+        adminFirstNameTextField = new javax.swing.JTextField();
+        adminMiddleNameTextField = new javax.swing.JTextField();
+        adminAddressTextField = new javax.swing.JTextField();
+        adminPhoneNumberTextField = new javax.swing.JTextField();
+        adminSaveButton = new javax.swing.JButton();
+        adminCancelButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         adminTable = new javax.swing.JTable();
-        usernameLabel = new javax.swing.JLabel();
-        usernameTextField = new javax.swing.JTextField();
-        passwordTextField = new javax.swing.JTextField();
-        passwordLabel = new javax.swing.JLabel();
-        createAdminAccountLabel1 = new javax.swing.JLabel();
-        myAccountPane = new javax.swing.JPanel();
+        adminUsernameLabel = new javax.swing.JLabel();
+        adminUsernameTextField = new javax.swing.JTextField();
+        adminPasswordLabel = new javax.swing.JLabel();
+        listOfAdminAccountLabel = new javax.swing.JLabel();
+        adminPasswordTextField = new javax.swing.JPasswordField();
+        myAccountPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -166,58 +155,94 @@ public class Admin extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout homePaneLayout = new javax.swing.GroupLayout(homePane);
-        homePane.setLayout(homePaneLayout);
-        homePaneLayout.setHorizontalGroup(
-            homePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout homePanelLayout = new javax.swing.GroupLayout(homePanel);
+        homePanel.setLayout(homePanelLayout);
+        homePanelLayout.setHorizontalGroup(
+            homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 826, Short.MAX_VALUE)
         );
-        homePaneLayout.setVerticalGroup(
-            homePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        homePanelLayout.setVerticalGroup(
+            homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 600, Short.MAX_VALUE)
         );
 
-        adminTabbedPane.addTab("Home", homePane);
-        adminTabbedPane.addTab("Billing", billingPane);
-        adminTabbedPane.addTab("Client", clientPane);
-        adminTabbedPane.addTab("Staff", staffPane);
+        adminTabbedPane.addTab("Home", homePanel);
 
-        adminPane.setPreferredSize(new java.awt.Dimension(820, 600));
+        javax.swing.GroupLayout billingPanelLayout = new javax.swing.GroupLayout(billingPanel);
+        billingPanel.setLayout(billingPanelLayout);
+        billingPanelLayout.setHorizontalGroup(
+            billingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 826, Short.MAX_VALUE)
+        );
+        billingPanelLayout.setVerticalGroup(
+            billingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 600, Short.MAX_VALUE)
+        );
+
+        adminTabbedPane.addTab("Billing", billingPanel);
+
+        javax.swing.GroupLayout clientPanelLayout = new javax.swing.GroupLayout(clientPanel);
+        clientPanel.setLayout(clientPanelLayout);
+        clientPanelLayout.setHorizontalGroup(
+            clientPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 826, Short.MAX_VALUE)
+        );
+        clientPanelLayout.setVerticalGroup(
+            clientPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 600, Short.MAX_VALUE)
+        );
+
+        adminTabbedPane.addTab("Client", clientPanel);
+
+        javax.swing.GroupLayout staffPanelLayout = new javax.swing.GroupLayout(staffPanel);
+        staffPanel.setLayout(staffPanelLayout);
+        staffPanelLayout.setHorizontalGroup(
+            staffPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 826, Short.MAX_VALUE)
+        );
+        staffPanelLayout.setVerticalGroup(
+            staffPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 600, Short.MAX_VALUE)
+        );
+
+        adminTabbedPane.addTab("Staff", staffPanel);
+
+        adminPanel.setPreferredSize(new java.awt.Dimension(820, 600));
 
         createAdminAccountLabel.setFont(new java.awt.Font("sansserif", 1, 28)); // NOI18N
         createAdminAccountLabel.setText("Create Admin Account");
 
-        accountIdLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        accountIdLabel.setText("Account Id:");
+        adminAccountIdLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        adminAccountIdLabel.setText("Account Id:");
 
-        lastNameLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        lastNameLabel.setText("Last Name:");
+        adminLastNameLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        adminLastNameLabel.setText("Last Name:");
 
-        firstNameLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        firstNameLabel.setText("First Name:");
+        adminFirstNameLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        adminFirstNameLabel.setText("First Name:");
 
-        middleInitialLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        middleInitialLabel.setText("Middle Name: ");
+        adminMiddleInitialLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        adminMiddleInitialLabel.setText("Middle Name: ");
 
-        addressLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        addressLabel.setText("Address:");
+        adminAddressLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        adminAddressLabel.setText("Address:");
 
-        phoneNumberLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        phoneNumberLabel.setText("Phone Number:");
+        adminPhoneNumberLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        adminPhoneNumberLabel.setText("Phone Number:");
 
-        accountIdTextField.setEditable(false);
+        adminAccountIdTextField.setEditable(false);
 
-        createButton.setText("Create");
-        createButton.addActionListener(new java.awt.event.ActionListener() {
+        adminSaveButton.setText("Save");
+        adminSaveButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                createButtonActionPerformed(evt);
+                adminSaveButtonActionPerformed(evt);
             }
         });
 
-        cancelButton.setText("Cancel");
-        cancelButton.addActionListener(new java.awt.event.ActionListener() {
+        adminCancelButton.setText("Cancel");
+        adminCancelButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cancelButtonActionPerformed(evt);
+                adminCancelButtonActionPerformed(evt);
             }
         });
 
@@ -242,125 +267,131 @@ public class Admin extends javax.swing.JFrame {
             adminTable.getColumnModel().getColumn(0).setResizable(false);
         }
 
-        usernameLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        usernameLabel.setText("Username:");
+        adminUsernameLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        adminUsernameLabel.setText("Username:");
 
-        passwordLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        passwordLabel.setText("Password:");
+        adminPasswordLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        adminPasswordLabel.setText("Password:");
 
-        createAdminAccountLabel1.setFont(new java.awt.Font("sansserif", 1, 28)); // NOI18N
-        createAdminAccountLabel1.setText("List of Admin Accounts");
+        listOfAdminAccountLabel.setFont(new java.awt.Font("sansserif", 1, 28)); // NOI18N
+        listOfAdminAccountLabel.setText("List of Admin Accounts");
 
-        javax.swing.GroupLayout adminPaneLayout = new javax.swing.GroupLayout(adminPane);
-        adminPane.setLayout(adminPaneLayout);
-        adminPaneLayout.setHorizontalGroup(
-            adminPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(adminPaneLayout.createSequentialGroup()
-                .addGap(34, 34, 34)
-                .addGroup(adminPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(adminPaneLayout.createSequentialGroup()
-                        .addGroup(adminPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(accountIdLabel)
-                            .addGroup(adminPaneLayout.createSequentialGroup()
-                                .addGap(1, 1, 1)
-                                .addGroup(adminPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(firstNameLabel)
-                                    .addComponent(lastNameLabel)
-                                    .addComponent(middleInitialLabel)
-                                    .addComponent(addressLabel)
-                                    .addComponent(phoneNumberLabel)
-                                    .addComponent(usernameLabel)
-                                    .addComponent(passwordLabel))))
-                        .addGap(22, 22, 22)
-                        .addGroup(adminPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(accountIdTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lastNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(firstNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(middleNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(addressTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(phoneNumberTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(usernameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(passwordTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(adminPaneLayout.createSequentialGroup()
-                        .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+        javax.swing.GroupLayout adminPanelLayout = new javax.swing.GroupLayout(adminPanel);
+        adminPanel.setLayout(adminPanelLayout);
+        adminPanelLayout.setHorizontalGroup(
+            adminPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(adminPanelLayout.createSequentialGroup()
+                .addGap(45, 45, 45)
+                .addGroup(adminPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(adminPanelLayout.createSequentialGroup()
+                        .addGap(16, 16, 16)
+                        .addComponent(createAdminAccountLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(createButton, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(40, 40, 40))
-            .addGroup(adminPaneLayout.createSequentialGroup()
-                .addGap(52, 52, 52)
-                .addComponent(createAdminAccountLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(createAdminAccountLabel1)
-                .addGap(68, 68, 68))
+                        .addComponent(listOfAdminAccountLabel)
+                        .addGap(68, 68, 68))
+                    .addGroup(adminPanelLayout.createSequentialGroup()
+                        .addGroup(adminPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(adminPanelLayout.createSequentialGroup()
+                                .addComponent(adminCancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(26, 26, 26)
+                                .addComponent(adminSaveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(adminPanelLayout.createSequentialGroup()
+                                .addGroup(adminPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(adminAccountIdLabel)
+                                    .addGroup(adminPanelLayout.createSequentialGroup()
+                                        .addGap(1, 1, 1)
+                                        .addGroup(adminPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(adminFirstNameLabel)
+                                            .addComponent(adminLastNameLabel)
+                                            .addComponent(adminMiddleInitialLabel)
+                                            .addComponent(adminAddressLabel)
+                                            .addComponent(adminPhoneNumberLabel)
+                                            .addComponent(adminUsernameLabel)
+                                            .addComponent(adminPasswordLabel))))
+                                .addGap(22, 22, 22)
+                                .addGroup(adminPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(adminAccountIdTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(adminLastNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(adminFirstNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(adminMiddleNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(adminAddressTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(adminPhoneNumberTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(adminUsernameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(adminPasswordTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(40, 40, 40))))
         );
 
-        adminPaneLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {accountIdTextField, addressTextField, firstNameTextField, lastNameTextField, middleNameTextField, phoneNumberTextField});
+        adminPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {adminAccountIdTextField, adminAddressTextField, adminFirstNameTextField, adminLastNameTextField, adminMiddleNameTextField, adminPhoneNumberTextField});
 
-        adminPaneLayout.setVerticalGroup(
-            adminPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, adminPaneLayout.createSequentialGroup()
+        adminPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {adminPasswordTextField, adminUsernameTextField});
+
+        adminPanelLayout.setVerticalGroup(
+            adminPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, adminPanelLayout.createSequentialGroup()
                 .addGap(39, 39, 39)
-                .addGroup(adminPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(adminPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(createAdminAccountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(createAdminAccountLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(listOfAdminAccountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(31, 31, 31)
-                .addGroup(adminPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(adminPaneLayout.createSequentialGroup()
-                        .addGroup(adminPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(accountIdTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(accountIdLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(adminPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(adminPanelLayout.createSequentialGroup()
+                        .addGroup(adminPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(adminAccountIdTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(adminAccountIdLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
-                        .addGroup(adminPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lastNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lastNameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE))
+                        .addGroup(adminPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(adminLastNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(adminLastNameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
-                        .addGroup(adminPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(firstNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(firstNameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE))
+                        .addGroup(adminPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(adminFirstNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(adminFirstNameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
-                        .addGroup(adminPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(middleNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(middleInitialLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE))
+                        .addGroup(adminPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(adminMiddleNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(adminMiddleInitialLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
-                        .addGroup(adminPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(addressTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(addressLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE))
+                        .addGroup(adminPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(adminAddressTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(adminAddressLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
-                        .addGroup(adminPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(phoneNumberTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(phoneNumberLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
-                        .addGroup(adminPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(usernameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(usernameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE))
+                        .addGroup(adminPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(adminPhoneNumberTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(adminPhoneNumberLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
+                        .addGroup(adminPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(adminUsernameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(adminUsernameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
-                        .addGroup(adminPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(passwordTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(passwordLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
-                        .addGroup(adminPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(createButton, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                        .addGroup(adminPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(adminPasswordLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
+                            .addComponent(adminPasswordTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
+                        .addGroup(adminPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(adminCancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(adminSaveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE))
                 .addGap(33, 33, 33))
         );
 
-        adminTabbedPane.addTab("Admin", adminPane);
+        adminPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {adminPasswordTextField, adminUsernameTextField});
 
-        javax.swing.GroupLayout myAccountPaneLayout = new javax.swing.GroupLayout(myAccountPane);
-        myAccountPane.setLayout(myAccountPaneLayout);
-        myAccountPaneLayout.setHorizontalGroup(
-            myAccountPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        adminTabbedPane.addTab("Admin", adminPanel);
+
+        javax.swing.GroupLayout myAccountPanelLayout = new javax.swing.GroupLayout(myAccountPanel);
+        myAccountPanel.setLayout(myAccountPanelLayout);
+        myAccountPanelLayout.setHorizontalGroup(
+            myAccountPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 826, Short.MAX_VALUE)
         );
-        myAccountPaneLayout.setVerticalGroup(
-            myAccountPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        myAccountPanelLayout.setVerticalGroup(
+            myAccountPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 600, Short.MAX_VALUE)
         );
 
-        adminTabbedPane.addTab("My Account", myAccountPane);
+        adminTabbedPane.addTab("My Account", myAccountPanel);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -377,29 +408,64 @@ public class Admin extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void createButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createButtonActionPerformed
-        
-    }//GEN-LAST:event_createButtonActionPerformed
-
     int selectedTab;
     
     private void adminTabbedPaneStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_adminTabbedPaneStateChanged
-        selectedTab = adminTabbedPane.getSelectedIndex();        
+        selectedTab = adminTabbedPane.getSelectedIndex();
     }//GEN-LAST:event_adminTabbedPaneStateChanged
 
-    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
-        lastNameTextField.setText(" ");
-        firstNameTextField.setText(" ");
-        middleNameTextField.setText(" ");
-        lastNameTextField.setText(" ");
-        addressTextField.setText(" ");
-        phoneNumberTextField.setText(" ");
-        usernameTextField.setText(" ");
-        passwordTextField.setText(" ");
-    }//GEN-LAST:event_cancelButtonActionPerformed
-     
+    private void adminCancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adminCancelButtonActionPerformed
+        clearAdminTextFields();
+    }//GEN-LAST:event_adminCancelButtonActionPerformed
+
+    private void adminSaveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adminSaveButtonActionPerformed
+        try {
+            PreparedStatement preparedStatement = connect.prepareStatement("INSERT IGNORE INTO Admin VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            preparedStatement.setInt(1, Integer.parseInt(adminAccountIdTextField.getText()));
+            preparedStatement.setString(2, adminLastNameTextField.getText());
+            preparedStatement.setString(3, adminFirstNameTextField.getText());
+            preparedStatement.setString(4, adminMiddleNameTextField.getText());
+            preparedStatement.setString(5, adminAddressTextField.getText());
+            preparedStatement.setString(6, adminPhoneNumberTextField.getText());
+            preparedStatement.setString(7, adminUsernameTextField.getText());
+            preparedStatement.setString(8, adminPasswordTextField.getText());
+
+            preparedStatement.executeUpdate();
+
+            showDataAdminTable();
+
+            adminAccountIdTextField.setText(Integer.toString(adminDatas.get(adminDatas.size()-1).getId() + 1));
+            clearAdminTextFields();
+        } catch (Exception ex) {
+        }
+    }//GEN-LAST:event_adminSaveButtonActionPerformed
+           
+   
+    public void clearAdminTextFields(){
+        adminLastNameTextField.setText("");
+        adminFirstNameTextField.setText("");
+        adminMiddleNameTextField.setText("");
+        adminLastNameTextField.setText("");
+        adminAddressTextField.setText("");
+        adminPhoneNumberTextField.setText("");
+        adminUsernameTextField.setText("");
+        adminPasswordTextField.setText("");
+    }
     
-    public void showDataInTable(){
+    public void showDataAdminTable(){
+        try {
+            Statement statement = connect.createStatement();
+
+            ResultSet selectAdministrator = statement.executeQuery("SELECT * FROM Admin");
+
+            adminDatas.clear();
+            while (selectAdministrator.next()) {
+                adminDatas.add(new AdminData(selectAdministrator.getInt("id"), selectAdministrator.getString("lastname"),
+                        selectAdministrator.getString("firstname"), selectAdministrator.getString("middlename"), selectAdministrator.getString("address"),
+                        selectAdministrator.getString("phonenumber"), selectAdministrator.getString("username"), selectAdministrator.getString("password")));
+            }
+        } catch (Exception ex) {
+        }
         DefaultTableModel model = (DefaultTableModel) adminTable.getModel();
         Object[] row = new Object[2];
         
@@ -413,34 +479,34 @@ public class Admin extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel accountIdLabel;
-    private javax.swing.JTextField accountIdTextField;
-    private javax.swing.JLabel addressLabel;
-    private javax.swing.JTextField addressTextField;
-    private javax.swing.JPanel adminPane;
+    private javax.swing.JLabel adminAccountIdLabel;
+    private javax.swing.JTextField adminAccountIdTextField;
+    private javax.swing.JLabel adminAddressLabel;
+    private javax.swing.JTextField adminAddressTextField;
+    private javax.swing.JButton adminCancelButton;
+    private javax.swing.JLabel adminFirstNameLabel;
+    private javax.swing.JTextField adminFirstNameTextField;
+    private javax.swing.JLabel adminLastNameLabel;
+    private javax.swing.JTextField adminLastNameTextField;
+    private javax.swing.JLabel adminMiddleInitialLabel;
+    private javax.swing.JTextField adminMiddleNameTextField;
+    private javax.swing.JPanel adminPanel;
+    private javax.swing.JLabel adminPasswordLabel;
+    private javax.swing.JPasswordField adminPasswordTextField;
+    private javax.swing.JLabel adminPhoneNumberLabel;
+    private javax.swing.JTextField adminPhoneNumberTextField;
+    private javax.swing.JButton adminSaveButton;
     private javax.swing.JTabbedPane adminTabbedPane;
     private javax.swing.JTable adminTable;
-    private javax.swing.JTabbedPane billingPane;
-    private javax.swing.JButton cancelButton;
-    private javax.swing.JTabbedPane clientPane;
+    private javax.swing.JLabel adminUsernameLabel;
+    private javax.swing.JTextField adminUsernameTextField;
+    private javax.swing.JPanel billingPanel;
+    private javax.swing.JPanel clientPanel;
     private javax.swing.JLabel createAdminAccountLabel;
-    private javax.swing.JLabel createAdminAccountLabel1;
-    private javax.swing.JButton createButton;
-    private javax.swing.JLabel firstNameLabel;
-    private javax.swing.JTextField firstNameTextField;
-    private javax.swing.JPanel homePane;
+    private javax.swing.JPanel homePanel;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel lastNameLabel;
-    private javax.swing.JTextField lastNameTextField;
-    private javax.swing.JLabel middleInitialLabel;
-    private javax.swing.JTextField middleNameTextField;
-    private javax.swing.JPanel myAccountPane;
-    private javax.swing.JLabel passwordLabel;
-    private javax.swing.JTextField passwordTextField;
-    private javax.swing.JLabel phoneNumberLabel;
-    private javax.swing.JTextField phoneNumberTextField;
-    private javax.swing.JTabbedPane staffPane;
-    private javax.swing.JLabel usernameLabel;
-    private javax.swing.JTextField usernameTextField;
+    private javax.swing.JLabel listOfAdminAccountLabel;
+    private javax.swing.JPanel myAccountPanel;
+    private javax.swing.JPanel staffPanel;
     // End of variables declaration//GEN-END:variables
 }

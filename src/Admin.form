@@ -40,7 +40,7 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
       <SubComponents>
-        <Container class="javax.swing.JPanel" name="homePane">
+        <Container class="javax.swing.JPanel" name="homePanel">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
               <JTabbedPaneConstraints tabName="Home">
@@ -62,7 +62,7 @@
             </DimensionLayout>
           </Layout>
         </Container>
-        <Container class="javax.swing.JTabbedPane" name="billingPane">
+        <Container class="javax.swing.JPanel" name="billingPanel">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
               <JTabbedPaneConstraints tabName="Billing">
@@ -71,9 +71,20 @@
             </Constraint>
           </Constraints>
 
-          <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
+          <Layout>
+            <DimensionLayout dim="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <EmptySpace min="0" pref="826" max="32767" attributes="0"/>
+              </Group>
+            </DimensionLayout>
+            <DimensionLayout dim="1">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <EmptySpace min="0" pref="600" max="32767" attributes="0"/>
+              </Group>
+            </DimensionLayout>
+          </Layout>
         </Container>
-        <Container class="javax.swing.JTabbedPane" name="clientPane">
+        <Container class="javax.swing.JPanel" name="clientPanel">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
               <JTabbedPaneConstraints tabName="Client">
@@ -82,9 +93,20 @@
             </Constraint>
           </Constraints>
 
-          <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
+          <Layout>
+            <DimensionLayout dim="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <EmptySpace min="0" pref="826" max="32767" attributes="0"/>
+              </Group>
+            </DimensionLayout>
+            <DimensionLayout dim="1">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <EmptySpace min="0" pref="600" max="32767" attributes="0"/>
+              </Group>
+            </DimensionLayout>
+          </Layout>
         </Container>
-        <Container class="javax.swing.JTabbedPane" name="staffPane">
+        <Container class="javax.swing.JPanel" name="staffPanel">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
               <JTabbedPaneConstraints tabName="Staff">
@@ -93,9 +115,20 @@
             </Constraint>
           </Constraints>
 
-          <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
+          <Layout>
+            <DimensionLayout dim="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <EmptySpace min="0" pref="826" max="32767" attributes="0"/>
+              </Group>
+            </DimensionLayout>
+            <DimensionLayout dim="1">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <EmptySpace min="0" pref="600" max="32767" attributes="0"/>
+              </Group>
+            </DimensionLayout>
+          </Layout>
         </Container>
-        <Container class="javax.swing.JPanel" name="adminPane">
+        <Container class="javax.swing.JPanel" name="adminPanel">
           <Properties>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[820, 600]"/>
@@ -112,53 +145,57 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
-                      <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="45" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
+                              <Component id="createAdminAccountLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
+                              <Component id="listOfAdminAccountLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="68" max="-2" attributes="0"/>
+                          </Group>
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="accountIdLabel" min="-2" max="-2" attributes="0"/>
+                                  <Group type="102" attributes="0">
+                                      <Component id="adminCancelButton" min="-2" pref="160" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+                                      <Component id="adminSaveButton" min="-2" pref="160" max="-2" attributes="0"/>
+                                  </Group>
                                   <Group type="102" alignment="0" attributes="0">
-                                      <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="firstNameLabel" min="-2" max="-2" attributes="0"/>
-                                          <Component id="lastNameLabel" min="-2" max="-2" attributes="0"/>
-                                          <Component id="middleInitialLabel" min="-2" max="-2" attributes="0"/>
-                                          <Component id="addressLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Component id="phoneNumberLabel" min="-2" max="-2" attributes="0"/>
-                                          <Component id="usernameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Component id="passwordLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="adminAccountIdLabel" min="-2" max="-2" attributes="0"/>
+                                          <Group type="102" alignment="0" attributes="0">
+                                              <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
+                                              <Group type="103" groupAlignment="0" attributes="0">
+                                                  <Component id="adminFirstNameLabel" min="-2" max="-2" attributes="0"/>
+                                                  <Component id="adminLastNameLabel" min="-2" max="-2" attributes="0"/>
+                                                  <Component id="adminMiddleInitialLabel" min="-2" max="-2" attributes="0"/>
+                                                  <Component id="adminAddressLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                                  <Component id="adminPhoneNumberLabel" min="-2" max="-2" attributes="0"/>
+                                                  <Component id="adminUsernameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                                  <Component id="adminPasswordLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                              </Group>
+                                          </Group>
+                                      </Group>
+                                      <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="adminAccountIdTextField" linkSize="1" min="-2" pref="227" max="-2" attributes="0"/>
+                                          <Component id="adminLastNameTextField" linkSize="1" min="-2" pref="227" max="-2" attributes="0"/>
+                                          <Component id="adminFirstNameTextField" linkSize="1" alignment="0" min="-2" pref="227" max="-2" attributes="0"/>
+                                          <Component id="adminMiddleNameTextField" linkSize="1" alignment="0" min="-2" pref="227" max="-2" attributes="0"/>
+                                          <Component id="adminAddressTextField" linkSize="1" alignment="0" min="-2" pref="227" max="-2" attributes="0"/>
+                                          <Component id="adminPhoneNumberTextField" linkSize="1" alignment="0" min="-2" pref="227" max="-2" attributes="0"/>
+                                          <Component id="adminUsernameTextField" linkSize="2" alignment="0" min="-2" pref="227" max="-2" attributes="0"/>
+                                          <Component id="adminPasswordTextField" linkSize="2" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
                               </Group>
-                              <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="accountIdTextField" linkSize="1" min="-2" pref="227" max="-2" attributes="0"/>
-                                  <Component id="lastNameTextField" linkSize="1" min="-2" pref="227" max="-2" attributes="0"/>
-                                  <Component id="firstNameTextField" linkSize="1" alignment="0" min="-2" pref="227" max="-2" attributes="0"/>
-                                  <Component id="middleNameTextField" linkSize="1" alignment="0" min="-2" pref="227" max="-2" attributes="0"/>
-                                  <Component id="addressTextField" linkSize="1" alignment="0" min="-2" pref="227" max="-2" attributes="0"/>
-                                  <Component id="phoneNumberTextField" linkSize="1" alignment="0" min="-2" pref="227" max="-2" attributes="0"/>
-                                  <Component id="usernameTextField" alignment="0" min="-2" pref="227" max="-2" attributes="0"/>
-                                  <Component id="passwordTextField" alignment="0" min="-2" pref="227" max="-2" attributes="0"/>
-                              </Group>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="cancelButton" min="-2" pref="160" max="-2" attributes="0"/>
-                              <EmptySpace max="32767" attributes="0"/>
-                              <Component id="createButton" min="-2" pref="160" max="-2" attributes="0"/>
+                              <EmptySpace pref="35" max="32767" attributes="0"/>
+                              <Component id="jScrollPane1" min="-2" pref="360" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace pref="46" max="32767" attributes="0"/>
-                      <Component id="jScrollPane1" min="-2" pref="360" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="52" max="-2" attributes="0"/>
-                      <Component id="createAdminAccountLabel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
-                      <Component id="createAdminAccountLabel1" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="68" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -168,57 +205,57 @@
                       <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="createAdminAccountLabel" alignment="3" min="-2" pref="49" max="-2" attributes="0"/>
-                          <Component id="createAdminAccountLabel1" alignment="3" min="-2" pref="49" max="-2" attributes="0"/>
+                          <Component id="listOfAdminAccountLabel" alignment="3" min="-2" pref="49" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="accountIdTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="accountIdLabel" alignment="3" max="32767" attributes="0"/>
+                                  <Component id="adminAccountIdTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="adminAccountIdLabel" alignment="3" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace pref="16" max="32767" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="lastNameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lastNameLabel" alignment="3" pref="29" max="32767" attributes="0"/>
+                                  <Component id="adminLastNameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="adminLastNameLabel" alignment="3" pref="29" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace pref="15" max="32767" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="firstNameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="firstNameLabel" alignment="3" pref="29" max="32767" attributes="0"/>
+                                  <Component id="adminFirstNameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="adminFirstNameLabel" alignment="3" pref="29" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace pref="15" max="32767" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="middleNameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="middleInitialLabel" alignment="3" pref="29" max="32767" attributes="0"/>
+                                  <Component id="adminMiddleNameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="adminMiddleInitialLabel" alignment="3" pref="29" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace pref="15" max="32767" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="addressTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="addressLabel" alignment="3" pref="29" max="32767" attributes="0"/>
+                                  <Component id="adminAddressTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="adminAddressLabel" alignment="3" pref="29" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace pref="15" max="32767" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="phoneNumberTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="phoneNumberLabel" alignment="3" pref="29" max="32767" attributes="0"/>
+                                  <Component id="adminPhoneNumberTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="adminPhoneNumberLabel" alignment="3" pref="29" max="32767" attributes="0"/>
                               </Group>
-                              <EmptySpace pref="15" max="32767" attributes="0"/>
+                              <EmptySpace pref="17" max="32767" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="usernameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="usernameLabel" alignment="3" pref="32" max="32767" attributes="0"/>
+                                  <Component id="adminUsernameTextField" linkSize="3" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="adminUsernameLabel" alignment="3" pref="32" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace pref="18" max="32767" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="passwordTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="passwordLabel" alignment="3" pref="31" max="32767" attributes="0"/>
+                                  <Component id="adminPasswordLabel" alignment="3" pref="31" max="32767" attributes="0"/>
+                                  <Component id="adminPasswordTextField" linkSize="3" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace pref="43" max="32767" attributes="0"/>
+                              <EmptySpace pref="41" max="32767" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="cancelButton" alignment="3" min="-2" pref="60" max="-2" attributes="0"/>
-                                  <Component id="createButton" alignment="3" min="-2" pref="60" max="-2" attributes="0"/>
+                                  <Component id="adminCancelButton" alignment="3" min="-2" pref="60" max="-2" attributes="0"/>
+                                  <Component id="adminSaveButton" alignment="3" min="-2" pref="60" max="-2" attributes="0"/>
                               </Group>
                           </Group>
-                          <Component id="jScrollPane1" pref="0" max="32767" attributes="0"/>
+                          <Component id="jScrollPane1" pref="448" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="33" pref="33" max="-2" attributes="0"/>
                   </Group>
@@ -234,7 +271,7 @@
                 <Property name="text" type="java.lang.String" value="Create Admin Account"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="accountIdLabel">
+            <Component class="javax.swing.JLabel" name="adminAccountIdLabel">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI" size="14" style="0"/>
@@ -242,7 +279,7 @@
                 <Property name="text" type="java.lang.String" value="Account Id:"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="lastNameLabel">
+            <Component class="javax.swing.JLabel" name="adminLastNameLabel">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI" size="14" style="0"/>
@@ -250,7 +287,7 @@
                 <Property name="text" type="java.lang.String" value="Last Name:"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="firstNameLabel">
+            <Component class="javax.swing.JLabel" name="adminFirstNameLabel">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI" size="14" style="0"/>
@@ -258,7 +295,7 @@
                 <Property name="text" type="java.lang.String" value="First Name:"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="middleInitialLabel">
+            <Component class="javax.swing.JLabel" name="adminMiddleInitialLabel">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI" size="14" style="0"/>
@@ -266,7 +303,7 @@
                 <Property name="text" type="java.lang.String" value="Middle Name: "/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="addressLabel">
+            <Component class="javax.swing.JLabel" name="adminAddressLabel">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI" size="14" style="0"/>
@@ -274,7 +311,7 @@
                 <Property name="text" type="java.lang.String" value="Address:"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="phoneNumberLabel">
+            <Component class="javax.swing.JLabel" name="adminPhoneNumberLabel">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI" size="14" style="0"/>
@@ -282,35 +319,35 @@
                 <Property name="text" type="java.lang.String" value="Phone Number:"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="accountIdTextField">
+            <Component class="javax.swing.JTextField" name="adminAccountIdTextField">
               <Properties>
                 <Property name="editable" type="boolean" value="false"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="lastNameTextField">
+            <Component class="javax.swing.JTextField" name="adminLastNameTextField">
             </Component>
-            <Component class="javax.swing.JTextField" name="firstNameTextField">
+            <Component class="javax.swing.JTextField" name="adminFirstNameTextField">
             </Component>
-            <Component class="javax.swing.JTextField" name="middleNameTextField">
+            <Component class="javax.swing.JTextField" name="adminMiddleNameTextField">
             </Component>
-            <Component class="javax.swing.JTextField" name="addressTextField">
+            <Component class="javax.swing.JTextField" name="adminAddressTextField">
             </Component>
-            <Component class="javax.swing.JTextField" name="phoneNumberTextField">
+            <Component class="javax.swing.JTextField" name="adminPhoneNumberTextField">
             </Component>
-            <Component class="javax.swing.JButton" name="createButton">
+            <Component class="javax.swing.JButton" name="adminSaveButton">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Create"/>
+                <Property name="text" type="java.lang.String" value="Save"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="createButtonActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="adminSaveButtonActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JButton" name="cancelButton">
+            <Component class="javax.swing.JButton" name="adminCancelButton">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Cancel"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cancelButtonActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="adminCancelButtonActionPerformed"/>
               </Events>
             </Component>
             <Container class="javax.swing.JScrollPane" name="jScrollPane1">
@@ -349,7 +386,7 @@
                 </Component>
               </SubComponents>
             </Container>
-            <Component class="javax.swing.JLabel" name="usernameLabel">
+            <Component class="javax.swing.JLabel" name="adminUsernameLabel">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI" size="14" style="0"/>
@@ -357,11 +394,9 @@
                 <Property name="text" type="java.lang.String" value="Username:"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="usernameTextField">
+            <Component class="javax.swing.JTextField" name="adminUsernameTextField">
             </Component>
-            <Component class="javax.swing.JTextField" name="passwordTextField">
-            </Component>
-            <Component class="javax.swing.JLabel" name="passwordLabel">
+            <Component class="javax.swing.JLabel" name="adminPasswordLabel">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI" size="14" style="0"/>
@@ -369,7 +404,7 @@
                 <Property name="text" type="java.lang.String" value="Password:"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="createAdminAccountLabel1">
+            <Component class="javax.swing.JLabel" name="listOfAdminAccountLabel">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="sansserif" size="28" style="1"/>
@@ -377,9 +412,11 @@
                 <Property name="text" type="java.lang.String" value="List of Admin Accounts"/>
               </Properties>
             </Component>
+            <Component class="javax.swing.JPasswordField" name="adminPasswordTextField">
+            </Component>
           </SubComponents>
         </Container>
-        <Container class="javax.swing.JPanel" name="myAccountPane">
+        <Container class="javax.swing.JPanel" name="myAccountPanel">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
               <JTabbedPaneConstraints tabName="My Account">
