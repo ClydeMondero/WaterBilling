@@ -1,6 +1,8 @@
 import java.sql.Connection;
 import java.sql.Statement;
 import java.sql.ResultSet;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -11,16 +13,19 @@ public class Login extends javax.swing.JFrame {
     static ArrayList<AdminData> adminDatas = new ArrayList<>();
     static ArrayList<StaffData> staffDatas = new ArrayList<>();
     
+    Connection connect = null;
+    
     public Login() {      
         initComponents();        
-        Connection connect = DatabaseConnection.connectDatabase();
+         connect = DatabaseConnection.connectDatabase();
                 
         try {
             Statement statement = connect.createStatement();
-            ResultSet selectAdministrator = statement.executeQuery("SELECT id, username, password FROM Admin");
+            ResultSet selectAdmin = statement.executeQuery("SELECT id, username, password, status FROM Admin");
                         
-            while(selectAdministrator.next()){
-                adminDatas.add(new AdminData(selectAdministrator.getInt("id"), selectAdministrator.getString("username"), selectAdministrator.getString("password")));
+            while(selectAdmin.next()){
+                adminDatas.add(new AdminData(selectAdmin.getInt("id"), selectAdmin.getString("username"), selectAdmin.getString("password")
+                , selectAdmin.getString("status")));
             }
             
             ResultSet selectStaff = statement.executeQuery("SELECT id, username, password FROM Staff");
@@ -92,32 +97,47 @@ public class Login extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    int loginCounter = 0;
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
-        boolean loginStatus = false;
+             
         for (int i = 0; i < adminDatas.size(); i++) {
-            if (usernameTextField.getText().equals(adminDatas.get(i).getUsername()) && adminDatas.get(i).getStatus().equals("Active")) {
-                if (usernameTextField.getText().equals(adminDatas.get(i).getUsername()) && passwordTextField.getText().equals(adminDatas.get(i).getPassword())) {
-                    loginStatus = true;
-                    this.dispose();
-                    new Admin().setVisible(true);
+            if (usernameTextField.getText().equals(adminDatas.get(i).getUsername())) {
+                if (adminDatas.get(i).getStatus().equals("Active")) {
+                    if (passwordTextField.getText().equals(adminDatas.get(i).getPassword())) {                        
+                        this.dispose();
+                        JOptionPane.showMessageDialog(null, "Login Success!", "Login", JOptionPane.INFORMATION_MESSAGE);
+                        new Admin().setVisible(true);
+                    }else{
+                        JOptionPane.showMessageDialog(null, "Login Failed!", "Login", JOptionPane.WARNING_MESSAGE);
+                        usernameTextField.setText("");
+                        passwordTextField.setText("");
+                        System.out.println(++loginCounter);
+                        if(loginCounter == 3){
+                            try {
+                                PreparedStatement statement = connect.prepareStatement("UPDATE Admin SET status = ? WHERE username = ?");
+                                statement.setString(1, "Deactivated");
+                                statement.setString(2, adminDatas.get(i).getUsername());
+                                
+                                statement.executeUpdate();
+                                adminDatas.get(i).setStatus("Deactivated");
+                            } catch (Exception ex) {                                
+                            }
+                        }
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Account deactivated!", "Login", JOptionPane.ERROR_MESSAGE);
+                    usernameTextField.setText("");
+                    passwordTextField.setText("");
                 }
-            }
-            
+
+            }            
         }
         for (int i = 0; i < staffDatas.size(); i++) {
-            if(usernameTextField.getText().equals(staffDatas.get(i).getUsername()) && passwordTextField.getText().equals(staffDatas.get(i).getPassword())){
-                loginStatus = true;
+            if(usernameTextField.getText().equals(staffDatas.get(i).getUsername()) && passwordTextField.getText().equals(staffDatas.get(i).getPassword())){                
                 this.dispose();
                 new Staff().setVisible(true);                
             }
-        }
-        if(loginStatus){
-            JOptionPane.showMessageDialog(null, "Login Success!", "Login", JOptionPane.INFORMATION_MESSAGE);
-        }else{
-            JOptionPane.showMessageDialog(null, "Login Failed!", "Login", JOptionPane.WARNING_MESSAGE);
-            usernameTextField.setText("");
-            passwordTextField.setText("");
-        }        
+        }              
     }//GEN-LAST:event_loginButtonActionPerformed
 
     

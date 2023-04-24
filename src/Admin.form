@@ -24,19 +24,25 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Component id="adminTabbedPane" alignment="1" max="32767" attributes="0"/>
+          <Group type="102" alignment="1" attributes="0">
+              <EmptySpace max="32767" attributes="0"/>
+              <Component id="logoutButton" min="-2" pref="120" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="164" max="-2" attributes="0"/>
+          </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="adminTabbedPane" alignment="1" max="32767" attributes="0"/>
+          <Group type="102" alignment="1" attributes="0">
+              <Component id="logoutButton" min="-2" pref="34" max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
+              <Component id="adminTabbedPane" min="-2" pref="600" max="-2" attributes="0"/>
+          </Group>
       </Group>
     </DimensionLayout>
   </Layout>
   <SubComponents>
     <Container class="javax.swing.JTabbedPane" name="adminTabbedPane">
-      <Events>
-        <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="adminTabbedPaneStateChanged"/>
-      </Events>
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
       <SubComponents>
@@ -52,12 +58,12 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="826" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="820" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="600" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="570" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
@@ -74,12 +80,12 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="826" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="820" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="600" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="570" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
@@ -96,12 +102,12 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="826" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="820" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="600" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="570" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
@@ -118,12 +124,12 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="826" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="820" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="600" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="570" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
@@ -191,7 +197,7 @@
                                       </Group>
                                   </Group>
                               </Group>
-                              <EmptySpace pref="35" max="32767" attributes="0"/>
+                              <EmptySpace pref="29" max="32767" attributes="0"/>
                               <Component id="jScrollPane1" min="-2" pref="360" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
                           </Group>
@@ -214,48 +220,48 @@
                                   <Component id="adminAccountIdTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="adminAccountIdLabel" alignment="3" max="32767" attributes="0"/>
                               </Group>
-                              <EmptySpace pref="16" max="32767" attributes="0"/>
+                              <EmptySpace pref="13" max="32767" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="adminLastNameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="adminLastNameLabel" alignment="3" pref="29" max="32767" attributes="0"/>
                               </Group>
-                              <EmptySpace pref="15" max="32767" attributes="0"/>
+                              <EmptySpace pref="12" max="32767" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="adminFirstNameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="adminFirstNameLabel" alignment="3" pref="29" max="32767" attributes="0"/>
                               </Group>
-                              <EmptySpace pref="15" max="32767" attributes="0"/>
+                              <EmptySpace pref="12" max="32767" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="adminMiddleNameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="adminMiddleInitialLabel" alignment="3" pref="29" max="32767" attributes="0"/>
                               </Group>
-                              <EmptySpace pref="15" max="32767" attributes="0"/>
+                              <EmptySpace pref="12" max="32767" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="adminAddressTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="adminAddressLabel" alignment="3" pref="29" max="32767" attributes="0"/>
                               </Group>
-                              <EmptySpace pref="15" max="32767" attributes="0"/>
+                              <EmptySpace pref="12" max="32767" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="adminPhoneNumberTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="adminPhoneNumberLabel" alignment="3" pref="29" max="32767" attributes="0"/>
                               </Group>
-                              <EmptySpace pref="17" max="32767" attributes="0"/>
+                              <EmptySpace pref="14" max="32767" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="adminUsernameTextField" linkSize="3" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="adminUsernameLabel" alignment="3" pref="32" max="32767" attributes="0"/>
                               </Group>
-                              <EmptySpace pref="18" max="32767" attributes="0"/>
+                              <EmptySpace pref="15" max="32767" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="adminPasswordLabel" alignment="3" pref="31" max="32767" attributes="0"/>
                                   <Component id="adminPasswordTextField" linkSize="3" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace pref="41" max="32767" attributes="0"/>
+                              <EmptySpace pref="32" max="32767" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="adminCancelButton" alignment="3" min="-2" pref="60" max="-2" attributes="0"/>
                                   <Component id="adminSaveButton" alignment="3" min="-2" pref="60" max="-2" attributes="0"/>
                               </Group>
                           </Group>
-                          <Component id="jScrollPane1" pref="448" max="32767" attributes="0"/>
+                          <Component id="jScrollPane1" pref="418" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="33" pref="33" max="-2" attributes="0"/>
                   </Group>
@@ -434,17 +440,25 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="826" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="820" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="600" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="570" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
         </Container>
       </SubComponents>
     </Container>
+    <Component class="javax.swing.JButton" name="logoutButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Logout"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="logoutButtonActionPerformed"/>
+      </Events>
+    </Component>
   </SubComponents>
 </Form>
