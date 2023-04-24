@@ -1,7 +1,8 @@
-import java.io.*;
-import java.sql.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.io.Reader;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import org.apache.ibatis.jdbc.ScriptRunner;
 
 public class DatabaseConnection {

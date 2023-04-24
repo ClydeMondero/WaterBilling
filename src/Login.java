@@ -1,33 +1,39 @@
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.Statement;
+import java.sql.ResultSet;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 public class Login extends javax.swing.JFrame {        
     
-    static ArrayList<AdministratorData> administratorDatas = new ArrayList<>();
+    static ArrayList<AdminData> adminDatas = new ArrayList<>();
     static ArrayList<StaffData> staffDatas = new ArrayList<>();
     
-    public Login() {
-        initComponents();
-        Connection connect = DatabaseConnection.connectDatabase();
-        
-        
+    Connection connect = null;
+    
+    public Login() {      
+        initComponents();        
+         connect = DatabaseConnection.connectDatabase();
+                
         try {
             Statement statement = connect.createStatement();
-            ResultSet selectAdministrator = statement.executeQuery("SELECT * FROM Administrator");
+            ResultSet selectAdmin = statement.executeQuery("SELECT id, username, password, status FROM Admin");
                         
-            while(selectAdministrator.next()){
-                administratorDatas.add(new AdministratorData(selectAdministrator.getInt("id"), selectAdministrator.getString("username"), selectAdministrator.getString("password")));
+            while(selectAdmin.next()){
+                adminDatas.add(new AdminData(selectAdmin.getInt("id"), selectAdmin.getString("username"), selectAdmin.getString("password")
+                , selectAdmin.getString("status")));
             }
             
-            ResultSet selectStaff = statement.executeQuery("SELECT * FROM Staff");
+            ResultSet selectStaff = statement.executeQuery("SELECT id, username, password FROM Staff");
             
             while(selectStaff.next()){
                 staffDatas.add(new StaffData(selectStaff.getInt("id"), selectStaff.getString("username"), selectStaff.getString("password")));
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {           
         }
                 
     }
@@ -51,7 +57,7 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
-        signInLabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        signInLabel.setFont(new java.awt.Font("sansserif", 1, 24)); // NOI18N
         signInLabel.setText("Log In");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -66,19 +72,19 @@ public class Login extends javax.swing.JFrame {
                             .addComponent(usernameTextField)
                             .addComponent(passwordTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(152, 152, 152)
-                        .addComponent(loginButton, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(161, 161, 161)
+                        .addComponent(signInLabel))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(164, 164, 164)
-                        .addComponent(signInLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(157, 157, 157)
+                        .addComponent(loginButton, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(85, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(16, 16, 16)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(22, 22, 22)
                 .addComponent(signInLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
                 .addComponent(usernameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(39, 39, 39)
                 .addComponent(passwordTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -88,29 +94,50 @@ public class Login extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    int loginCounter = 0;
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
-        boolean loginStatus = false;
-        for (int i = 0; i < administratorDatas.size(); i++) {
-            if(usernameTextField.getText().equals(administratorDatas.get(i).getUsername()) && passwordTextField.getText().equals(administratorDatas.get(i).getPassword())){
-                loginStatus = true;
-                
-                new Administrator().setVisible(true);
-            }
+             
+        for (int i = 0; i < adminDatas.size(); i++) {
+            if (usernameTextField.getText().equals(adminDatas.get(i).getUsername())) {
+                if (adminDatas.get(i).getStatus().equals("Active")) {
+                    if (passwordTextField.getText().equals(adminDatas.get(i).getPassword())) {                        
+                        this.dispose();
+                        JOptionPane.showMessageDialog(null, "Login Success!", "Login", JOptionPane.INFORMATION_MESSAGE);
+                        new Admin().setVisible(true);
+                    }else{
+                        JOptionPane.showMessageDialog(null, "Login Failed!", "Login", JOptionPane.WARNING_MESSAGE);
+                        usernameTextField.setText("");
+                        passwordTextField.setText("");
+                        System.out.println(++loginCounter);
+                        if(loginCounter == 3){
+                            try {
+                                PreparedStatement statement = connect.prepareStatement("UPDATE Admin SET status = ? WHERE username = ?");
+                                statement.setString(1, "Deactivated");
+                                statement.setString(2, adminDatas.get(i).getUsername());
+                                
+                                statement.executeUpdate();
+                                adminDatas.get(i).setStatus("Deactivated");
+                            } catch (Exception ex) {                                
+                            }
+                        }
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Account deactivated!", "Login", JOptionPane.ERROR_MESSAGE);
+                    usernameTextField.setText("");
+                    passwordTextField.setText("");
+                }
+
+            }            
         }
         for (int i = 0; i < staffDatas.size(); i++) {
-            if(usernameTextField.getText().equals(staffDatas.get(i).getUsername()) && passwordTextField.getText().equals(staffDatas.get(i).getPassword())){
-                loginStatus = true;
-                
-                new Staff().setVisible(true);
+            if(usernameTextField.getText().equals(staffDatas.get(i).getUsername()) && passwordTextField.getText().equals(staffDatas.get(i).getPassword())){                
+                this.dispose();
+                new Staff().setVisible(true);                
             }
-        }
-        if(loginStatus){
-            System.out.println("Login Sucess");
-        }else{
-            System.out.println("Login Failed!");
-        }        
+        }              
     }//GEN-LAST:event_loginButtonActionPerformed
 
     
