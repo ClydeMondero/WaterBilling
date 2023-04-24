@@ -120,6 +120,8 @@ public class Admin extends javax.swing.JFrame {
         }
         
         showDataInTable();
+        
+        accountIdTextField.setText(Integer.toString(adminDatas.get(adminDatas.size()-1).getId() + 1));
     }           
     
     @SuppressWarnings("unchecked")
@@ -139,7 +141,7 @@ public class Admin extends javax.swing.JFrame {
         middleInitialLabel = new javax.swing.JLabel();
         addressLabel = new javax.swing.JLabel();
         phoneNumberLabel = new javax.swing.JLabel();
-        acccountIdTextField = new javax.swing.JTextField();
+        accountIdTextField = new javax.swing.JTextField();
         lastNameTextField = new javax.swing.JTextField();
         firstNameTextField = new javax.swing.JTextField();
         middleNameTextField = new javax.swing.JTextField();
@@ -180,7 +182,6 @@ public class Admin extends javax.swing.JFrame {
         adminTabbedPane.addTab("Client", clientPane);
         adminTabbedPane.addTab("Staff", staffPane);
 
-        adminPane.setForeground(new java.awt.Color(254, 217, 183));
         adminPane.setPreferredSize(new java.awt.Dimension(820, 600));
 
         createAdminAccountLabel.setFont(new java.awt.Font("sansserif", 1, 28)); // NOI18N
@@ -203,6 +204,8 @@ public class Admin extends javax.swing.JFrame {
 
         phoneNumberLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         phoneNumberLabel.setText("Phone Number:");
+
+        accountIdTextField.setEditable(false);
 
         createButton.setText("Create");
         createButton.addActionListener(new java.awt.event.ActionListener() {
@@ -270,7 +273,7 @@ public class Admin extends javax.swing.JFrame {
                                     .addComponent(passwordLabel))))
                         .addGap(22, 22, 22)
                         .addGroup(adminPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(acccountIdTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(accountIdTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lastNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(firstNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(middleNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -293,7 +296,7 @@ public class Admin extends javax.swing.JFrame {
                 .addGap(68, 68, 68))
         );
 
-        adminPaneLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {acccountIdTextField, addressTextField, firstNameTextField, lastNameTextField, middleNameTextField, phoneNumberTextField});
+        adminPaneLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {accountIdTextField, addressTextField, firstNameTextField, lastNameTextField, middleNameTextField, phoneNumberTextField});
 
         adminPaneLayout.setVerticalGroup(
             adminPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -306,7 +309,7 @@ public class Admin extends javax.swing.JFrame {
                 .addGroup(adminPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(adminPaneLayout.createSequentialGroup()
                         .addGroup(adminPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(acccountIdTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(accountIdTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(accountIdLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
                         .addGroup(adminPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -385,7 +388,14 @@ public class Admin extends javax.swing.JFrame {
     }//GEN-LAST:event_adminTabbedPaneStateChanged
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
-        // TODO add your handling code here:
+        lastNameTextField.setText(" ");
+        firstNameTextField.setText(" ");
+        middleNameTextField.setText(" ");
+        lastNameTextField.setText(" ");
+        addressTextField.setText(" ");
+        phoneNumberTextField.setText(" ");
+        usernameTextField.setText(" ");
+        passwordTextField.setText(" ");
     }//GEN-LAST:event_cancelButtonActionPerformed
      
     
@@ -403,8 +413,8 @@ public class Admin extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField acccountIdTextField;
     private javax.swing.JLabel accountIdLabel;
+    private javax.swing.JTextField accountIdTextField;
     private javax.swing.JLabel addressLabel;
     private javax.swing.JTextField addressTextField;
     private javax.swing.JPanel adminPane;
