@@ -15,15 +15,39 @@ public class DatabaseConnection {
             
             connect = DriverManager.getConnection("jdbc:mysql://localhost/", "root", "root");                        
             
+<<<<<<< Updated upstream
             System.out.println("Database Connected");  
-            
-            ScriptRunner scriptRunner = new ScriptRunner(connect);            
-            Reader reader = new BufferedReader(new FileReader("src/Database.sql"));
-            
-            scriptRunner.runScript(reader);
-            
+=======
+            System.out.println("Database Connected");                                      
         } catch (Exception e){            
         }
         return connect;  
+    }
+    
+    public static Connection runDatabase() {
+        connectDatabase();
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            
+            connect = DriverManager.getConnection("jdbc:mysql://localhost/", "root", "root");                        
+>>>>>>> Stashed changes
+            
+            System.out.println("Database Connected");     
+            
+            ScriptRunner scriptRunner = new ScriptRunner(connect);
+            Reader reader = new BufferedReader(new FileReader("src/Database.sql"));
+
+            scriptRunner.runScript(reader);
+<<<<<<< Updated upstream
+            
+        } catch (Exception e){            
+=======
+
+            System.out.println("Database Executed");
+
+        } catch (Exception e) {
+>>>>>>> Stashed changes
+        }
+        return connect;
     }
 }

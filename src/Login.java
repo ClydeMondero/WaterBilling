@@ -21,11 +21,16 @@ public class Login extends javax.swing.JFrame {
                 
         try {
             Statement statement = connect.createStatement();
-            ResultSet selectAdmin = statement.executeQuery("SELECT id, username, password, status FROM Admin");
+            ResultSet selectAdmin = statement.executeQuery("SELECT admin_id, admin_username, admin_password, admin_status FROM Admin");
                         
             while(selectAdmin.next()){
+<<<<<<< Updated upstream
                 adminDatas.add(new AdminData(selectAdmin.getInt("id"), selectAdmin.getString("username"), selectAdmin.getString("password")
                 , selectAdmin.getString("status")));
+=======
+                adminDatas.add(new AdminData(selectAdmin.getInt("admin_id"), selectAdmin.getString("admin_username"), selectAdmin.getString("admin_password")
+                ,selectAdmin.getString("admin_status")));
+>>>>>>> Stashed changes
             }
             
             ResultSet selectStaff = statement.executeQuery("SELECT id, username, password FROM Staff");
@@ -114,7 +119,7 @@ public class Login extends javax.swing.JFrame {
                         System.out.println(++loginCounter);
                         if(loginCounter == 3){
                             try {
-                                PreparedStatement statement = connect.prepareStatement("UPDATE Admin SET status = ? WHERE username = ?");
+                                PreparedStatement statement = connect.prepareStatement("UPDATE Admin SET admin_status = ? WHERE admin_username = ?");
                                 statement.setString(1, "Deactivated");
                                 statement.setString(2, adminDatas.get(i).getUsername());
                                 
