@@ -478,10 +478,10 @@ public class Admin extends javax.swing.JFrame {
 
             adminDatas.clear();
             while (selectAdministrator.next()) {
-                adminDatas.add(new AdminData(selectAdministrator.getInt("id"), selectAdministrator.getString("lastname"),
-                        selectAdministrator.getString("firstname"), selectAdministrator.getString("middlename"), selectAdministrator.getString("address"),
-                        selectAdministrator.getString("phonenumber"), selectAdministrator.getString("username"), selectAdministrator.getString("password"), 
-                        selectAdministrator.getString("status")
+                adminDatas.add(new AdminData(selectAdministrator.getInt("admin_id"), selectAdministrator.getString("admin_lastname"),
+                        selectAdministrator.getString("admin_firstname"), selectAdministrator.getString("admin_middlename"), selectAdministrator.getString("admin_address"),
+                        selectAdministrator.getString("admin_phonenumber"), selectAdministrator.getString("admin_username"), selectAdministrator.getString("admin_password"), 
+                        selectAdministrator.getString("admin_status")
                 ));
             }
         } catch (Exception ex) {

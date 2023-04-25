@@ -13,7 +13,7 @@ public class DatabaseConnection {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             
-            connect = DriverManager.getConnection("jdbc:mysql://localhost/", "root", "root");                        
+            connect = DriverManager.getConnection("jdbc:mysql://localhost/Database", "root", "root");                        
             
             System.out.println("Database Connected");                                      
         } catch (Exception e){            
