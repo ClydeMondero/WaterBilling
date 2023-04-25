@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS Admin(
         phonenumber VARCHAR(25),
 	username VARCHAR(25) UNIQUE, 
 	password VARCHAR(25),
-        status ENUM('Active', 'Deactivated')
+        status VARCHAR(15)
 );
 
 INSERT IGNORE INTO Admin (username, password, status) VALUES ('admin', 'admin', 'Active');
