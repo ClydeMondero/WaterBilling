@@ -25,16 +25,17 @@ public class Login extends javax.swing.JFrame {
     
     public Login() {      
         initComponents();        
-         connect = DatabaseConnection.connectDatabase();
+        connect = DatabaseConnection.connectDatabase();
                 
         try {
             Statement statement = connect.createStatement();
             ResultSet selectAdmin = statement.executeQuery("SELECT admin_id, admin_username, admin_password, admin_status FROM Admin");
                         
+            adminDatas.clear();
             while(selectAdmin.next()){
                 adminDatas.add(new AdminData(selectAdmin.getInt("admin_id"), selectAdmin.getString("admin_username"), selectAdmin.getString("admin_password")
                 ,selectAdmin.getString("admin_status")));
-            }
+            }                        
             
             ResultSet selectStaff = statement.executeQuery("SELECT id, username, password FROM Staff");
             

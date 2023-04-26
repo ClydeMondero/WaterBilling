@@ -14,10 +14,8 @@ public class DatabaseConnection {
             Class.forName("com.mysql.cj.jdbc.Driver");
             
             connect = DriverManager.getConnection("jdbc:mysql://localhost/waterbilling", "root", "root");                        
-            
-            System.out.println("Database connected!");                                      
-        } catch (Exception e){ 
-            System.out.println("Database don't exist"); 
+                                                             
+        } catch (Exception e){             
         }
         return connect;  
     }
@@ -32,10 +30,8 @@ public class DatabaseConnection {
             Reader reader = new BufferedReader(new FileReader("src/Database.sql"));
             
             scriptRunner.runScript(reader);
-            
-            System.out.println("Database executed!");  
-            
-        } catch (Exception e){            
+                                    
+        } catch (Exception e){                 
         }
         return connect;  
     }

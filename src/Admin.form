@@ -148,6 +148,9 @@
               <Dimension value="[820, 600]"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="adminPanelMousePressed"/>
+          </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
               <JTabbedPaneConstraints tabName="Admin">
@@ -390,7 +393,7 @@
                         <Column editable="false" title="Address" type="java.lang.Object"/>
                         <Column editable="false" title="Phone Number" type="java.lang.Object"/>
                         <Column editable="false" title="Usename" type="java.lang.Object"/>
-                        <Column editable="false" title="Status" type="java.lang.Object"/>
+                        <Column editable="true" title="Status" type="java.lang.Object"/>
                       </Table>
                     </Property>
                     <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
