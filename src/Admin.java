@@ -17,19 +17,20 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
 class AdminData {
+
     private int id;
-    private String lastName, firstName, middleName, address, phonNumber;    
+    private String lastName, firstName, middleName, address, phonNumber;
     private String username, password;
-    private String status;  
-    
+    private String status;
+
     public AdminData(int id, String username, String password, String status) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.status = status;
     }
-    
-    public AdminData(int id, String lastName, String firstName, String middleName, String address, 
+
+    public AdminData(int id, String lastName, String firstName, String middleName, String address,
             String phonNumber, String username, String password, String status) {
         this.id = id;
         this.lastName = lastName;
@@ -89,8 +90,7 @@ class AdminData {
     public void setPhonNumber(String phonNumber) {
         this.phonNumber = phonNumber;
     }
-    
-    
+
     public String getUsername() {
         return username;
     }
@@ -105,7 +105,7 @@ class AdminData {
 
     public void setPassword(String password) {
         this.password = password;
-    }  
+    }
 
     public String getStatus() {
         return status;
@@ -113,34 +113,26 @@ class AdminData {
 
     public void setStatus(String status) {
         this.status = status;
-    }        
+    }
 }
 
 public class Admin extends javax.swing.JFrame {
 
     static ArrayList<AdminData> adminDatas = new ArrayList<>();
     Connection connect = null;
-    
-    DefaultComboBoxModel<String> statuses = new DefaultComboBoxModel<>(new String[]{"Active", "Deactivated"});
-    JComboBox<String> adminStatus = new JComboBox<>(statuses);
-    DefaultCellEditor adminStatusEdittor = new DefaultCellEditor(adminStatus);
-    MyTableModelListener adminTableListener = new MyTableModelListener();
-    
+
     public Admin() {
         initComponents();
 
-        connect = DatabaseConnection.connectDatabase();  
-        
-        new Login(usernameLabel);                
+        connect = DatabaseConnection.connectDatabase();
 
-        adminTable.getColumnModel().getColumn(5).setCellEditor(adminStatusEdittor);
-        adminTable.getModel().addTableModelListener(adminTableListener);
-        
+        new Login(usernameLabel);
+
         showDataAdminTable();
-        
-        adminAccountId.setText(Integer.toString(adminDatas.get(adminDatas.size()-1).getId() + 1));
-    }           
-    
+
+        adminId.setText(Integer.toString(adminDatas.get(adminDatas.size() - 1).getId() + 1));
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -174,7 +166,7 @@ public class Admin extends javax.swing.JFrame {
         adminPasswordTextField = new javax.swing.JPasswordField();
         adminStatusComboBox = new javax.swing.JComboBox<>();
         adminPasswordLabel1 = new javax.swing.JLabel();
-        adminAccountId = new javax.swing.JLabel();
+        adminId = new javax.swing.JLabel();
         myAccountPanel = new javax.swing.JPanel();
         logoutButton = new javax.swing.JButton();
         usernameLabel = new javax.swing.JLabel();
@@ -286,11 +278,16 @@ public class Admin extends javax.swing.JFrame {
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, true
+                false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
+            }
+        });
+        adminTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                adminTableMouseClicked(evt);
             }
         });
         jScrollPane1.setViewportView(adminTable);
@@ -309,13 +306,13 @@ public class Admin extends javax.swing.JFrame {
         listOfAdminAccountLabel.setFont(new java.awt.Font("sansserif", 1, 28)); // NOI18N
         listOfAdminAccountLabel.setText("List of Admin Accounts");
 
-        adminStatusComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Active", "Deactivated", " " }));
+        adminStatusComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Active", "Deactivated"}));
         adminStatusComboBox.setMinimumSize(new java.awt.Dimension(60, 26));
 
         adminPasswordLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         adminPasswordLabel1.setText("Status: ");
 
-        adminAccountId.setText("Id");
+        adminId.setText("Id");
 
         javax.swing.GroupLayout adminPanelLayout = new javax.swing.GroupLayout(adminPanel);
         adminPanel.setLayout(adminPanelLayout);
@@ -329,7 +326,7 @@ public class Admin extends javax.swing.JFrame {
                     .addGroup(adminPanelLayout.createSequentialGroup()
                         .addGap(250, 250, 250)
                         .addComponent(createAdminAccountLabel)))
-                .addContainerGap(265, Short.MAX_VALUE))
+                .addContainerGap(261, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, adminPanelLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addGroup(adminPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -367,7 +364,7 @@ public class Admin extends javax.swing.JFrame {
                                         .addComponent(adminCancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addComponent(adminSaveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addComponent(adminAccountId))))
+                            .addComponent(adminId))))
                 .addGap(45, 45, 45))
         );
 
@@ -389,7 +386,7 @@ public class Admin extends javax.swing.JFrame {
                     .addGroup(adminPanelLayout.createSequentialGroup()
                         .addGroup(adminPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(adminAccountIdLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(adminAccountId))
+                            .addComponent(adminId))
                         .addGap(13, 13, 13)
                         .addGroup(adminPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(adminLastNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -478,8 +475,8 @@ public class Admin extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-  
-    
+
+
     private void logoutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutButtonActionPerformed
         this.dispose();
         new Login().setVisible(true);
@@ -490,110 +487,148 @@ public class Admin extends javax.swing.JFrame {
     }//GEN-LAST:event_adminCancelButtonActionPerformed
 
     private void adminSaveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adminSaveButtonActionPerformed
-        String adminPassword = null;
-        for(AdminData admin : adminDatas){
-            if(usernameLabel.getText().equals(admin.getUsername())){
-                adminPassword = admin.getPassword();
+        String currentAdminPassword = null;
+        boolean isUsernameDuplicate = false;
+                
+       
+        for (AdminData admin : adminDatas) {                        
+             if(adminUsernameTextField.getText().equals(admin.getUsername())){
+                isUsernameDuplicate = true;
             }
+            if (usernameLabel.getText().equals(admin.getUsername())) {
+                currentAdminPassword = admin.getPassword();                
+            }           
+        }        
+        System.out.println(adminTableModel.getValueAt(adminRow, 5).toString());
+        System.out.println(adminRow);
+        if (isUsernameDuplicate && !adminTableModel.getValueAt(adminRow, 4).toString().equals(adminUsernameTextField.getText())) {
+            JOptionPane.showMessageDialog(null, "Username already exist!", "Invalid Username", JOptionPane.ERROR_MESSAGE);
+            return;
         }
+        
         String password = JOptionPane.showInputDialog(null, "Enter your password: ", "Save Account", JOptionPane.QUESTION_MESSAGE);
         if (password == null) {
             return;
         } else {
-            if (!password.equals(adminPassword)) {
-                JOptionPane.showMessageDialog(null, "Incorrect password", "Wrong Password", JOptionPane.ERROR_MESSAGE);
+            if (!password.equals(currentAdminPassword)) {
+                JOptionPane.showMessageDialog(null, "Incorrect password!", "Wrong Password", JOptionPane.ERROR_MESSAGE);
                 return;
-            }
-            try {
-                PreparedStatement preparedStatement = connect.prepareStatement("INSERT IGNORE INTO Admin VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-                preparedStatement.setInt(1, Integer.parseInt(adminAccountId.getText()));
-                preparedStatement.setString(2, adminLastNameTextField.getText());
-                preparedStatement.setString(3, adminFirstNameTextField.getText());
-                preparedStatement.setString(4, adminMiddleNameTextField.getText());
-                preparedStatement.setString(5, adminAddressTextField.getText());
-                preparedStatement.setString(6, adminPhoneNumberTextField.getText());
-                preparedStatement.setString(7, adminUsernameTextField.getText());
-                preparedStatement.setString(8, adminPasswordTextField.getText());
-                preparedStatement.setString(9, adminStatusComboBox.getSelectedItem().toString());
+            }                                
+            try {                
+                if (Integer.parseInt(adminId.getText()) > adminDatas.size()) {
+                    PreparedStatement insertAdmin;
+                    insertAdmin = connect.prepareStatement("INSERT IGNORE INTO Admin VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                    insertAdmin.setInt(1, Integer.parseInt(adminId.getText()));
+                    insertAdmin.setString(2, adminLastNameTextField.getText());
+                    insertAdmin.setString(3, adminFirstNameTextField.getText());
+                    insertAdmin.setString(4, adminMiddleNameTextField.getText());
+                    insertAdmin.setString(5, adminAddressTextField.getText());
+                    insertAdmin.setString(6, adminPhoneNumberTextField.getText());
+                    insertAdmin.setString(7, adminUsernameTextField.getText());
+                    insertAdmin.setString(8, adminPasswordTextField.getText());
+                    insertAdmin.setString(9, adminStatusComboBox.getSelectedItem().toString());
 
-                preparedStatement.executeUpdate();
+                    insertAdmin.executeUpdate();
 
-                showDataAdminTable();
+                    showDataAdminTable();
 
-                adminAccountId.setText(Integer.toString(adminDatas.get(adminDatas.size() - 1).getId() + 1));
-                clearAdminTextFields();
-            } catch (Exception ex) {
+                    adminId.setText(Integer.toString(adminDatas.get(adminDatas.size() - 1).getId() + 1));
+                    clearAdminTextFields();                                                        
+                }else{
+                    PreparedStatement updateAdmin = connect.prepareStatement("UPDATE Admin SET admin_id = ?, admin_lastname = ?, admin_firstname = ?,"
+                            + " admin_middlename = ?, admin_address =  ?, admin_phonenumber = ?, admin_username =  ?, admin_password = ?, admin_status = ? WHERE admin_id = ?");
+                    updateAdmin.setInt(1, Integer.parseInt(adminId.getText()));
+                    updateAdmin.setString(2, adminLastNameTextField.getText());
+                    updateAdmin.setString(3, adminFirstNameTextField.getText());
+                    updateAdmin.setString(4, adminMiddleNameTextField.getText());
+                    updateAdmin.setString(5, adminAddressTextField.getText());
+                    updateAdmin.setString(6, adminPhoneNumberTextField.getText());
+                    updateAdmin.setString(7, adminUsernameTextField.getText());
+                    updateAdmin.setString(8, adminPasswordTextField.getText());
+                    updateAdmin.setString(9, adminStatusComboBox.getSelectedItem().toString());
+                    updateAdmin.setInt(10, Integer.parseInt(adminId.getText()));
+
+                    updateAdmin.executeUpdate();
+
+                    showDataAdminTable();
+
+                    adminId.setText(Integer.toString(adminDatas.get(adminDatas.size() - 1).getId() + 1));
+                    clearAdminTextFields();
+                }                        
+            } catch (SQLException ex) {
+                Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }//GEN-LAST:event_adminSaveButtonActionPerformed
 
     private void adminPanelMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_adminPanelMousePressed
-        Rectangle tableBounds = adminTable.getBounds();        
-        if (!tableBounds.contains(evt.getPoint())) {            
+        Rectangle tableBounds = adminTable.getBounds();
+        if (!tableBounds.contains(evt.getPoint())) {
             adminTable.clearSelection();
         }
     }//GEN-LAST:event_adminPanelMousePressed
-           
-   
-    public class MyTableModelListener implements TableModelListener {
-        @Override
-        public void tableChanged(TableModelEvent e) {
-            if (e.getType() == TableModelEvent.UPDATE) {
-                int row = e.getFirstRow();               
-                PreparedStatement statement;
-                try {
-                    statement = connect.prepareStatement("UPDATE Admin SET admin_status = ? WHERE admin_id = ?");
-                    statement.setString(1, adminTableModel.getValueAt(row, 5).toString());
-                    statement.setString(2, adminTableModel.getValueAt(row, 0).toString());
 
-                    statement.executeUpdate();
-                    
-                    updateAdminDatas(); 
-                                        
-                } catch (SQLException ex) {                    
-                }               
-            }
+     int adminRow;
+    private void adminTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_adminTableMouseClicked
+        adminRow = adminTable.getSelectedRow();               
+
+        if (!usernameLabel.getText().equals("main_admin")) {
+            JOptionPane.showMessageDialog(null, "Main Admin Account Only!", "Edit", JOptionPane.WARNING_MESSAGE);
+            return;
         }
-    }
-    
-    public void clearAdminTextFields(){
+
+        adminId.setText(Integer.toString(adminDatas.get(adminRow).getId()));
+        adminLastNameTextField.setText(adminDatas.get(adminRow).getLastName());
+        adminFirstNameTextField.setText(adminDatas.get(adminRow).getFirstName());
+        adminMiddleNameTextField.setText(adminDatas.get(adminRow).getMiddleName());
+        adminAddressTextField.setText(adminDatas.get(adminRow).getAddress());
+        adminPhoneNumberTextField.setText(adminDatas.get(adminRow).getPhonNumber());
+        adminUsernameTextField.setText(adminDatas.get(adminRow).getUsername());
+        adminPasswordTextField.setText(adminDatas.get(adminRow).getPassword());
+        adminStatusComboBox.setSelectedItem(adminDatas.get(adminRow).getStatus());
+    }//GEN-LAST:event_adminTableMouseClicked
+
+    public void clearAdminTextFields() {
+        adminId.setText(Integer.toString(adminDatas.get(adminDatas.size() - 1).getId() + 1));
         adminLastNameTextField.setText("");
         adminFirstNameTextField.setText("");
         adminMiddleNameTextField.setText("");
-        adminLastNameTextField.setText("");
         adminAddressTextField.setText("");
         adminPhoneNumberTextField.setText("");
         adminUsernameTextField.setText("");
         adminPasswordTextField.setText("");
+        adminStatusComboBox.setSelectedItem("Activate");
     }
-    
-    public void updateAdminDatas(){
+
+    public void updateAdminDatas() {
         try {
             Statement statement = connect.createStatement();
 
-            ResultSet selectAdministrator = statement.executeQuery("SELECT * FROM Admin");
+            ResultSet selectAdmin = statement.executeQuery("SELECT * FROM Admin");
 
             adminDatas.clear();
-            while (selectAdministrator.next()) {
-                adminDatas.add(new AdminData(selectAdministrator.getInt("admin_id"), selectAdministrator.getString("admin_lastname"),
-                        selectAdministrator.getString("admin_firstname"), selectAdministrator.getString("admin_middlename"), selectAdministrator.getString("admin_address"),
-                        selectAdministrator.getString("admin_phonenumber"), selectAdministrator.getString("admin_username"), selectAdministrator.getString("admin_password"), 
-                        selectAdministrator.getString("admin_status")
+            while (selectAdmin.next()) {
+                adminDatas.add(new AdminData(selectAdmin.getInt("admin_id"), selectAdmin.getString("admin_lastname"),
+                        selectAdmin.getString("admin_firstname"), selectAdmin.getString("admin_middlename"), selectAdmin.getString("admin_address"),
+                        selectAdmin.getString("admin_phonenumber"), selectAdmin.getString("admin_username"), selectAdmin.getString("admin_password"),
+                        selectAdmin.getString("admin_status")
                 ));
             }
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
+            Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-   DefaultTableModel adminTableModel;    
-    public void showDataAdminTable(){
-        updateAdminDatas();        
-        
+
+    DefaultTableModel adminTableModel;
+
+    public void showDataAdminTable() {
+        updateAdminDatas();
+
         adminTableModel = (DefaultTableModel) adminTable.getModel();
         Object[] row = new Object[6];
-        
+
         adminTableModel.setRowCount(0);
-        
+
         for (int i = 0; i < adminDatas.size(); i++) {
             row[0] = adminDatas.get(i).getId();
             row[1] = adminDatas.get(i).getFirstName() + " " + adminDatas.get(i).getMiddleName() + " " + adminDatas.get(i).getLastName();
@@ -606,13 +641,13 @@ public class Admin extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel adminAccountId;
     private javax.swing.JLabel adminAccountIdLabel;
     private javax.swing.JLabel adminAddressLabel;
     private javax.swing.JTextField adminAddressTextField;
     private javax.swing.JButton adminCancelButton;
     private javax.swing.JLabel adminFirstNameLabel;
     private javax.swing.JTextField adminFirstNameTextField;
+    private javax.swing.JLabel adminId;
     private javax.swing.JLabel adminLastNameLabel;
     private javax.swing.JTextField adminLastNameTextField;
     private javax.swing.JLabel adminMiddleInitialLabel;
