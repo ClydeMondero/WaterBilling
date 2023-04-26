@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS Admin(
         admin_address VARCHAR(50),
         admin_phonenumber VARCHAR(25),
 	admin_username VARCHAR(25) UNIQUE, 
-	admin_password VARCHAR(25),
+        admin_password VARCHAR(25),
         admin_status VARCHAR(15)
 );
 

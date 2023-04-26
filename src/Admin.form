@@ -195,8 +195,8 @@
                                           <Component id="adminUsernameTextField" linkSize="2" alignment="0" pref="227" max="32767" attributes="0"/>
                                           <Component id="adminStatusComboBox" min="-2" pref="227" max="-2" attributes="0"/>
                                       </Group>
-                                      <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                      <EmptySpace min="-2" pref="58" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="1" attributes="0">
                                           <Group type="102" alignment="1" attributes="0">
                                               <Group type="103" groupAlignment="0" attributes="0">
                                                   <Component id="adminPasswordLabel" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -209,11 +209,10 @@
                                                   <Component id="adminPhoneNumberTextField" linkSize="1" alignment="0" pref="227" max="32767" attributes="0"/>
                                                   <Component id="adminPasswordTextField" linkSize="2" alignment="0" max="32767" attributes="0"/>
                                               </Group>
-                                              <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
                                           </Group>
-                                          <Group type="102" alignment="0" attributes="0">
+                                          <Group type="102" alignment="1" attributes="0">
                                               <Component id="adminCancelButton" min="-2" pref="160" max="-2" attributes="0"/>
-                                              <EmptySpace max="32767" attributes="0"/>
+                                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                               <Component id="adminSaveButton" min="-2" pref="160" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
@@ -236,35 +235,49 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="createAdminAccountLabel" min="-2" pref="49" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="adminAccountIdLabel" alignment="3" max="32767" attributes="0"/>
-                          <Component id="adminAccountId" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="adminLastNameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="adminLastNameLabel" alignment="3" pref="29" max="32767" attributes="0"/>
-                          <Component id="adminFirstNameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="adminFirstNameLabel" alignment="3" pref="29" max="32767" attributes="0"/>
-                      </Group>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="adminMiddleNameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="adminMiddleInitialLabel" alignment="3" pref="29" max="32767" attributes="0"/>
-                      </Group>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="adminAddressTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="adminAddressLabel" alignment="3" pref="29" max="32767" attributes="0"/>
-                          <Component id="adminPhoneNumberTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="adminPhoneNumberLabel" alignment="3" pref="29" max="32767" attributes="0"/>
-                      </Group>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="adminUsernameTextField" linkSize="3" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="adminUsernameLabel" alignment="3" pref="32" max="32767" attributes="0"/>
-                          <Component id="adminPasswordLabel" alignment="3" pref="31" max="32767" attributes="0"/>
-                          <Component id="adminPasswordTextField" linkSize="3" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Group type="102" attributes="0">
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="adminAccountIdLabel" alignment="3" max="32767" attributes="0"/>
+                                  <Component id="adminAccountId" alignment="3" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="adminLastNameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="adminLastNameLabel" alignment="3" pref="29" max="32767" attributes="0"/>
+                              </Group>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="adminMiddleNameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="adminMiddleInitialLabel" alignment="3" pref="29" max="32767" attributes="0"/>
+                              </Group>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="adminAddressTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="adminAddressLabel" alignment="3" pref="29" max="32767" attributes="0"/>
+                              </Group>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="adminUsernameTextField" linkSize="3" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="adminUsernameLabel" alignment="3" pref="32" max="32767" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <Group type="102" attributes="0">
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="adminFirstNameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="adminFirstNameLabel" alignment="3" pref="29" max="32767" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="59" pref="59" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="adminPhoneNumberTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="adminPhoneNumberLabel" alignment="3" pref="29" max="32767" attributes="0"/>
+                              </Group>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="adminPasswordLabel" alignment="3" pref="31" max="32767" attributes="0"/>
+                                  <Component id="adminPasswordTextField" linkSize="3" alignment="3" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">

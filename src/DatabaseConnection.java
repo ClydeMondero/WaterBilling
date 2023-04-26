@@ -13,10 +13,11 @@ public class DatabaseConnection {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             
-            connect = DriverManager.getConnection("jdbc:mysql://localhost/Database", "root", "root");                        
+            connect = DriverManager.getConnection("jdbc:mysql://localhost/waterbilling", "root", "root");                        
             
-            System.out.println("Database Connected");                                      
-        } catch (Exception e){            
+            System.out.println("Database connected!");                                      
+        } catch (Exception e){ 
+            System.out.println("Database don't exist"); 
         }
         return connect;  
     }
@@ -32,7 +33,7 @@ public class DatabaseConnection {
             
             scriptRunner.runScript(reader);
             
-            System.out.println("Database Executed");  
+            System.out.println("Database executed!");  
             
         } catch (Exception e){            
         }
