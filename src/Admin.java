@@ -498,9 +498,7 @@ public class Admin extends javax.swing.JFrame {
             if (usernameLabel.getText().equals(admin.getUsername())) {
                 currentAdminPassword = admin.getPassword();                
             }           
-        }        
-        System.out.println(adminTableModel.getValueAt(adminRow, 5).toString());
-        System.out.println(adminRow);
+        }                
         if (isUsernameDuplicate && !adminTableModel.getValueAt(adminRow, 4).toString().equals(adminUsernameTextField.getText())) {
             JOptionPane.showMessageDialog(null, "Username already exist!", "Invalid Username", JOptionPane.ERROR_MESSAGE);
             return;

@@ -125,12 +125,13 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     int loginCounter = 0;
+    boolean loginStatus = false;
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
-
-        for (int i = 0; i < adminDatas.size(); i++) {
+       for (int i = 0; i < adminDatas.size(); i++) {
             if (usernameTextField.getText().equals(adminDatas.get(i).getUsername())) {
                 if (adminDatas.get(i).getStatus().equals("Active")) {
                     if (passwordPasswordField.getText().equals(adminDatas.get(i).getPassword())) {
+                        loginStatus = true;
                         this.dispose();
                         JOptionPane.showMessageDialog(null, "Login Success!", "Login", JOptionPane.INFORMATION_MESSAGE);
                         setUsername(usernameTextField.getText());
@@ -156,21 +157,26 @@ public class Login extends javax.swing.JFrame {
                                 Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
                             }
                         }
+                        return;
                     }
                 } else {
                     JOptionPane.showMessageDialog(null, "Account deactivated!", "Login", JOptionPane.ERROR_MESSAGE);
                     usernameTextField.setText("");
                     passwordPasswordField.setText("");
-                }
-
-            }
-        }
+                }                
+            }                            
+        }                   
         for (int i = 0; i < staffDatas.size(); i++) {
             if (usernameTextField.getText().equals(staffDatas.get(i).getUsername()) && passwordPasswordField.getText().equals(staffDatas.get(i).getPassword())) {
                 this.dispose();
                 new Staff().setVisible(true);
             }
         }
+        if (!loginStatus) {
+            JOptionPane.showMessageDialog(null, "Login Failed!", "Login", JOptionPane.WARNING_MESSAGE);
+            usernameTextField.setText("");
+            passwordPasswordField.setText("");
+        }        
     }//GEN-LAST:event_loginButtonActionPerformed
 
 
