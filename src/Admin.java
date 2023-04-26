@@ -141,7 +141,32 @@ public class Admin extends javax.swing.JFrame {
         homePanel = new javax.swing.JPanel();
         billingPanel = new javax.swing.JPanel();
         clientPanel = new javax.swing.JPanel();
+        listOfClientAccountLabel = new javax.swing.JLabel();
         staffPanel = new javax.swing.JPanel();
+        listOfStaffAccountLabel = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        staffTable = new javax.swing.JTable();
+        createStaffAccountLabel = new javax.swing.JLabel();
+        staffAccountIdLabel = new javax.swing.JLabel();
+        staffLastNameLabel = new javax.swing.JLabel();
+        staffFirstNameLabel = new javax.swing.JLabel();
+        staffMiddleNameLabel = new javax.swing.JLabel();
+        staffAddressLabel = new javax.swing.JLabel();
+        staffUsernameLabel = new javax.swing.JLabel();
+        staffStatusLabel = new javax.swing.JLabel();
+        staffPhoneNumberLabel = new javax.swing.JLabel();
+        staffPasswordLabel = new javax.swing.JLabel();
+        staffCancelButton = new javax.swing.JButton();
+        staffSaveButton = new javax.swing.JButton();
+        staffLastNameTextField = new javax.swing.JTextField();
+        staffMiddleNameTextField = new javax.swing.JTextField();
+        staffAddressTextField = new javax.swing.JTextField();
+        staffUsernameTextField = new javax.swing.JTextField();
+        staffFirstNameTextField = new javax.swing.JTextField();
+        staffPhoneNumberTextField = new javax.swing.JTextField();
+        staffPasswordTextField = new javax.swing.JTextField();
+        staffId = new javax.swing.JLabel();
+        staffStatusComboBox = new javax.swing.JComboBox<>();
         adminPanel = new javax.swing.JPanel();
         createAdminAccountLabel = new javax.swing.JLabel();
         adminAccountIdLabel = new javax.swing.JLabel();
@@ -183,7 +208,7 @@ public class Admin extends javax.swing.JFrame {
         );
         homePanelLayout.setVerticalGroup(
             homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 570, Short.MAX_VALUE)
+            .addGap(0, 569, Short.MAX_VALUE)
         );
 
         adminTabbedPane.addTab("Home", homePanel);
@@ -196,33 +221,234 @@ public class Admin extends javax.swing.JFrame {
         );
         billingPanelLayout.setVerticalGroup(
             billingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 570, Short.MAX_VALUE)
+            .addGap(0, 569, Short.MAX_VALUE)
         );
 
         adminTabbedPane.addTab("Billing", billingPanel);
+
+        listOfClientAccountLabel.setFont(new java.awt.Font("sansserif", 1, 28)); // NOI18N
+        listOfClientAccountLabel.setText("List of Client Accounts");
 
         javax.swing.GroupLayout clientPanelLayout = new javax.swing.GroupLayout(clientPanel);
         clientPanel.setLayout(clientPanelLayout);
         clientPanelLayout.setHorizontalGroup(
             clientPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 820, Short.MAX_VALUE)
+            .addGroup(clientPanelLayout.createSequentialGroup()
+                .addGap(250, 250, 250)
+                .addComponent(listOfClientAccountLabel)
+                .addContainerGap(267, Short.MAX_VALUE))
         );
         clientPanelLayout.setVerticalGroup(
             clientPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 570, Short.MAX_VALUE)
+            .addGroup(clientPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(listOfClientAccountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(514, Short.MAX_VALUE))
         );
 
         adminTabbedPane.addTab("Client", clientPanel);
+
+        listOfStaffAccountLabel.setFont(new java.awt.Font("sansserif", 1, 28)); // NOI18N
+        listOfStaffAccountLabel.setText("List of Staff Accounts");
+
+        staffTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Id", "Name", "Address", "Phone Number", "Usename", "Status"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        staffTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                staffTableMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(staffTable);
+        if (staffTable.getColumnModel().getColumnCount() > 0) {
+            staffTable.getColumnModel().getColumn(0).setResizable(false);
+            staffTable.getColumnModel().getColumn(4).setResizable(false);
+            staffTable.getColumnModel().getColumn(5).setResizable(false);
+        }
+
+        createStaffAccountLabel.setFont(new java.awt.Font("sansserif", 1, 28)); // NOI18N
+        createStaffAccountLabel.setText("Create Staff Account");
+
+        staffAccountIdLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        staffAccountIdLabel.setText("Account Id");
+
+        staffLastNameLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        staffLastNameLabel.setText("Last Name:");
+
+        staffFirstNameLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        staffFirstNameLabel.setText("First Name:");
+
+        staffMiddleNameLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        staffMiddleNameLabel.setText("Middle Name:");
+
+        staffAddressLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        staffAddressLabel.setText("Address");
+
+        staffUsernameLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        staffUsernameLabel.setText("Username:");
+
+        staffStatusLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        staffStatusLabel.setText("Status");
+
+        staffPhoneNumberLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        staffPhoneNumberLabel.setText("Phone Number:");
+
+        staffPasswordLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        staffPasswordLabel.setText("Password:");
+
+        staffCancelButton.setText("Cancel");
+        staffCancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                staffCancelButtonActionPerformed(evt);
+            }
+        });
+
+        staffSaveButton.setText("Save");
+        staffSaveButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                staffSaveButtonActionPerformed(evt);
+            }
+        });
+
+        staffAddressTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                staffAddressTextFieldActionPerformed(evt);
+            }
+        });
+
+        staffId.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        staffId.setText("id");
+
+        staffStatusComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Active", "Deactivated"}));
+        staffStatusComboBox.setMinimumSize(new java.awt.Dimension(60, 26));
 
         javax.swing.GroupLayout staffPanelLayout = new javax.swing.GroupLayout(staffPanel);
         staffPanel.setLayout(staffPanelLayout);
         staffPanelLayout.setHorizontalGroup(
             staffPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 820, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, staffPanelLayout.createSequentialGroup()
+                .addGap(39, 39, 39)
+                .addGroup(staffPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(staffMiddleNameLabel)
+                    .addComponent(staffAccountIdLabel)
+                    .addComponent(staffStatusLabel)
+                    .addComponent(staffLastNameLabel)
+                    .addComponent(staffAddressLabel)
+                    .addComponent(staffUsernameLabel))
+                .addGap(33, 33, 33)
+                .addGroup(staffPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(staffUsernameTextField, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(staffPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(staffId, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, staffPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(staffAddressTextField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
+                            .addComponent(staffMiddleNameTextField, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(staffLastNameTextField, javax.swing.GroupLayout.Alignment.LEADING)))
+                    .addComponent(staffStatusComboBox, 0, 230, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(staffPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, staffPanelLayout.createSequentialGroup()
+                        .addGroup(staffPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(staffPanelLayout.createSequentialGroup()
+                                .addGroup(staffPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(staffPanelLayout.createSequentialGroup()
+                                        .addGap(41, 41, 41)
+                                        .addComponent(staffFirstNameLabel)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, staffPanelLayout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(staffCancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                                .addComponent(staffSaveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(staffPanelLayout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addGroup(staffPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(staffPhoneNumberTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(staffFirstNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(staffPasswordTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(19, 19, 19))
+                    .addGroup(staffPanelLayout.createSequentialGroup()
+                        .addGap(41, 41, 41)
+                        .addGroup(staffPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(staffPasswordLabel)
+                            .addComponent(staffPhoneNumberLabel))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, staffPanelLayout.createSequentialGroup()
+                .addContainerGap(42, Short.MAX_VALUE)
+                .addGroup(staffPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, staffPanelLayout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 739, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(39, 39, 39))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, staffPanelLayout.createSequentialGroup()
+                        .addComponent(listOfStaffAccountLabel)
+                        .addGap(265, 265, 265))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, staffPanelLayout.createSequentialGroup()
+                        .addComponent(createStaffAccountLabel)
+                        .addGap(245, 245, 245))))
         );
         staffPanelLayout.setVerticalGroup(
             staffPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 570, Short.MAX_VALUE)
+            .addGroup(staffPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(listOfStaffAccountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(createStaffAccountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(11, 11, 11)
+                .addGroup(staffPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(staffPanelLayout.createSequentialGroup()
+                        .addGroup(staffPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(staffFirstNameLabel)
+                            .addComponent(staffFirstNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(101, 101, 101)
+                        .addGroup(staffPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(staffPasswordLabel)
+                            .addComponent(staffPasswordTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(staffPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(staffStatusComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(staffCancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(staffSaveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(staffPanelLayout.createSequentialGroup()
+                        .addGroup(staffPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(staffId)
+                            .addComponent(staffAccountIdLabel))
+                        .addGap(18, 18, 18)
+                        .addGroup(staffPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(staffLastNameLabel)
+                            .addComponent(staffLastNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(staffPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(staffMiddleNameLabel)
+                            .addComponent(staffMiddleNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(staffPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(staffAddressLabel)
+                            .addComponent(staffAddressTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(staffPhoneNumberLabel)
+                            .addComponent(staffPhoneNumberTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(staffPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(staffUsernameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(staffUsernameLabel))
+                        .addGap(18, 18, 18)
+                        .addComponent(staffStatusLabel)
+                        .addGap(13, 13, 13)))
+                .addContainerGap(45, Short.MAX_VALUE))
         );
 
         adminTabbedPane.addTab("Staff", staffPanel);
@@ -326,7 +552,7 @@ public class Admin extends javax.swing.JFrame {
                     .addGroup(adminPanelLayout.createSequentialGroup()
                         .addGap(250, 250, 250)
                         .addComponent(createAdminAccountLabel)))
-                .addContainerGap(261, Short.MAX_VALUE))
+                .addContainerGap(265, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, adminPanelLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addGroup(adminPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -436,7 +662,7 @@ public class Admin extends javax.swing.JFrame {
         );
         myAccountPanelLayout.setVerticalGroup(
             myAccountPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 570, Short.MAX_VALUE)
+            .addGap(0, 569, Short.MAX_VALUE)
         );
 
         adminTabbedPane.addTab("My Account", myAccountPanel);
@@ -586,6 +812,22 @@ public class Admin extends javax.swing.JFrame {
         adminStatusComboBox.setSelectedItem(adminDatas.get(adminRow).getStatus());
     }//GEN-LAST:event_adminTableMouseClicked
 
+    private void staffSaveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_staffSaveButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_staffSaveButtonActionPerformed
+
+    private void staffCancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_staffCancelButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_staffCancelButtonActionPerformed
+
+    private void staffTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_staffTableMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_staffTableMouseClicked
+
+    private void staffAddressTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_staffAddressTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_staffAddressTextFieldActionPerformed
+
     public void clearAdminTextFields() {
         adminId.setText(Integer.toString(adminDatas.get(adminDatas.size() - 1).getId() + 1));
         adminLastNameTextField.setText("");
@@ -665,12 +907,37 @@ public class Admin extends javax.swing.JFrame {
     private javax.swing.JPanel billingPanel;
     private javax.swing.JPanel clientPanel;
     private javax.swing.JLabel createAdminAccountLabel;
+    private javax.swing.JLabel createStaffAccountLabel;
     private javax.swing.JPanel homePanel;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel listOfAdminAccountLabel;
+    private javax.swing.JLabel listOfClientAccountLabel;
+    private javax.swing.JLabel listOfStaffAccountLabel;
     private javax.swing.JButton logoutButton;
     private javax.swing.JPanel myAccountPanel;
+    private javax.swing.JLabel staffAccountIdLabel;
+    private javax.swing.JLabel staffAddressLabel;
+    private javax.swing.JTextField staffAddressTextField;
+    private javax.swing.JButton staffCancelButton;
+    private javax.swing.JLabel staffFirstNameLabel;
+    private javax.swing.JTextField staffFirstNameTextField;
+    private javax.swing.JLabel staffId;
+    private javax.swing.JLabel staffLastNameLabel;
+    private javax.swing.JTextField staffLastNameTextField;
+    private javax.swing.JLabel staffMiddleNameLabel;
+    private javax.swing.JTextField staffMiddleNameTextField;
     private javax.swing.JPanel staffPanel;
+    private javax.swing.JLabel staffPasswordLabel;
+    private javax.swing.JTextField staffPasswordTextField;
+    private javax.swing.JLabel staffPhoneNumberLabel;
+    private javax.swing.JTextField staffPhoneNumberTextField;
+    private javax.swing.JButton staffSaveButton;
+    private javax.swing.JComboBox<String> staffStatusComboBox;
+    private javax.swing.JLabel staffStatusLabel;
+    private javax.swing.JTable staffTable;
+    private javax.swing.JLabel staffUsernameLabel;
+    private javax.swing.JTextField staffUsernameTextField;
     private javax.swing.JLabel usernameLabel;
     // End of variables declaration//GEN-END:variables
 }
