@@ -1,4 +1,3 @@
-
 import java.sql.Connection;
 import java.sql.Statement;
 import java.sql.ResultSet;
@@ -12,8 +11,7 @@ import javax.swing.JOptionPane;
 
 public class Login extends javax.swing.JFrame {
 
-    static ArrayList<AdminData> adminDatas = new ArrayList<>();
-    static ArrayList<StaffData> staffDatas = new ArrayList<>();
+    static ArrayList<AdminData> adminDatas = new ArrayList<>();    
 
     Connection connect = null;
 
@@ -39,13 +37,7 @@ public class Login extends javax.swing.JFrame {
             while (selectAdmin.next()) {
                 adminDatas.add(new AdminData(selectAdmin.getInt("admin_id"), selectAdmin.getString("admin_username"), selectAdmin.getString("admin_password"),
                         selectAdmin.getString("admin_status")));
-            }
-
-            ResultSet selectStaff = statement.executeQuery("SELECT id, username, password FROM Staff");
-
-            while (selectStaff.next()) {
-                staffDatas.add(new StaffData(selectStaff.getInt("id"), selectStaff.getString("username"), selectStaff.getString("password")));
-            }
+            }           
         } catch (SQLException ex) {
             Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -134,7 +126,7 @@ public class Login extends javax.swing.JFrame {
                         this.dispose();
                         JOptionPane.showMessageDialog(null, "Login Success!", "Login", JOptionPane.INFORMATION_MESSAGE);
                         setUsername(usernameTextField.getText());
-                        new Admin().setVisible(true);
+                        new Main().setVisible(true);
                         break;
                     } else {
                         JOptionPane.showMessageDialog(null, "Login Failed!", "Login", JOptionPane.WARNING_MESSAGE);
@@ -164,13 +156,7 @@ public class Login extends javax.swing.JFrame {
                     passwordPasswordField.setText("");
                 }                
             }                            
-        }                   
-        for (int i = 0; i < staffDatas.size(); i++) {
-            if (usernameTextField.getText().equals(staffDatas.get(i).getUsername()) && passwordPasswordField.getText().equals(staffDatas.get(i).getPassword())) {
-                this.dispose();
-                new Staff().setVisible(true);
-            }
-        }
+        }                           
         if (!loginStatus) {
             JOptionPane.showMessageDialog(null, "Login Failed!", "Login", JOptionPane.WARNING_MESSAGE);
             usernameTextField.setText("");

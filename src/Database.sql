@@ -28,4 +28,4 @@ SELECT * FROM Admin;
 
 SELECT * FROM Staff;
 
- -- DROP DATABASE WaterBilling;
+-- DROP DATABASE WaterBilling;
