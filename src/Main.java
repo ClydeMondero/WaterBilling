@@ -20,6 +20,8 @@ public class Main extends javax.swing.JFrame {
         if(accountUsername.equals("main_admin")){
             mainTabbedPane.add("Admin", new AdminPanel(accountUsername, accountPassword));  
         }                 
+        
+        mainTabbedPane.add("My Account", new MyAccount(accountUsername, accountPassword));
     }            
     
     @SuppressWarnings("unchecked")

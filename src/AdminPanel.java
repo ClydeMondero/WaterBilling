@@ -477,7 +477,7 @@ public class AdminPanel extends javax.swing.JPanel {
                             id.setText(Integer.toString(admins.get(admins.size() - 1).getId() + 1));
                             clearTextFields();
 
-                            JOptionPane.showMessageDialog(null, "Account Created!", "Login", JOptionPane.INFORMATION_MESSAGE);
+                            JOptionPane.showMessageDialog(null, "Account Created!", "Create", JOptionPane.INFORMATION_MESSAGE);
                         } else {
                             PreparedStatement updateStatement = connect.prepareStatement("UPDATE Admin SET admin_id = ?, admin_lastname = ?, admin_firstname = ?,"
                                     + " admin_middlename = ?, admin_address =  ?, admin_phonenumber = ?, admin_username =  ?, admin_password = ?, admin_status = ? WHERE admin_id = ?");
@@ -502,7 +502,7 @@ public class AdminPanel extends javax.swing.JPanel {
                             table.clearSelection();
                             delete.setEnabled(false);
 
-                            JOptionPane.showMessageDialog(null, "Account Updated!", "Login", JOptionPane.INFORMATION_MESSAGE);
+                            JOptionPane.showMessageDialog(null, "Account Updated!", "Update", JOptionPane.INFORMATION_MESSAGE);
                         }
                     } catch (SQLException ex) {
                         Logger.getLogger(AdminPanel.class.getName()).log(Level.SEVERE, null, ex);
@@ -530,11 +530,12 @@ public class AdminPanel extends javax.swing.JPanel {
             table.clearSelection();
             clearTextFields();
             delete.setEnabled(false);
+            return;
         }
         
         JPasswordField passwordField = new JPasswordField();
         String password = null;
-        int option = JOptionPane.showConfirmDialog(null, passwordField, "Enter your password:", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+        int option = JOptionPane.showConfirmDialog(null, passwordField, "Enter your password", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
 
         if (option == JOptionPane.OK_OPTION) {
             password = passwordField.getText();

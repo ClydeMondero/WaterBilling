@@ -478,7 +478,7 @@ public class StaffPanel extends javax.swing.JPanel {
                             id.setText(Integer.toString(staffs.get(staffs.size() - 1).getId() + 1));
                             clearTextFields();
 
-                            JOptionPane.showMessageDialog(null, "Account Created!", "Login", JOptionPane.INFORMATION_MESSAGE);
+                            JOptionPane.showMessageDialog(null, "Account Created!", "Create", JOptionPane.INFORMATION_MESSAGE);
                         } else {
                             PreparedStatement updateStatement = connect.prepareStatement("UPDATE Staff SET staff_id = ?, staff_lastname = ?, staff_firstname = ?,"
                                     + " staff_middlename = ?, staff_address =  ?, staff_phonenumber = ?, staff_username =  ?, staff_password = ?, staff_status = ? WHERE staff_id = ?");
@@ -503,7 +503,7 @@ public class StaffPanel extends javax.swing.JPanel {
                             table.clearSelection();
                             delete.setEnabled(false);
 
-                            JOptionPane.showMessageDialog(null, "Account Updated!", "Login", JOptionPane.INFORMATION_MESSAGE);
+                            JOptionPane.showMessageDialog(null, "Account Updated!", "Update", JOptionPane.INFORMATION_MESSAGE);
                         }
                     } catch (SQLException ex) {
                         Logger.getLogger(AdminPanel.class.getName()).log(Level.SEVERE, null, ex);
