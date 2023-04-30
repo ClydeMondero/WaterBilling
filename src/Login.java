@@ -132,7 +132,9 @@ public class Login extends javax.swing.JFrame {
                         JOptionPane.showMessageDialog(null, "Login Failed!", "Login", JOptionPane.WARNING_MESSAGE);
                         usernameTextField.setText("");
                         passwordPasswordField.setText("");
-                        ++loginCounter;
+                        if(!usernameTextField.getText().equals("main_admin")){
+                            ++loginCounter;
+                        }                        
                         if (loginCounter == 3) {
                             JOptionPane.showMessageDialog(null, "Account deactivated!", "Login", JOptionPane.ERROR_MESSAGE);
                             usernameTextField.setText("");
@@ -156,7 +158,7 @@ public class Login extends javax.swing.JFrame {
                     passwordPasswordField.setText("");
                     return;
                 }
-            }loginStatus = false;
+            }else {loginStatus = false;}            
         }
         if (loginStatus == false) {
             JOptionPane.showMessageDialog(null, "Login Failed!", "Login", JOptionPane.WARNING_MESSAGE);

@@ -129,7 +129,7 @@ public class Admin extends javax.swing.JPanel {
 
         adminId.setText(Integer.toString(adminDatas.get(adminDatas.size() - 1).getId() + 1));
 
-        deleteButton.setVisible(false);
+        deleteButton.setEnabled(false);
     }
 
     @SuppressWarnings("unchecked")
@@ -265,7 +265,7 @@ public class Admin extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(deleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(45, 45, 45)
+                        .addGap(58, 58, 58)
                         .addComponent(listOfAdminAccountLabel))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addGroup(layout.createSequentialGroup()
@@ -306,16 +306,16 @@ public class Admin extends javax.swing.JPanel {
                                                 .addComponent(adminPasswordTextField)
                                                 .addComponent(adminPhoneNumberTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 728, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(38, Short.MAX_VALUE))
+                .addGap(38, 38, 38))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(listOfAdminAccountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(deleteButton))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(16, 16, 16)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(deleteButton)
+                    .addComponent(listOfAdminAccountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(createAdminAccountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -365,7 +365,7 @@ public class Admin extends javax.swing.JPanel {
 
     int adminRow;
     private void adminTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_adminTableMouseClicked
-        deleteButton.setVisible(true);
+        deleteButton.setEnabled(true);
 
         adminRow = adminTable.getSelectedRow();
 
@@ -389,7 +389,7 @@ public class Admin extends javax.swing.JPanel {
     private void adminCancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adminCancelButtonActionPerformed
         clearAdminTextFields();
         adminTable.clearSelection();
-        deleteButton.setVisible(false);
+        deleteButton.setEnabled(false);
     }//GEN-LAST:event_adminCancelButtonActionPerformed
 
     private void adminSaveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adminSaveButtonActionPerformed
@@ -471,7 +471,7 @@ public class Admin extends javax.swing.JPanel {
         if (adminTable.getSelectedRowCount() > 0) {
             clearAdminTextFields();
             adminTable.clearSelection();
-            deleteButton.setVisible(false);
+            deleteButton.setEnabled(false);
         }
     }//GEN-LAST:event_formMouseClicked
 
@@ -494,7 +494,7 @@ public class Admin extends javax.swing.JPanel {
                     showDataAdminTable();
                     clearAdminTextFields();
                     adminTable.clearSelection();
-                    deleteButton.setVisible(false);
+                    deleteButton.setEnabled(false);
                 } catch (SQLException ex) {
                     Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -518,7 +518,7 @@ public class Admin extends javax.swing.JPanel {
         try {
             Statement statement = connect.createStatement();
 
-            ResultSet selectAdmin = statement.executeQuery("SELECT * FROM Admin");
+            ResultSet selectAdmin = statement.executeQuery("SELECT * FROM Admin WHERE admin_status != 'Deleted'");
 
             adminDatas.clear();
             while (selectAdmin.next()) {
@@ -544,15 +544,13 @@ public class Admin extends javax.swing.JPanel {
         adminTableModel.setRowCount(0);
 
         for (int i = 0; i < adminDatas.size(); i++) {
-            if(!adminDatas.get(i).getStatus().equals("Deleted")){
-                row[0] = adminDatas.get(i).getId();
+            row[0] = adminDatas.get(i).getId();
             row[1] = adminDatas.get(i).getFirstName() + " " + adminDatas.get(i).getMiddleName() + " " + adminDatas.get(i).getLastName();
             row[2] = adminDatas.get(i).getAddress();
             row[3] = adminDatas.get(i).getPhonNumber();
             row[4] = adminDatas.get(i).getUsername();
             row[5] = adminDatas.get(i).getStatus();
             adminTableModel.addRow(row);
-            }            
         }
     }
 
