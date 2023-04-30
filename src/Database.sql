@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS Admin(
         admin_status VARCHAR(15)
 );
 
-INSERT IGNORE INTO Admin (admin_username, admin_password, admin_status) VALUES ('main_admin', '1234main', 'Active');
+INSERT IGNORE INTO Admin (admin_id, admin_username, admin_password, admin_status) VALUES (1001, 'main_admin', '1234main', 'Active');
 
 CREATE TABLE IF NOT EXISTS Staff(
 	staff_id INT PRIMARY KEY AUTO_INCREMENT, 
@@ -28,10 +28,10 @@ CREATE TABLE IF NOT EXISTS Staff(
         staff_status VARCHAR(15)
 );
 
-INSERT IGNORE INTO Staff (staff_username, staff_password, staff_status) VALUES ('clyde_staff', '1234clyde', 'Active');
+INSERT IGNORE INTO Staff (staff_ id, staff_username, staff_password, staff_status) VALUES (1001, 'clyde_staff', '1234clyde', 'Active');
 
 SELECT * FROM Admin;
 
 SELECT * FROM Staff;
 
--- DROP DATABASE WaterBilling;
+DROP DATABASE WaterBilling;

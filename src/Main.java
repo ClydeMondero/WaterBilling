@@ -1,29 +1,29 @@
 
 import javax.swing.JPanel;
 
+public class Main extends javax.swing.JFrame {
 
-
-public class Main extends javax.swing.JFrame {       
-    
-    
     String accountUsername, accountPassword;
+
     public Main(String username, String password) {
         initComponents();
-        
+
         this.accountUsername = username;
         this.accountPassword = password;
-        
+
         usernameLabel.setText(accountUsername);
-                              
-         mainTabbedPane.add("Staff", new StaffPanel(accountUsername, accountPassword));
-        
-        if(accountUsername.equals("main_admin")){
-            mainTabbedPane.add("Admin", new AdminPanel(accountUsername, accountPassword));  
-        }                 
-        
-        mainTabbedPane.add("My Account", new MyAccount(accountUsername, accountPassword));
-    }            
-    
+
+        mainTabbedPane.add("Staff", new StaffPanel(accountUsername, accountPassword));
+
+        if (accountUsername.equals("main_admin")) {
+            mainTabbedPane.add("Admin", new AdminPanel(accountUsername, accountPassword));
+        }
+
+        if (!accountUsername.equals("main_admin")) {
+            mainTabbedPane.add("My Account", new MyAccount(accountUsername, accountPassword));
+        }
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -95,8 +95,7 @@ public class Main extends javax.swing.JFrame {
         this.dispose();
         new Login().setVisible(true);
     }//GEN-LAST:event_logoutButtonActionPerformed
-       
-    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel homePanel;
