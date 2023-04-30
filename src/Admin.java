@@ -7,9 +7,15 @@ import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.PatternSyntaxException;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
+import javax.swing.RowFilter;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 class AdminData {
 
@@ -118,6 +124,8 @@ public class Admin extends javax.swing.JPanel {
 
     String username;
 
+    TableRowSorter<TableModel> adminTableSorter;
+
     public Admin(String username) {
         initComponents();
 
@@ -125,11 +133,32 @@ public class Admin extends javax.swing.JPanel {
 
         this.username = username;
 
+        deleteButton.setEnabled(false);
+
+        adminTableSorter = new TableRowSorter<>(adminTable.getModel());
+        adminTable.setRowSorter(adminTableSorter);
+
+        searchTextField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                updateFilter();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                updateFilter();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                updateFilter();
+            }
+
+        });
+
         showDataAdminTable();
 
         adminId.setText(Integer.toString(adminDatas.get(adminDatas.size() - 1).getId() + 1));
-
-        deleteButton.setEnabled(false);
     }
 
     @SuppressWarnings("unchecked")
@@ -137,7 +166,7 @@ public class Admin extends javax.swing.JPanel {
     private void initComponents() {
 
         listOfAdminAccountLabel = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        adminScrollPane = new javax.swing.JScrollPane();
         adminTable = new javax.swing.JTable();
         createAdminAccountLabel = new javax.swing.JLabel();
         adminAccountIdLabel = new javax.swing.JLabel();
@@ -161,6 +190,7 @@ public class Admin extends javax.swing.JPanel {
         adminCancelButton = new javax.swing.JButton();
         adminSaveButton = new javax.swing.JButton();
         deleteButton = new javax.swing.JButton();
+        searchTextField = new javax.swing.JTextField();
 
         setPreferredSize(new java.awt.Dimension(820, 540));
         addMouseListener(new java.awt.event.MouseAdapter() {
@@ -193,7 +223,7 @@ public class Admin extends javax.swing.JPanel {
                 adminTableMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(adminTable);
+        adminScrollPane.setViewportView(adminTable);
 
         createAdminAccountLabel.setFont(new java.awt.Font("sansserif", 1, 28)); // NOI18N
         createAdminAccountLabel.setText("Create / Update Admin Account");
@@ -251,6 +281,13 @@ public class Admin extends javax.swing.JPanel {
             }
         });
 
+        searchTextField.setToolTipText("Search");
+        searchTextField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                searchTextFieldFocusGained(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -259,11 +296,9 @@ public class Admin extends javax.swing.JPanel {
                 .addGap(40, 40, 40)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 728, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(createAdminAccountLabel)
                                 .addGap(149, 149, 149))
                             .addGroup(layout.createSequentialGroup()
@@ -307,8 +342,13 @@ public class Admin extends javax.swing.JPanel {
                                 .addComponent(deleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(49, 49, 49)
                                 .addComponent(listOfAdminAccountLabel)
-                                .addGap(0, 227, Short.MAX_VALUE)))
-                        .addGap(32, 32, 32))))
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(32, 32, 32))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(searchTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(adminScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 728, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(52, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -316,9 +356,10 @@ public class Admin extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(deleteButton)
-                    .addComponent(listOfAdminAccountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(listOfAdminAccountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(searchTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(adminScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(createAdminAccountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -371,10 +412,10 @@ public class Admin extends javax.swing.JPanel {
 
         if (adminDatas.get(adminRow).getStatus().equals("Deleted")) {
             deleteButton.setEnabled(false);
-        }else{
-             deleteButton.setEnabled(true);
+        } else {
+            deleteButton.setEnabled(true);
         }
-       
+
         if (!username.equals("main_admin")) {
             JOptionPane.showMessageDialog(null, "Main Admin Account Only!", "Update / Delete", JOptionPane.WARNING_MESSAGE);
             adminTable.clearSelection();
@@ -476,9 +517,10 @@ public class Admin extends javax.swing.JPanel {
     private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
         if (adminTable.getSelectedRowCount() > 0) {
             clearAdminTextFields();
-            adminTable.clearSelection();
-            deleteButton.setEnabled(false);
-        }
+            adminTable.clearSelection();            
+            deleteButton.setEnabled(false);            
+        }        
+        this.requestFocus();
     }//GEN-LAST:event_formMouseClicked
 
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
@@ -508,6 +550,11 @@ public class Admin extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_deleteButtonActionPerformed
 
+    private void searchTextFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_searchTextFieldFocusGained
+        adminTable.clearSelection();
+        deleteButton.setEnabled(false);
+    }//GEN-LAST:event_searchTextFieldFocusGained
+
     public void clearAdminTextFields() {
         adminId.setText(Integer.toString(adminDatas.get(adminDatas.size() - 1).getId() + 1));
         adminLastNameTextField.setText("");
@@ -518,6 +565,18 @@ public class Admin extends javax.swing.JPanel {
         adminUsernameTextField.setText("");
         adminPasswordTextField.setText("");
         adminStatusComboBox.setSelectedItem("Active");
+    }
+
+    public void updateFilter() {
+        String text = searchTextField.getText();
+        if (text.length() == 0) {
+            adminTableSorter.setRowFilter(null);
+        } else {
+            try {
+                adminTableSorter.setRowFilter(RowFilter.regexFilter(text));
+            } catch (PatternSyntaxException pse) {
+            }
+        }
     }
 
     public void updateAdminDatas() {
@@ -578,13 +637,14 @@ public class Admin extends javax.swing.JPanel {
     private javax.swing.JLabel adminPhoneNumberLabel;
     private javax.swing.JTextField adminPhoneNumberTextField;
     private javax.swing.JButton adminSaveButton;
+    private javax.swing.JScrollPane adminScrollPane;
     private javax.swing.JComboBox<String> adminStatusComboBox;
     private javax.swing.JTable adminTable;
     private javax.swing.JLabel adminUsernameLabel;
     private javax.swing.JTextField adminUsernameTextField;
     private javax.swing.JLabel createAdminAccountLabel;
     private javax.swing.JButton deleteButton;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel listOfAdminAccountLabel;
+    private javax.swing.JTextField searchTextField;
     // End of variables declaration//GEN-END:variables
 }
