@@ -455,67 +455,70 @@ public class AdminPanel extends javax.swing.JPanel {
         }
 
         JPasswordField passwordField = new JPasswordField();
-        String password = "";
+        String password = null;
         int option = JOptionPane.showConfirmDialog(null, passwordField, "Enter your password:", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
 
         if (option == JOptionPane.OK_OPTION) {
             password = passwordField.getText();
-            if (password != "") {
-                if (!password.equals(accountPassword)) {
-                    JOptionPane.showMessageDialog(null, "Incorrect password!", "Wrong Password", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-                try {
-                    if (Integer.parseInt(id.getText()) > admins.size()) {
-                        PreparedStatement insertStatement;
-                        insertStatement = connect.prepareStatement("INSERT IGNORE INTO Admin VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-                        insertStatement.setInt(1, Integer.parseInt(id.getText()));
-                        insertStatement.setString(2, lastname.getText());
-                        insertStatement.setString(3, firstname.getText());
-                        insertStatement.setString(4, middlename.getText());
-                        insertStatement.setString(5, address.getText());
-                        insertStatement.setString(6, phonenumber.getText());
-                        insertStatement.setString(7, username.getText());
-                        insertStatement.setString(8, this.password.getText());
-                        insertStatement.setString(9, status.getSelectedItem().toString());
+            if (password != null) {
+                if (password.equals(accountPassword)) {
+                    try {
+                        if (Integer.parseInt(id.getText()) > admins.size()) {
+                            PreparedStatement insertStatement;
+                            insertStatement = connect.prepareStatement("INSERT IGNORE INTO Admin VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                            insertStatement.setInt(1, Integer.parseInt(id.getText()));
+                            insertStatement.setString(2, lastname.getText());
+                            insertStatement.setString(3, firstname.getText());
+                            insertStatement.setString(4, middlename.getText());
+                            insertStatement.setString(5, address.getText());
+                            insertStatement.setString(6, phonenumber.getText());
+                            insertStatement.setString(7, username.getText());
+                            insertStatement.setString(8, this.password.getText());
+                            insertStatement.setString(9, status.getSelectedItem().toString());
 
-                        insertStatement.executeUpdate();
+                            insertStatement.executeUpdate();
 
-                        showDataInTable();
+                            showDataInTable();
 
-                        id.setText(Integer.toString(admins.get(admins.size() - 1).getId() + 1));
-                        clearTextFields();
-                    } else {
-                        PreparedStatement updateStatement = connect.prepareStatement("UPDATE Admin SET admin_id = ?, admin_lastname = ?, admin_firstname = ?,"
-                                + " admin_middlename = ?, admin_address =  ?, admin_phonenumber = ?, admin_username =  ?, admin_password = ?, admin_status = ? WHERE admin_id = ?");
-                        updateStatement.setInt(1, Integer.parseInt(id.getText()));
-                        updateStatement.setString(2, lastname.getText());
-                        updateStatement.setString(3, firstname.getText());
-                        updateStatement.setString(4, middlename.getText());
-                        updateStatement.setString(5, address.getText());
-                        updateStatement.setString(6, phonenumber.getText());
-                        updateStatement.setString(7, username.getText());
-                        updateStatement.setString(8, this.password.getText());
-                        updateStatement.setString(9, status.getSelectedItem().toString());
-                        updateStatement.setInt(10, Integer.parseInt(id.getText()));
+                            id.setText(Integer.toString(admins.get(admins.size() - 1).getId() + 1));
+                            clearTextFields();
+                            
+                            JOptionPane.showMessageDialog(null, "Account Created!", "Login", JOptionPane.INFORMATION_MESSAGE);
+                        } else {
+                            PreparedStatement updateStatement = connect.prepareStatement("UPDATE Admin SET admin_id = ?, admin_lastname = ?, admin_firstname = ?,"
+                                    + " admin_middlename = ?, admin_address =  ?, admin_phonenumber = ?, admin_username =  ?, admin_password = ?, admin_status = ? WHERE admin_id = ?");
+                            updateStatement.setInt(1, Integer.parseInt(id.getText()));
+                            updateStatement.setString(2, lastname.getText());
+                            updateStatement.setString(3, firstname.getText());
+                            updateStatement.setString(4, middlename.getText());
+                            updateStatement.setString(5, address.getText());
+                            updateStatement.setString(6, phonenumber.getText());
+                            updateStatement.setString(7, username.getText());
+                            updateStatement.setString(8, this.password.getText());
+                            updateStatement.setString(9, status.getSelectedItem().toString());
+                            updateStatement.setInt(10, Integer.parseInt(id.getText()));
 
-                        updateStatement.executeUpdate();
+                            updateStatement.executeUpdate();
 
-                        showDataInTable();
+                            showDataInTable();
 
-                        id.setText(Integer.toString(admins.get(admins.size() - 1).getId() + 1));
+                            id.setText(Integer.toString(admins.get(admins.size() - 1).getId() + 1));
 
-                        clearTextFields();
-                        table.clearSelection();
-                        delete.setEnabled(false);
+                            clearTextFields();
+                            table.clearSelection();
+                            delete.setEnabled(false);
+                            
+                            JOptionPane.showMessageDialog(null, "Account Updated!", "Login", JOptionPane.INFORMATION_MESSAGE);
+                        }
+                    } catch (SQLException ex) {
+                        Logger.getLogger(AdminPanel.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                } catch (SQLException ex) {
-                    Logger.getLogger(AdminPanel.class.getName()).log(Level.SEVERE, null, ex);
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "Incorrect password!", "Wrong Password", JOptionPane.ERROR_MESSAGE);                    
                 }
             }
-        } else {
-            return;
-        }
+        } 
     }//GEN-LAST:event_saveActionPerformed
 
     private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked

@@ -7,14 +7,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 public class Login extends javax.swing.JFrame {
 
-    static ArrayList<Admin> adminDatas = new ArrayList<>();
+    static ArrayList<Admin> admins = new ArrayList<>();
+    static ArrayList<Staff> staffs = new ArrayList<>();
 
-    Connection connect = null;    
+    Connection connect = null;
 
     public Login() {
         initComponents();
@@ -24,13 +24,21 @@ public class Login extends javax.swing.JFrame {
             Statement statement = connect.createStatement();
             ResultSet selectAdmin = statement.executeQuery("SELECT admin_id, admin_username, admin_password, admin_status FROM Admin WHERE admin_status != 'Deleted'");
 
-            adminDatas.clear();
+            admins.clear();
             while (selectAdmin.next()) {
-                adminDatas.add(new Admin(selectAdmin.getInt("admin_id"), selectAdmin.getString("admin_username"), selectAdmin.getString("admin_password"),
+                admins.add(new Admin(selectAdmin.getInt("admin_id"), selectAdmin.getString("admin_username"), selectAdmin.getString("admin_password"),
                         selectAdmin.getString("admin_status")));
             }
+            
+            ResultSet selectStaff = statement.executeQuery("SELECT staff_id, staff_username, staff_password, staff_status FROM Staff WHERE staff_status != 'Deleted'");
+
+            staffs.clear();
+            while (selectStaff.next()) {
+                staffs.add(new Staff(selectStaff.getInt("staff_id"), selectStaff.getString("staff_username"), selectStaff.getString("staff_password"),
+                        selectStaff.getString("staff_status")));
+            }
         } catch (SQLException ex) {
-            Logger.getLogger(AdminPanel.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -125,23 +133,23 @@ public class Login extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    int loginCounter = 0;    
+    int loginCounter = 0;
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
-        for (int i = 0; i < adminDatas.size(); i++) {
-            if (usernameTextField.getText().equals(adminDatas.get(i).getUsername())) {
-                if (adminDatas.get(i).getStatus().equals("Active")) {
-                    if (passwordPasswordField.getText().equals(adminDatas.get(i).getPassword())) {                        
+        for (int i = 0; i < admins.size(); i++) {
+            if (usernameTextField.getText().equals(admins.get(i).getUsername())) {
+                if (admins.get(i).getStatus().equals("Active")) {
+                    if (passwordPasswordField.getText().equals(admins.get(i).getPassword())) {
                         this.dispose();
-                        JOptionPane.showMessageDialog(null, "Login Success!", "Login", JOptionPane.INFORMATION_MESSAGE);                        
+                        JOptionPane.showMessageDialog(null, "Login Success!", "Login", JOptionPane.INFORMATION_MESSAGE);
                         new Main(usernameTextField.getText(), passwordPasswordField.getText()).setVisible(true);
                         return;
                     } else {
                         JOptionPane.showMessageDialog(null, "Login Failed!", "Login", JOptionPane.WARNING_MESSAGE);
                         usernameTextField.setText("");
                         passwordPasswordField.setText("");
-                        if(!usernameTextField.getText().equals("main_admin")){
+                        if (!usernameTextField.getText().equals("main_admin")) {
                             ++loginCounter;
-                        }                        
+                        }
                         if (loginCounter == 3) {
                             JOptionPane.showMessageDialog(null, "Account deactivated!", "Login", JOptionPane.ERROR_MESSAGE);
                             usernameTextField.setText("");
@@ -149,12 +157,12 @@ public class Login extends javax.swing.JFrame {
                             try {
                                 PreparedStatement statement = connect.prepareStatement("UPDATE Admin SET admin_status = ? WHERE admin_username = ?");
                                 statement.setString(1, "Deactivated");
-                                statement.setString(2, adminDatas.get(i).getUsername());
+                                statement.setString(2, admins.get(i).getUsername());
 
                                 statement.executeUpdate();
-                                adminDatas.get(i).setStatus("Deactivated");
+                                admins.get(i).setStatus("Deactivated");
                             } catch (SQLException ex) {
-                                Logger.getLogger(AdminPanel.class.getName()).log(Level.SEVERE, null, ex);
+                                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
                             }
                         }
                         return;
@@ -165,14 +173,50 @@ public class Login extends javax.swing.JFrame {
                     passwordPasswordField.setText("");
                     return;
                 }
-            }           
+            }
         }
         
-            JOptionPane.showMessageDialog(null, "Login Failed!", "Login", JOptionPane.WARNING_MESSAGE);
-            usernameTextField.setText("");
-            passwordPasswordField.setText("");
-            
-        
+        for (int i = 0; i < staffs.size(); i++) {
+            if (usernameTextField.getText().equals(staffs.get(i).getUsername())) {
+                if (staffs.get(i).getStatus().equals("Active")) {
+                    if (passwordPasswordField.getText().equals(staffs.get(i).getPassword())) {
+                        this.dispose();
+                        JOptionPane.showMessageDialog(null, "Login Success!", "Login", JOptionPane.INFORMATION_MESSAGE);
+                        new Main(usernameTextField.getText(), passwordPasswordField.getText()).setVisible(true);
+                        return;
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Login Failed!", "Login", JOptionPane.WARNING_MESSAGE);
+                        usernameTextField.setText("");
+                        passwordPasswordField.setText("");                        
+                            ++loginCounter;                        
+                        if (loginCounter == 3) {
+                            JOptionPane.showMessageDialog(null, "Account deactivated!", "Login", JOptionPane.ERROR_MESSAGE);
+                            usernameTextField.setText("");
+                            passwordPasswordField.setText("");
+                            try {
+                                PreparedStatement statement = connect.prepareStatement("UPDATE Staff SET staff_status = ? WHERE staff_username = ?");
+                                statement.setString(1, "Deactivated");
+                                statement.setString(2, staffs.get(i).getUsername());
+
+                                statement.executeUpdate();
+                                staffs.get(i).setStatus("Deactivated");
+                            } catch (SQLException ex) {
+                                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                        return;
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Account deactivated!", "Login", JOptionPane.ERROR_MESSAGE);
+                    usernameTextField.setText("");
+                    passwordPasswordField.setText("");
+                    return;
+                }
+            }
+        }
+        JOptionPane.showMessageDialog(null, "Login Failed!", "Login", JOptionPane.WARNING_MESSAGE);
+        usernameTextField.setText("");
+        passwordPasswordField.setText("");
     }//GEN-LAST:event_loginButtonActionPerformed
 
 
