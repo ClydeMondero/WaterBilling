@@ -418,12 +418,6 @@ public class AdminPanel extends javax.swing.JPanel {
             delete.setEnabled(true);
         }
 
-        if (!accountUsername.equals("main_admin")) {
-            JOptionPane.showMessageDialog(null, "Main Admin Account Only!", "Update / Delete", JOptionPane.WARNING_MESSAGE);
-            table.clearSelection();
-            return;
-        }
-
         id.setText(Integer.toString(admins.get(row).getId()));
         lastname.setText(admins.get(row).getLastName());
         firstname.setText(admins.get(row).getFirstName());
@@ -482,7 +476,7 @@ public class AdminPanel extends javax.swing.JPanel {
 
                             id.setText(Integer.toString(admins.get(admins.size() - 1).getId() + 1));
                             clearTextFields();
-                            
+
                             JOptionPane.showMessageDialog(null, "Account Created!", "Login", JOptionPane.INFORMATION_MESSAGE);
                         } else {
                             PreparedStatement updateStatement = connect.prepareStatement("UPDATE Admin SET admin_id = ?, admin_lastname = ?, admin_firstname = ?,"
@@ -507,7 +501,7 @@ public class AdminPanel extends javax.swing.JPanel {
                             clearTextFields();
                             table.clearSelection();
                             delete.setEnabled(false);
-                            
+
                             JOptionPane.showMessageDialog(null, "Account Updated!", "Login", JOptionPane.INFORMATION_MESSAGE);
                         }
                     } catch (SQLException ex) {
@@ -515,10 +509,10 @@ public class AdminPanel extends javax.swing.JPanel {
                     }
 
                 } else {
-                    JOptionPane.showMessageDialog(null, "Incorrect password!", "Wrong Password", JOptionPane.ERROR_MESSAGE);                    
+                    JOptionPane.showMessageDialog(null, "Incorrect password!", "Wrong Password", JOptionPane.ERROR_MESSAGE);
                 }
             }
-        } 
+        }
     }//GEN-LAST:event_saveActionPerformed
 
     private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
@@ -531,27 +525,48 @@ public class AdminPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_formMouseClicked
 
     private void deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteActionPerformed
-        ListSelectionModel selectionModel = table.getSelectionModel();
+        if(admins.get(table.getSelectedRow()).getUsername().equals("main_admin")){
+            JOptionPane.showMessageDialog(null, "Main Admin Account can't be deleted!", "Delete", JOptionPane.ERROR_MESSAGE);            
+            table.clearSelection();
+            clearTextFields();
+            delete.setEnabled(false);
+        }
+        
+        JPasswordField passwordField = new JPasswordField();
+        String password = null;
+        int option = JOptionPane.showConfirmDialog(null, passwordField, "Enter your password:", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
 
-        if (selectionModel.getSelectionMode() == ListSelectionModel.MULTIPLE_INTERVAL_SELECTION) {
-            int[] selectedRows = table.getSelectedRows();
+        if (option == JOptionPane.OK_OPTION) {
+            password = passwordField.getText();
+            if (password != null) {
+                if (password.equals(accountPassword)) {
+                    ListSelectionModel selectionModel = table.getSelectionModel();
 
-            for (int row : selectedRows) {
-                int id = Integer.parseInt(table.getValueAt(row, 0).toString());
-                System.out.println(id);
-                try {
-                    PreparedStatement deleteStatement = connect.prepareStatement("UPDATE Admin SET admin_status = ? WHERE admin_id = ?");
-                    deleteStatement.setString(1, "Deleted");
-                    deleteStatement.setInt(2, id);
+                    if (selectionModel.getSelectionMode() == ListSelectionModel.MULTIPLE_INTERVAL_SELECTION) {
+                        int[] selectedRows = table.getSelectedRows();
 
-                    deleteStatement.executeUpdate();
+                        for (int row : selectedRows) {
+                            int id = Integer.parseInt(table.getValueAt(row, 0).toString());
+                            try {
+                                PreparedStatement deleteStatement = connect.prepareStatement("UPDATE Admin SET admin_status = ? WHERE admin_id = ?");
+                                deleteStatement.setString(1, "Deleted");
+                                deleteStatement.setInt(2, id);
 
-                    showDataInTable();
-                    clearTextFields();
-                    table.clearSelection();
-                    delete.setEnabled(false);
-                } catch (SQLException ex) {
-                    Logger.getLogger(AdminPanel.class.getName()).log(Level.SEVERE, null, ex);
+                                deleteStatement.executeUpdate();
+
+                                showDataInTable();
+                                clearTextFields();
+                                table.clearSelection();
+                                delete.setEnabled(false);
+                            } catch (SQLException ex) {
+                                Logger.getLogger(AdminPanel.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                            JOptionPane.showMessageDialog(null, "Account Deleted!", "Delete", JOptionPane.INFORMATION_MESSAGE);
+
+                        }
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Incorrect password!", "Wrong Password", JOptionPane.ERROR_MESSAGE);
                 }
             }
         }

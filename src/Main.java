@@ -15,8 +15,11 @@ public class Main extends javax.swing.JFrame {
         
         usernameLabel.setText(accountUsername);
                               
-        mainTabbedPane.add("Admin", new AdminPanel(accountUsername, accountPassword));   
-        mainTabbedPane.add("Staff", new StaffPanel(accountUsername, accountPassword)); 
+         mainTabbedPane.add("Staff", new StaffPanel(accountUsername, accountPassword));
+        
+        if(accountUsername.equals("main_admin")){
+            mainTabbedPane.add("Admin", new AdminPanel(accountUsername, accountPassword));  
+        }                 
     }            
     
     @SuppressWarnings("unchecked")

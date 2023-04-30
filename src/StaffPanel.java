@@ -419,12 +419,6 @@ public class StaffPanel extends javax.swing.JPanel {
             delete.setEnabled(true);
         }
 
-        if (!accountUsername.equals("main_admin")) {
-            JOptionPane.showMessageDialog(null, "Main Admin Account Only!", "Update / Delete", JOptionPane.WARNING_MESSAGE);
-            table.clearSelection();
-            return;
-        }
-
         id.setText(Integer.toString(staffs.get(row).getId()));
         lastname.setText(staffs.get(row).getLastName());
         firstname.setText(staffs.get(row).getFirstName());
@@ -457,7 +451,7 @@ public class StaffPanel extends javax.swing.JPanel {
 
         JPasswordField passwordField = new JPasswordField();
         String password = "";
-        int option = JOptionPane.showConfirmDialog(null, passwordField, "Enter your password:", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+        int option = JOptionPane.showConfirmDialog(null, passwordField, "Enter your password", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
 
         if (option == JOptionPane.OK_OPTION) {
             password = passwordField.getText();
@@ -483,7 +477,7 @@ public class StaffPanel extends javax.swing.JPanel {
 
                             id.setText(Integer.toString(staffs.get(staffs.size() - 1).getId() + 1));
                             clearTextFields();
-                            
+
                             JOptionPane.showMessageDialog(null, "Account Created!", "Login", JOptionPane.INFORMATION_MESSAGE);
                         } else {
                             PreparedStatement updateStatement = connect.prepareStatement("UPDATE Staff SET staff_id = ?, staff_lastname = ?, staff_firstname = ?,"
@@ -508,8 +502,8 @@ public class StaffPanel extends javax.swing.JPanel {
                             clearTextFields();
                             table.clearSelection();
                             delete.setEnabled(false);
-                            
-                             JOptionPane.showMessageDialog(null, "Account Updated!", "Login", JOptionPane.INFORMATION_MESSAGE);
+
+                            JOptionPane.showMessageDialog(null, "Account Updated!", "Login", JOptionPane.INFORMATION_MESSAGE);
                         }
                     } catch (SQLException ex) {
                         Logger.getLogger(AdminPanel.class.getName()).log(Level.SEVERE, null, ex);
@@ -532,27 +526,41 @@ public class StaffPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_formMouseClicked
 
     private void deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteActionPerformed
-        ListSelectionModel selectionModel = table.getSelectionModel();
+        JPasswordField passwordField = new JPasswordField();
+        String password = null;
+        int option = JOptionPane.showConfirmDialog(null, passwordField, "Enter your password", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
 
-        if (selectionModel.getSelectionMode() == ListSelectionModel.MULTIPLE_INTERVAL_SELECTION) {
-            int[] selectedRows = table.getSelectedRows();
+        if (option == JOptionPane.OK_OPTION) {
+            password = passwordField.getText();
+            if (password != null) {
+                if (password.equals(accountPassword)) {
+                    ListSelectionModel selectionModel = table.getSelectionModel();
 
-            for (int row : selectedRows) {
-                int id = Integer.parseInt(table.getValueAt(row, 0).toString());
-                System.out.println(id);
-                try {
-                    PreparedStatement deleteStatement = connect.prepareStatement("UPDATE Staff SET staff_status = ? WHERE staff_id = ?");
-                    deleteStatement.setString(1, "Deleted");
-                    deleteStatement.setInt(2, id);
+                    if (selectionModel.getSelectionMode() == ListSelectionModel.MULTIPLE_INTERVAL_SELECTION) {
+                        int[] selectedRows = table.getSelectedRows();
 
-                    deleteStatement.executeUpdate();
+                        for (int row : selectedRows) {
+                            int id = Integer.parseInt(table.getValueAt(row, 0).toString());
+                            try {
+                                PreparedStatement deleteStatement = connect.prepareStatement("UPDATE Staff SET staff_status = ? WHERE staff_id = ?");
+                                deleteStatement.setString(1, "Deleted");
+                                deleteStatement.setInt(2, id);
 
-                    showDataInTable();
-                    clearTextFields();
-                    table.clearSelection();
-                    delete.setEnabled(false);
-                } catch (SQLException ex) {
-                    Logger.getLogger(AdminPanel.class.getName()).log(Level.SEVERE, null, ex);
+                                deleteStatement.executeUpdate();
+
+                                showDataInTable();
+                                clearTextFields();
+                                table.clearSelection();
+                                delete.setEnabled(false);
+                            } catch (SQLException ex) {
+                                Logger.getLogger(AdminPanel.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                            JOptionPane.showMessageDialog(null, "Account Deleted!", "Delete", JOptionPane.INFORMATION_MESSAGE);
+
+                        }
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Incorrect password!", "Wrong Password", JOptionPane.ERROR_MESSAGE);
                 }
             }
         }
