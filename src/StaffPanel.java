@@ -9,6 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.PatternSyntaxException;
 import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowFilter;
 import javax.swing.event.DocumentEvent;
@@ -122,7 +123,7 @@ public class StaffPanel extends javax.swing.JPanel {
     static ArrayList<Staff> staffs = new ArrayList<>();
     Connection connect = null;
 
-   String accountUsername, accountPassword;
+    String accountUsername, accountPassword;
 
     TableRowSorter<TableModel> sorter;
 
@@ -442,72 +443,81 @@ public class StaffPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_cancelActionPerformed
 
     private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
-              boolean isUsernameDuplicate = false;
+        boolean isUsernameDuplicate = false;
 
         for (Staff staff : staffs) {
             if (username.getText().equals(staff.getUsername())) {
                 isUsernameDuplicate = true;
-            }            
+            }
         }
         if (isUsernameDuplicate && !model.getValueAt(row, 4).toString().equals(username.getText())) {
             JOptionPane.showMessageDialog(null, "Username already exist!", "Invalid Username", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        String password = JOptionPane.showInputDialog(null, "Enter your password: ", "Save Account", JOptionPane.QUESTION_MESSAGE);
-        if (password == null) {
-            return;
-        } else {
-            if (!password.equals(accountPassword)) {
-                JOptionPane.showMessageDialog(null, "Incorrect password!", "Wrong Password", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            try {
-                if (Integer.parseInt(id.getText()) > staffs.size()) {
-                    PreparedStatement insertStatement;
-                    insertStatement = connect.prepareStatement("INSERT IGNORE INTO Staff VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-                    insertStatement.setInt(1, Integer.parseInt(id.getText()));
-                    insertStatement.setString(2, lastname.getText());
-                    insertStatement.setString(3, firstname.getText());
-                    insertStatement.setString(4, middlename.getText());
-                    insertStatement.setString(5, address.getText());
-                    insertStatement.setString(6, phonenumber.getText());
-                    insertStatement.setString(7, username.getText());
-                    insertStatement.setString(8, this.password.getText());
-                    insertStatement.setString(9, status.getSelectedItem().toString());
+        JPasswordField passwordField = new JPasswordField();
+        String password = "";
+        int option = JOptionPane.showConfirmDialog(null, passwordField, "Enter your password:", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
 
-                    insertStatement.executeUpdate();
+        if (option == JOptionPane.OK_OPTION) {
+            password = passwordField.getText();
+            if (password != null) {
+                if (password.equals(accountPassword)) {
+                    try {
+                        if (Integer.parseInt(id.getText()) > staffs.size()) {
+                            PreparedStatement insertStatement;
+                            insertStatement = connect.prepareStatement("INSERT IGNORE INTO Staff VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                            insertStatement.setInt(1, Integer.parseInt(id.getText()));
+                            insertStatement.setString(2, lastname.getText());
+                            insertStatement.setString(3, firstname.getText());
+                            insertStatement.setString(4, middlename.getText());
+                            insertStatement.setString(5, address.getText());
+                            insertStatement.setString(6, phonenumber.getText());
+                            insertStatement.setString(7, username.getText());
+                            insertStatement.setString(8, this.password.getText());
+                            insertStatement.setString(9, status.getSelectedItem().toString());
 
-                    showDataInTable();
+                            insertStatement.executeUpdate();
 
-                    id.setText(Integer.toString(staffs.get(staffs.size() - 1).getId() + 1));
-                    clearTextFields();
+                            showDataInTable();
+
+                            id.setText(Integer.toString(staffs.get(staffs.size() - 1).getId() + 1));
+                            clearTextFields();
+                            
+                            JOptionPane.showMessageDialog(null, "Account Created!", "Login", JOptionPane.INFORMATION_MESSAGE);
+                        } else {
+                            PreparedStatement updateStatement = connect.prepareStatement("UPDATE Staff SET staff_id = ?, staff_lastname = ?, staff_firstname = ?,"
+                                    + " staff_middlename = ?, staff_address =  ?, staff_phonenumber = ?, staff_username =  ?, staff_password = ?, staff_status = ? WHERE staff_id = ?");
+                            updateStatement.setInt(1, Integer.parseInt(id.getText()));
+                            updateStatement.setString(2, lastname.getText());
+                            updateStatement.setString(3, firstname.getText());
+                            updateStatement.setString(4, middlename.getText());
+                            updateStatement.setString(5, address.getText());
+                            updateStatement.setString(6, phonenumber.getText());
+                            updateStatement.setString(7, username.getText());
+                            updateStatement.setString(8, this.password.getText());
+                            updateStatement.setString(9, status.getSelectedItem().toString());
+                            updateStatement.setInt(10, Integer.parseInt(id.getText()));
+
+                            updateStatement.executeUpdate();
+
+                            showDataInTable();
+
+                            id.setText(Integer.toString(staffs.get(staffs.size() - 1).getId() + 1));
+
+                            clearTextFields();
+                            table.clearSelection();
+                            delete.setEnabled(false);
+                            
+                             JOptionPane.showMessageDialog(null, "Account Updated!", "Login", JOptionPane.INFORMATION_MESSAGE);
+                        }
+                    } catch (SQLException ex) {
+                        Logger.getLogger(AdminPanel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
                 } else {
-                    PreparedStatement updateStatement = connect.prepareStatement("UPDATE Staff SET staff_id = ?, staff_lastname = ?, staff_firstname = ?,"
-                            + " staff_middlename = ?, staff_address =  ?, staff_phonenumber = ?, staff_username =  ?, staff_password = ?, staff_status = ? WHERE staff_id = ?");
-                    updateStatement.setInt(1, Integer.parseInt(id.getText()));
-                    updateStatement.setString(2, lastname.getText());
-                    updateStatement.setString(3, firstname.getText());
-                    updateStatement.setString(4, middlename.getText());
-                    updateStatement.setString(5, address.getText());
-                    updateStatement.setString(6, phonenumber.getText());
-                    updateStatement.setString(7, username.getText());
-                    updateStatement.setString(8, this.password.getText());
-                    updateStatement.setString(9, status.getSelectedItem().toString());
-                    updateStatement.setInt(10, Integer.parseInt(id.getText()));
-
-                    updateStatement.executeUpdate();
-
-                    showDataInTable();
-
-                    id.setText(Integer.toString(staffs.get(staffs.size() - 1).getId() + 1));
-
-                    clearTextFields();
-                    table.clearSelection();
-                    delete.setEnabled(false);
+                    JOptionPane.showMessageDialog(null, "Incorrect password!", "Wrong Password", JOptionPane.ERROR_MESSAGE);
                 }
-            } catch (SQLException ex) {
-                Logger.getLogger(AdminPanel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }//GEN-LAST:event_saveActionPerformed
@@ -515,9 +525,9 @@ public class StaffPanel extends javax.swing.JPanel {
     private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
         if (table.getSelectedRowCount() > 0) {
             clearTextFields();
-            table.clearSelection();            
-            delete.setEnabled(false);            
-        }        
+            table.clearSelection();
+            delete.setEnabled(false);
+        }
         this.requestFocus();
     }//GEN-LAST:event_formMouseClicked
 
