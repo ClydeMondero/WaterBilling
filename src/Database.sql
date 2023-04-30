@@ -17,12 +17,18 @@ CREATE TABLE IF NOT EXISTS Admin(
 INSERT IGNORE INTO Admin (admin_username, admin_password, admin_status) VALUES ('main_admin', '1234main', 'Active');
 
 CREATE TABLE IF NOT EXISTS Staff(
-	id INT PRIMARY KEY AUTO_INCREMENT , 
-	username VARCHAR(25) UNIQUE, 
-	password VARCHAR(25)
+	staff_id INT PRIMARY KEY AUTO_INCREMENT, 
+        staff_lastname VARCHAR(25),
+        staff_firstname VARCHAR(25),
+        staff_middlename VARCHAR(25),
+        staff_address VARCHAR(50),
+        staff_phonenumber VARCHAR(25),
+	staff_username VARCHAR(25) UNIQUE, 
+        staff_password VARCHAR(25),
+        staff_status VARCHAR(15)
 );
 
-INSERT IGNORE INTO Staff (username, password) VALUES ('staff', 'staff');
+INSERT IGNORE INTO Staff (staff_username, staff_password, staff_status) VALUES ('clyde_staff', '1234clyde', 'Active');
 
 SELECT * FROM Admin;
 

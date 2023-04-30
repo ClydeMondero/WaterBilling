@@ -5,12 +5,18 @@ import javax.swing.JPanel;
 
 public class Main extends javax.swing.JFrame {       
     
-    public Main() {
+    
+    String accountUsername, accountPassword;
+    public Main(String username, String password) {
         initComponents();
         
-        new Login(usernameLabel);
+        this.accountUsername = username;
+        this.accountPassword = password;
+        
+        usernameLabel.setText(accountUsername);
                               
-        mainTabbedPane.add("Admin", new Admin(usernameLabel.getText()));                
+        mainTabbedPane.add("Admin", new AdminPanel(accountUsername, accountPassword));   
+        mainTabbedPane.add("Staff", new StaffPanel(accountUsername, accountPassword)); 
     }            
     
     @SuppressWarnings("unchecked")

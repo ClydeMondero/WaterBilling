@@ -12,19 +12,9 @@ import javax.swing.JOptionPane;
 
 public class Login extends javax.swing.JFrame {
 
-    static ArrayList<AdminData> adminDatas = new ArrayList<>();
+    static ArrayList<Admin> adminDatas = new ArrayList<>();
 
-    Connection connect = null;
-
-    private static String username;
-
-    public static void setUsername(String username) {
-        Login.username = username;
-    }
-
-    public Login(JLabel username) {
-        username.setText(this.username);
-    }
+    Connection connect = null;    
 
     public Login() {
         initComponents();
@@ -36,11 +26,11 @@ public class Login extends javax.swing.JFrame {
 
             adminDatas.clear();
             while (selectAdmin.next()) {
-                adminDatas.add(new AdminData(selectAdmin.getInt("admin_id"), selectAdmin.getString("admin_username"), selectAdmin.getString("admin_password"),
+                adminDatas.add(new Admin(selectAdmin.getInt("admin_id"), selectAdmin.getString("admin_username"), selectAdmin.getString("admin_password"),
                         selectAdmin.getString("admin_status")));
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AdminPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -135,18 +125,16 @@ public class Login extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    int loginCounter = 0;
-    boolean loginStatus = true;
+    int loginCounter = 0;    
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
         for (int i = 0; i < adminDatas.size(); i++) {
             if (usernameTextField.getText().equals(adminDatas.get(i).getUsername())) {
                 if (adminDatas.get(i).getStatus().equals("Active")) {
                     if (passwordPasswordField.getText().equals(adminDatas.get(i).getPassword())) {                        
                         this.dispose();
-                        JOptionPane.showMessageDialog(null, "Login Success!", "Login", JOptionPane.INFORMATION_MESSAGE);
-                        setUsername(usernameTextField.getText());
-                        new Main().setVisible(true);
-                        break;
+                        JOptionPane.showMessageDialog(null, "Login Success!", "Login", JOptionPane.INFORMATION_MESSAGE);                        
+                        new Main(usernameTextField.getText(), passwordPasswordField.getText()).setVisible(true);
+                        return;
                     } else {
                         JOptionPane.showMessageDialog(null, "Login Failed!", "Login", JOptionPane.WARNING_MESSAGE);
                         usernameTextField.setText("");
@@ -166,7 +154,7 @@ public class Login extends javax.swing.JFrame {
                                 statement.executeUpdate();
                                 adminDatas.get(i).setStatus("Deactivated");
                             } catch (SQLException ex) {
-                                Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+                                Logger.getLogger(AdminPanel.class.getName()).log(Level.SEVERE, null, ex);
                             }
                         }
                         return;
@@ -177,14 +165,14 @@ public class Login extends javax.swing.JFrame {
                     passwordPasswordField.setText("");
                     return;
                 }
-            }else {loginStatus = false;}            
+            }           
         }
-        if (loginStatus == false) {
+        
             JOptionPane.showMessageDialog(null, "Login Failed!", "Login", JOptionPane.WARNING_MESSAGE);
             usernameTextField.setText("");
             passwordPasswordField.setText("");
-            loginStatus = true;
-        }
+            
+        
     }//GEN-LAST:event_loginButtonActionPerformed
 
 
