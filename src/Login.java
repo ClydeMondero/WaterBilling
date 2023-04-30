@@ -183,6 +183,7 @@ public class Login extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Login Failed!", "Login", JOptionPane.WARNING_MESSAGE);
             usernameTextField.setText("");
             passwordPasswordField.setText("");
+            loginStatus = true;
         }
     }//GEN-LAST:event_loginButtonActionPerformed
 
