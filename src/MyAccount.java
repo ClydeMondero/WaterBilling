@@ -213,10 +213,25 @@ public class MyAccount extends javax.swing.JPanel {
     }//GEN-LAST:event_cancelActionPerformed
 
     private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
-        if(checkUsernamePassword() == false){
+        if (checkUsernamePassword() == false) {
             return;
-        }        
-        
+        }
+
+        int i = accountUsername.indexOf("_");
+        if (accountUsername.substring(i + 1).equals("admin")) {
+            int j = username.toString().indexOf("_");
+            if (!username.toString().substring(j + 1).equals("admin")) {
+                JOptionPane.showMessageDialog(null, "Username should have a admin suffix!", "Invalid Username", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }else if (accountUsername.substring(i + 1).equals("staff")){
+            int j = username.toString().indexOf("_");
+            if (!username.toString().substring(j + 1).equals("staff")) {
+                JOptionPane.showMessageDialog(null, "Username should have a staff suffix!", "Invalid Username", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+
         boolean isUsernameDuplicate = false;
 
         for (Admin admin : admins) {
@@ -318,7 +333,7 @@ public class MyAccount extends javax.swing.JPanel {
             username.setText(admins.get(0).getUsername());
             password.setText(admins.get(0).getPassword());
             status.setSelectedItem(admins.get(0).getStatus());
-        }else if (accountUsername.substring(index + 1).equals("staff")){
+        } else if (accountUsername.substring(index + 1).equals("staff")) {
             id.setText(Integer.toString(staffs.get(0).getId()));
             lastname.setText(staffs.get(0).getLastName());
             firstname.setText(staffs.get(0).getFirstName());
@@ -371,16 +386,16 @@ public class MyAccount extends javax.swing.JPanel {
         password.setText("");
         status.setSelectedItem("Active");
     }
-    
-    public boolean checkUsernamePassword(){
-        if(username.getText().equals("") && password.getText().equals("")){
+
+    public boolean checkUsernamePassword() {
+        if (username.getText().equals("") && password.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Username and Password is required!", "Username and Password", JOptionPane.ERROR_MESSAGE);
             return false;
-        }else if(username.getText().equals("")){
-            JOptionPane.showMessageDialog(null, "Username is required!", "Username", JOptionPane.ERROR_MESSAGE);        
+        } else if (username.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Username is required!", "Username", JOptionPane.ERROR_MESSAGE);
             return false;
-        }else if(password.getText().equals("")){
-            JOptionPane.showMessageDialog(null, "Password is required!", "Password", JOptionPane.ERROR_MESSAGE);  
+        } else if (password.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Password is required!", "Password", JOptionPane.ERROR_MESSAGE);
             return false;
         }
         return true;
