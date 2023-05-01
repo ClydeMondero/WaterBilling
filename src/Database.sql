@@ -38,14 +38,19 @@ CREATE TABLE IF NOT EXISTS Client(
         client_middlename VARCHAR(25),
         client_address VARCHAR(50),
         client_phonenumber VARCHAR(25),
-	client_username VARCHAR(25) UNIQUE, 
-        client_password VARCHAR(25),
+	client_rateclass VARCHAR(25) , 
+        client_metersize DOUBLE,
+        client_meterno INT,
         client_status VARCHAR(15)
         
 )AUTO_INCREMENT = 1001;
 
+INSERT IGNORE INTO Client VALUES (1001, 'Ragos', 'Ryan', 'M', 'Bustos, Bulacan', '09', 'Residential', 0.5, 0123456, 'Connected');
+
 SELECT * FROM Admin;
 
 SELECT * FROM Staff;
+
+SELECT * FROM Client;
 
 --DROP DATABASE WaterBilling;
