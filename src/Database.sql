@@ -12,9 +12,9 @@ CREATE TABLE IF NOT EXISTS Admin(
 	admin_username VARCHAR(25) UNIQUE, 
         admin_password VARCHAR(25),
         admin_status VARCHAR(15)
-);
+)AUTO_INCREMENT = 1001;
 
-INSERT IGNORE INTO Admin (admin_id, admin_username, admin_password, admin_status) VALUES (1001, 'main_admin', '1234main', 'Active');
+INSERT IGNORE INTO Admin (admin_username, admin_password, admin_status) VALUES ('main_admin', '1234main', 'Active');
 
 CREATE TABLE IF NOT EXISTS Staff(
 	staff_id INT PRIMARY KEY AUTO_INCREMENT, 
@@ -26,9 +26,10 @@ CREATE TABLE IF NOT EXISTS Staff(
 	staff_username VARCHAR(25) UNIQUE, 
         staff_password VARCHAR(25),
         staff_status VARCHAR(15)
-);
+        
+)AUTO_INCREMENT = 1001;
 
-INSERT IGNORE INTO Staff (staff_ id, staff_username, staff_password, staff_status) VALUES (1001, 'clyde_staff', '1234clyde', 'Active');
+INSERT IGNORE INTO Staff (staff_username, staff_password, staff_status) VALUES ('clyde_staff', '1234clyde', 'Active');
 
 SELECT * FROM Admin;
 
