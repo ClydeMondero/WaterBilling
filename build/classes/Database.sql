@@ -40,12 +40,13 @@ CREATE TABLE IF NOT EXISTS Client(
         client_phonenumber VARCHAR(25),
 	client_rateclass VARCHAR(25) , 
         client_metersize DOUBLE,
-        client_meterno INT,
+        client_meternumber INT,
+        client_meterreading INT,
         client_status VARCHAR(15)
         
 )AUTO_INCREMENT = 1001;
 
-INSERT IGNORE INTO Client VALUES (1001, 'Ragos', 'Ryan', 'M', 'Bustos, Bulacan', '09', 'Residential', 0.5, 0123456, 'Connected');
+INSERT IGNORE INTO Client VALUES (1001, 'Ragos', 'Ryan', 'M', 'Bustos, Bulacan', '09', 'Residential', 0.5, 012345, 224, 'Connected');
 
 SELECT * FROM Admin;
 
@@ -53,4 +54,4 @@ SELECT * FROM Staff;
 
 SELECT * FROM Client;
 
---DROP DATABASE WaterBilling;
+-- DROP DATABASE WaterBilling;

@@ -12,14 +12,16 @@ public class Main extends javax.swing.JFrame {
         this.accountPassword = password;
 
         usernameLabel.setText(accountUsername);
+        
+        mainTabbedPane.add("Clients", new ClientPanel(accountUsername, accountPassword));
 
         int index = accountUsername.indexOf("_");
         if (!accountUsername.substring(index + 1).equals("staff")) {
-            mainTabbedPane.add("Staff", new StaffPanel(accountUsername, accountPassword));
+            mainTabbedPane.add("Staffs", new StaffPanel(accountUsername, accountPassword));
         }       
 
         if (accountUsername.equals("main_admin")) {
-            mainTabbedPane.add("Admin", new AdminPanel(accountUsername, accountPassword));
+            mainTabbedPane.add("Admins", new AdminPanel(accountUsername, accountPassword));
         }
 
         if (!accountUsername.equals("main_admin")) {
