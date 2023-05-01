@@ -437,6 +437,10 @@ public class StaffPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_cancelActionPerformed
 
     private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
+        if (checkUsernamePassword() == false) {
+            return;
+        }
+
         boolean isUsernameDuplicate = false;
 
         for (Staff staff : staffs) {
@@ -633,6 +637,20 @@ public class StaffPanel extends javax.swing.JPanel {
             row[5] = staffs.get(i).getStatus();
             model.addRow(row);
         }
+    }
+
+    public boolean checkUsernamePassword() {
+        if (username.getText().equals("") && password.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Username and Password is required!", "Username and Password", JOptionPane.ERROR_MESSAGE);
+            return false;
+        } else if (username.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Username is required!", "Username", JOptionPane.ERROR_MESSAGE);
+            return false;
+        } else if (password.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Password is required!", "Password", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        return true;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

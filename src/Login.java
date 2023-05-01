@@ -29,7 +29,7 @@ public class Login extends javax.swing.JFrame {
                 admins.add(new Admin(selectAdmin.getInt("admin_id"), selectAdmin.getString("admin_username"), selectAdmin.getString("admin_password"),
                         selectAdmin.getString("admin_status")));
             }
-            
+
             ResultSet selectStaff = statement.executeQuery("SELECT staff_id, staff_username, staff_password, staff_status FROM Staff WHERE staff_status != 'Deleted'");
 
             staffs.clear();
@@ -46,11 +46,11 @@ public class Login extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        usernameTextField = new javax.swing.JTextField();
+        username = new javax.swing.JTextField();
         loginButton = new javax.swing.JButton();
         loginLabel = new javax.swing.JLabel();
         titleLabel = new javax.swing.JLabel();
-        passwordPasswordField = new javax.swing.JPasswordField();
+        password = new javax.swing.JPasswordField();
         usernameLabel = new javax.swing.JLabel();
         passwordLabel = new javax.swing.JLabel();
 
@@ -93,8 +93,8 @@ public class Login extends javax.swing.JFrame {
                                 .addGap(76, 76, 76)
                                 .addComponent(loginButton, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                                .addComponent(passwordPasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(usernameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(password, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(username, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(loginLabel))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(6, 6, 6)
@@ -105,7 +105,7 @@ public class Login extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {passwordPasswordField, usernameTextField});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {password, username});
 
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -117,17 +117,17 @@ public class Login extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
                 .addComponent(usernameLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(usernameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(username, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(passwordLabel)
                 .addGap(12, 12, 12)
-                .addComponent(passwordPasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(password, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(39, 39, 39)
                 .addComponent(loginButton, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(48, 48, 48))
         );
 
-        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {passwordPasswordField, usernameTextField});
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {password, username});
 
         pack();
         setLocationRelativeTo(null);
@@ -135,25 +135,28 @@ public class Login extends javax.swing.JFrame {
 
     int loginCounter = 0;
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
+        if (checkUsernamePassword() == false) {
+            return;
+        }
         for (int i = 0; i < admins.size(); i++) {
-            if (usernameTextField.getText().equals(admins.get(i).getUsername())) {
+            if (username.getText().equals(admins.get(i).getUsername())) {
                 if (admins.get(i).getStatus().equals("Active")) {
-                    if (passwordPasswordField.getText().equals(admins.get(i).getPassword())) {
+                    if (password.getText().equals(admins.get(i).getPassword())) {
                         this.dispose();
                         JOptionPane.showMessageDialog(null, "Login Success!", "Login", JOptionPane.INFORMATION_MESSAGE);
-                        new Main(usernameTextField.getText(), passwordPasswordField.getText()).setVisible(true);
+                        new Main(username.getText(), password.getText()).setVisible(true);
                         return;
                     } else {
                         JOptionPane.showMessageDialog(null, "Login Failed!", "Login", JOptionPane.WARNING_MESSAGE);
-                        usernameTextField.setText("");
-                        passwordPasswordField.setText("");
-                        if (!usernameTextField.getText().equals("main_admin")) {
+                        username.setText("");
+                        password.setText("");
+                        if (!username.getText().equals("main_admin")) {
                             ++loginCounter;
                         }
                         if (loginCounter == 3) {
                             JOptionPane.showMessageDialog(null, "Account deactivated!", "Login", JOptionPane.ERROR_MESSAGE);
-                            usernameTextField.setText("");
-                            passwordPasswordField.setText("");
+                            username.setText("");
+                            password.setText("");
                             try {
                                 PreparedStatement statement = connect.prepareStatement("UPDATE Admin SET admin_status = ? WHERE admin_username = ?");
                                 statement.setString(1, "Deactivated");
@@ -169,30 +172,30 @@ public class Login extends javax.swing.JFrame {
                     }
                 } else {
                     JOptionPane.showMessageDialog(null, "Account deactivated!", "Login", JOptionPane.ERROR_MESSAGE);
-                    usernameTextField.setText("");
-                    passwordPasswordField.setText("");
+                    username.setText("");
+                    password.setText("");
                     return;
                 }
             }
         }
-        
+
         for (int i = 0; i < staffs.size(); i++) {
-            if (usernameTextField.getText().equals(staffs.get(i).getUsername())) {
+            if (username.getText().equals(staffs.get(i).getUsername())) {
                 if (staffs.get(i).getStatus().equals("Active")) {
-                    if (passwordPasswordField.getText().equals(staffs.get(i).getPassword())) {
+                    if (password.getText().equals(staffs.get(i).getPassword())) {
                         this.dispose();
                         JOptionPane.showMessageDialog(null, "Login Success!", "Login", JOptionPane.INFORMATION_MESSAGE);
-                        new Main(usernameTextField.getText(), passwordPasswordField.getText()).setVisible(true);
+                        new Main(username.getText(), password.getText()).setVisible(true);
                         return;
                     } else {
                         JOptionPane.showMessageDialog(null, "Login Failed!", "Login", JOptionPane.WARNING_MESSAGE);
-                        usernameTextField.setText("");
-                        passwordPasswordField.setText("");                        
-                            ++loginCounter;                        
+                        username.setText("");
+                        password.setText("");
+                        ++loginCounter;
                         if (loginCounter == 3) {
                             JOptionPane.showMessageDialog(null, "Account deactivated!", "Login", JOptionPane.ERROR_MESSAGE);
-                            usernameTextField.setText("");
-                            passwordPasswordField.setText("");
+                            username.setText("");
+                            password.setText("");
                             try {
                                 PreparedStatement statement = connect.prepareStatement("UPDATE Staff SET staff_status = ? WHERE staff_username = ?");
                                 statement.setString(1, "Deactivated");
@@ -208,25 +211,38 @@ public class Login extends javax.swing.JFrame {
                     }
                 } else {
                     JOptionPane.showMessageDialog(null, "Account deactivated!", "Login", JOptionPane.ERROR_MESSAGE);
-                    usernameTextField.setText("");
-                    passwordPasswordField.setText("");
+                    username.setText("");
+                    password.setText("");
                     return;
                 }
             }
         }
         JOptionPane.showMessageDialog(null, "Login Failed!", "Login", JOptionPane.WARNING_MESSAGE);
-        usernameTextField.setText("");
-        passwordPasswordField.setText("");
+        username.setText("");
+        password.setText("");
     }//GEN-LAST:event_loginButtonActionPerformed
 
+    public boolean checkUsernamePassword() {
+        if (username.getText().equals("") && password.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Username and Password is required!", "Username and Password", JOptionPane.ERROR_MESSAGE);
+            return false;
+        } else if (username.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Username is required!", "Username", JOptionPane.ERROR_MESSAGE);
+            return false;
+        } else if (password.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Password is required!", "Password", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        return true;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton loginButton;
     private javax.swing.JLabel loginLabel;
+    private javax.swing.JPasswordField password;
     private javax.swing.JLabel passwordLabel;
-    private javax.swing.JPasswordField passwordPasswordField;
     private javax.swing.JLabel titleLabel;
+    private javax.swing.JTextField username;
     private javax.swing.JLabel usernameLabel;
-    private javax.swing.JTextField usernameTextField;
     // End of variables declaration//GEN-END:variables
 }
