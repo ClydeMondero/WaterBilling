@@ -439,11 +439,11 @@ public class StaffPanel extends javax.swing.JPanel {
             return;
         }
 
-        int j = username.toString().indexOf("_");
-        if (!username.toString().substring(j + 1).equals("staff")) {
-            JOptionPane.showMessageDialog(null, "Username should have a staff suffix!", "Invalid Username", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+//        int j = username.toString().indexOf("_");
+//        if (!username.toString().substring(j + 1).equals("staff")) {
+//            JOptionPane.showMessageDialog(null, "Username should have a staff suffix!", "Invalid Username", JOptionPane.ERROR_MESSAGE);
+//            return;
+//        }
 
         boolean isUsernameDuplicate = false;
 

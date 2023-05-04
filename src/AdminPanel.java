@@ -438,11 +438,11 @@ public class AdminPanel extends javax.swing.JPanel {
             return;
         }
 
-        int j = username.toString().indexOf("_");
-        if (!username.toString().substring(j + 1).equals("admin")) {
-            JOptionPane.showMessageDialog(null, "Username should have a admin suffix!", "Invalid Username", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+//        int j = username.toString().indexOf("_");
+//        if (!username.toString().substring(j + 1).equals("admin")) {
+//            JOptionPane.showMessageDialog(null, "Username should have a admin suffix!", "Invalid Username", JOptionPane.ERROR_MESSAGE);
+//            return;
+//        }
 
         boolean isUsernameDuplicate = false;
 

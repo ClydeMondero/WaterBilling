@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS Admin(
         admin_phonenumber VARCHAR(25),
 	admin_username VARCHAR(25) UNIQUE, 
         admin_password VARCHAR(25),
-        admin_status VARCHAR(15)
+        admin_status SET('Active', 'Deactivated')
 )AUTO_INCREMENT = 1001;
 
 INSERT IGNORE INTO Admin (admin_username, admin_password, admin_status) VALUES ('main_admin', '1234main', 'Active');
@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS Staff(
         staff_phonenumber VARCHAR(25),
 	staff_username VARCHAR(25) UNIQUE, 
         staff_password VARCHAR(25),
-        staff_status VARCHAR(15)
+        staff_status SET('Active', 'Deactivated')
         
 )AUTO_INCREMENT = 1001;
 
@@ -38,11 +38,11 @@ CREATE TABLE IF NOT EXISTS Client(
         client_middlename VARCHAR(25),
         client_address VARCHAR(50),
         client_phonenumber VARCHAR(25),
-	client_rateclass VARCHAR(25) , 
+	client_rateclass SET('Residential', 'Semi-Business', 'Business'), 
         client_metersize DOUBLE,
         client_meternumber INT,
         client_meterreading INT,
-        client_status VARCHAR(15)
+        client_status SET('Connected', 'Disconnected')
         
 )AUTO_INCREMENT = 1001;
 

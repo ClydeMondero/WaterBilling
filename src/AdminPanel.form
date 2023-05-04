@@ -42,10 +42,8 @@
                           <Component id="status" linkSize="1" min="-2" pref="227" max="-2" attributes="0"/>
                           <Component id="lastname" linkSize="1" min="-2" pref="220" max="-2" attributes="0"/>
                           <Component id="middlename" linkSize="1" alignment="0" min="-2" pref="220" max="-2" attributes="0"/>
-                          <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                              <Component id="username" linkSize="1" alignment="0" max="32767" attributes="0"/>
-                              <Component id="address" linkSize="1" alignment="0" min="-2" pref="220" max="-2" attributes="0"/>
-                          </Group>
+                          <Component id="username" linkSize="1" alignment="0" max="32767" attributes="0"/>
+                          <Component id="address" linkSize="1" alignment="0" min="-2" pref="220" max="-2" attributes="0"/>
                           <Component id="id" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace pref="81" max="32767" attributes="0"/>

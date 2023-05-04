@@ -150,10 +150,10 @@ public class Login extends javax.swing.JFrame {
                         JOptionPane.showMessageDialog(null, "Login Failed!", "Login", JOptionPane.WARNING_MESSAGE);
                         username.setText("");
                         password.setText("");
-                        if (!username.getText().equals("main_admin")) {
+                        if (!admins.get(i).getUsername().equals("main_admin")) {
                             ++loginCounter;
                         }
-                        if (loginCounter == 3) {
+                        if (loginCounter == 3 ) {
                             JOptionPane.showMessageDialog(null, "Account deactivated!", "Login", JOptionPane.ERROR_MESSAGE);
                             username.setText("");
                             password.setText("");
