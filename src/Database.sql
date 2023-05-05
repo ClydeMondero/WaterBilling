@@ -38,15 +38,23 @@ CREATE TABLE IF NOT EXISTS Client(
         client_middlename VARCHAR(25),
         client_address VARCHAR(50),
         client_phonenumber VARCHAR(25),
-	client_rateclass SET('Residential', 'Semi-Business', 'Business'), 
-        client_metersize DOUBLE,
-        client_meternumber INT,
-        client_meterreading INT,
-        client_status SET('Connected', 'Disconnected')
+	client_rateclass SET('Residential', 'Semi-Business', 'Business'),  
+        meter_id INT,
+        client_status SET('Connected', 'Disconnected'),
+        FOREIGN KEY (meter_id) REFERENCES Meter(meter_id)
         
 )AUTO_INCREMENT = 1001;
 
-INSERT IGNORE INTO Client VALUES (1001, 'Ragos', 'Ryan', 'M', 'Bustos, Bulacan', '09', 'Residential', 0.5, 012345, 224, 'Connected');
+INSERT IGNORE INTO Client VALUES (1001, 'Ragos', 'Ryan', 'M', 'Bustos, Bulacan', '09', 'Residential', 012345, 'Connected');
+
+CREATE TABLE IF NOT EXISTS Meter(
+	meter_id INT PRIMARY KEY AUTO_INCREMENT, 
+        meter_size DOUBLE,
+        meter_reading INT,
+        meter_consumption INT     
+);
+
+INSERT IGNORE INTO Meter VALUES (012345, 0.5, 224, 0);
 
 SELECT * FROM Admin;
 
