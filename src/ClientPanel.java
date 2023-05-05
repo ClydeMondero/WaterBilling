@@ -21,23 +21,20 @@ import javax.swing.table.TableRowSorter;
 class Client {
 
     private int id;
-    private String lastName, firstName, middleName, address, phonenumber;
+    private String lastname, firstname, middlename, address, phonenumber;
     private String rateclass;
-    private double metersize;
-    private int meternumber, meterreading;
+    private String meterId;
     private String status;
 
-    public Client(int id, String lastname, String firstname, String middlename, String address, String phonenumber, String rateclass, double metersize, int meternumber, int meterreading, String status) {
+    public Client(int id, String lastname, String firstname, String middlename, String address, String phonenumber, String rateclass, String meterId, String status) {
         this.id = id;
-        this.lastName = lastname;
-        this.firstName = firstname;
-        this.middleName = middlename;
+        this.lastname = lastname;
+        this.firstname = firstname;
+        this.middlename = middlename;
         this.address = address;
         this.phonenumber = phonenumber;
         this.rateclass = rateclass;
-        this.metersize = metersize;
-        this.meternumber = meternumber;
-        this.meterreading = meterreading;
+        this.meterId = meterId;
         this.status = status;
     }
 
@@ -49,28 +46,28 @@ class Client {
         this.id = id;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getLastname() {
+        return lastname;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getFirstname() {
+        return firstname;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
     }
 
-    public String getMiddleName() {
-        return middleName;
+    public String getMiddlename() {
+        return middlename;
     }
 
-    public void setMiddleName(String middleName) {
-        this.middleName = middleName;
+    public void setMiddlename(String middlename) {
+        this.middlename = middlename;
     }
 
     public String getAddress() {
@@ -81,12 +78,12 @@ class Client {
         this.address = address;
     }
 
-    public String getPhonNumber() {
+    public String getPhonenumber() {
         return phonenumber;
     }
 
-    public void setPhonNumber(String phonNumber) {
-        this.phonenumber = phonNumber;
+    public void setPhonenumber(String phonenumber) {
+        this.phonenumber = phonenumber;
     }
 
     public String getRateclass() {
@@ -97,28 +94,12 @@ class Client {
         this.rateclass = rateclass;
     }
 
-    public double getMetersize() {
-        return metersize;
+    public String getMeterId() {
+        return meterId;
     }
 
-    public void setMetersize(double metersize) {
-        this.metersize = metersize;
-    }
-
-    public int getMeternumber() {
-        return meternumber;
-    }
-
-    public void setMeternumber(int meternumber) {
-        this.meternumber = meternumber;
-    }
-
-    public int getMeterreading() {
-        return meterreading;
-    }
-
-    public void setMetereading(int metereading) {
-        this.meterreading = metereading;
+    public void setMeterId(String meterId) {
+        this.meterId = meterId;
     }
 
     public String getStatus() {
@@ -128,12 +109,59 @@ class Client {
     public void setStatus(String status) {
         this.status = status;
     }
+}
 
+class Meter {
+
+    private String id;
+    private double size;
+    private int reading;
+    private int consumption;
+
+    public Meter(String id, double size, int reading, int consumption) {
+        this.id = id;
+        this.size = size;
+        this.reading = reading;
+        this.consumption = consumption;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public double getSize() {
+        return size;
+    }
+
+    public void setSize(double size) {
+        this.size = size;
+    }
+
+    public int getReading() {
+        return reading;
+    }
+
+    public void setReading(int reading) {
+        this.reading = reading;
+    }
+
+    public int getConsumption() {
+        return consumption;
+    }
+
+    public void setConsumption(int consumption) {
+        this.consumption = consumption;
+    }
 }
 
 public class ClientPanel extends javax.swing.JPanel {
 
     static ArrayList<Client> clients = new ArrayList<>();
+    static ArrayList<Meter> meters = new ArrayList<>();
     Connection connect = null;
 
     String accountUsername, accountPassword;
@@ -198,8 +226,8 @@ public class ClientPanel extends javax.swing.JPanel {
         phonenumber = new javax.swing.JTextField();
         metersizeLabel = new javax.swing.JLabel();
         metersize = new javax.swing.JTextField();
-        meternoLabel = new javax.swing.JLabel();
-        meternumber = new javax.swing.JTextField();
+        meterIdLabel = new javax.swing.JLabel();
+        meterId = new javax.swing.JPasswordField();
         statusLabel = new javax.swing.JLabel();
         status = new javax.swing.JComboBox<>();
         cancel = new javax.swing.JButton();
@@ -209,7 +237,13 @@ public class ClientPanel extends javax.swing.JPanel {
         rateclassLabel = new javax.swing.JLabel();
         rateclass = new javax.swing.JComboBox<>();
         meterreadingLabel = new javax.swing.JLabel();
-        meterreading = new javax.swing.JTextField();
+        meterreading = new javax.swing.JPasswordField();
+
+        addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                formMouseClicked(evt);
+            }
+        });
 
         listOfAcccountLabel.setFont(new java.awt.Font("sansserif", 1, 28)); // NOI18N
         listOfAcccountLabel.setText("List of Clients ");
@@ -263,8 +297,8 @@ public class ClientPanel extends javax.swing.JPanel {
         metersizeLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         metersizeLabel.setText("Meter Size:");
 
-        meternoLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        meternoLabel.setText("Meter Number:");
+        meterIdLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        meterIdLabel.setText("Meter Id:");
 
         statusLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         statusLabel.setText("Status: ");
@@ -350,7 +384,7 @@ public class ClientPanel extends javax.swing.JPanel {
                                 .addComponent(save, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(meternoLabel)
+                                    .addComponent(meterIdLabel)
                                     .addComponent(firstnameLabel)
                                     .addComponent(phonenumberLabel)
                                     .addComponent(rateclassLabel))
@@ -358,7 +392,7 @@ public class ClientPanel extends javax.swing.JPanel {
                                     .addGroup(layout.createSequentialGroup()
                                         .addGap(11, 11, 11)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(meternumber, javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(meterId, javax.swing.GroupLayout.Alignment.TRAILING)
                                             .addComponent(phonenumber)))
                                     .addGroup(layout.createSequentialGroup()
                                         .addGap(12, 12, 12)
@@ -374,7 +408,7 @@ public class ClientPanel extends javax.swing.JPanel {
                 .addGap(32, 32, 32))
         );
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {address, firstname, lastname, meternumber, meterreading, metersize, middlename, phonenumber, rateclass});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {address, firstname, lastname, meterId, meterreading, metersize, middlename, phonenumber, rateclass});
 
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -426,8 +460,8 @@ public class ClientPanel extends javax.swing.JPanel {
                             .addComponent(phonenumberLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(meternoLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
-                            .addComponent(meternumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(meterIdLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
+                            .addComponent(meterId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(status, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -449,15 +483,15 @@ public class ClientPanel extends javax.swing.JPanel {
         }
 
         id.setText(Integer.toString(clients.get(row).getId()));
-        lastname.setText(clients.get(row).getLastName());
-        firstname.setText(clients.get(row).getFirstName());
-        middlename.setText(clients.get(row).getMiddleName());
+        lastname.setText(clients.get(row).getLastname());
+        firstname.setText(clients.get(row).getFirstname());
+        middlename.setText(clients.get(row).getMiddlename());
         address.setText(clients.get(row).getAddress());
-        phonenumber.setText(clients.get(row).getPhonNumber());
+        phonenumber.setText(clients.get(row).getPhonenumber());
         rateclass.setSelectedItem(clients.get(row).getRateclass());
-        metersize.setText(Double.toString(clients.get(row).getMetersize()));
-        meternumber.setText(Integer.toString(clients.get(row).getMeternumber()));
-        meterreading.setText(Integer.toString(clients.get(row).getMeterreading()));
+        metersize.setText(Double.toString(meters.get(row).getSize()));
+        meterId.setText(meters.get(row).getId());
+        meterreading.setText(Integer.toString(meters.get(row).getReading()));
         status.setSelectedItem(clients.get(row).getStatus());
     }//GEN-LAST:event_tableMouseClicked
 
@@ -472,21 +506,21 @@ public class ClientPanel extends javax.swing.JPanel {
             return;
         }
 
-        boolean isMeternumberDuplicate = false;
+        boolean isMeterIdDuplicate = false;
 
         for (Client client : clients) {
-            if (meternumber.getText().equals(client.getMeternumber())) {
-                isMeternumberDuplicate = true;
+            if (meterId.getText().equals(client.getMeterId())) {
+                isMeterIdDuplicate = true;
             }
         }
-        if (isMeternumberDuplicate && !model.getValueAt(row, 3).toString().equals(meternumber.getText())) {
-            JOptionPane.showMessageDialog(null, "Meter Number already exist!", "Invalid Meter Number", JOptionPane.ERROR_MESSAGE);
+        if (isMeterIdDuplicate && !model.getValueAt(row, 3).toString().equals(meterId.getText())) {
+            JOptionPane.showMessageDialog(null, "Meter Id already exist!", "Invalid Meter Id", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         JPasswordField passwordField = new JPasswordField();
         String password = null;
-        int option = JOptionPane.showConfirmDialog(null, passwordField, "Enter your password:", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+        int option = JOptionPane.showConfirmDialog(null, passwordField, "Enter your password", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
 
         if (option == JOptionPane.OK_OPTION) {
             password = passwordField.getText();
@@ -494,7 +528,15 @@ public class ClientPanel extends javax.swing.JPanel {
                 if (password.equals(accountPassword)) {
                     try {
                         if (Integer.parseInt(id.getText()) > clients.get(clients.size() - 1).getId()) {
-                            PreparedStatement insertStatement = connect.prepareStatement("INSERT IGNORE INTO Client VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                            PreparedStatement insertStatement = connect.prepareStatement("INSERT IGNORE INTO Meter VALUES (?, ?, ?, ?)");
+                            insertStatement.setString(1, meterId.getText());
+                            insertStatement.setDouble(2, Double.parseDouble(metersize.getText()));
+                            insertStatement.setInt(3, Integer.parseInt(meterreading.getText()));
+                            insertStatement.setInt(4, 0);
+
+                            insertStatement.executeUpdate();
+
+                            insertStatement = connect.prepareStatement("INSERT IGNORE INTO Client VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
                             insertStatement.setInt(1, Integer.parseInt(id.getText()));
                             insertStatement.setString(2, lastname.getText());
                             insertStatement.setString(3, firstname.getText());
@@ -502,10 +544,8 @@ public class ClientPanel extends javax.swing.JPanel {
                             insertStatement.setString(5, address.getText());
                             insertStatement.setString(6, phonenumber.getText());
                             insertStatement.setString(7, rateclass.getSelectedItem().toString());
-                            insertStatement.setDouble(8, Double.parseDouble(metersize.getText()));
-                            insertStatement.setInt(9, Integer.parseInt(meternumber.getText()));
-                            insertStatement.setInt(10, Integer.parseInt(meterreading.getText()));
-                            insertStatement.setString(11, status.getSelectedItem().toString());
+                            insertStatement.setString(8, meterId.getText());
+                            insertStatement.setString(9, status.getSelectedItem().toString());
 
                             insertStatement.executeUpdate();
 
@@ -516,9 +556,10 @@ public class ClientPanel extends javax.swing.JPanel {
 
                             JOptionPane.showMessageDialog(null, "Client Created!", "Create", JOptionPane.INFORMATION_MESSAGE);
                         } else {
-                            PreparedStatement updateStatement = connect.prepareStatement("UPDATE Client SET client_id = ?, client_lastname = ?, client_firstname = ?,"
-                                    + " client_middlename = ?, client_address =  ?, client_phonenumber = ?, client_rateclass = ?,  client_metersize =  ?, client_meternumber = ?,"
-                                    + "client_meterreading = ?, client_status = ? WHERE client_id = ?");                            
+                            PreparedStatement updateStatement = connect.prepareStatement("UPDATE Client JOIN Meter ON Client.meter_id = Meter.meter_id "
+                                    + "SET  client_id = ?, client_lastname = ?, client_firstname = ?, client_middlename = ?, client_address =  ?, "
+                                    + "client_phonenumber = ?, client_rateclass = ?, "
+                                    + "client_status = ?, meter_size = ?, meter_reading = ? WHERE client_id = ?");
                             updateStatement.setInt(1, Integer.parseInt(id.getText()));
                             updateStatement.setString(2, lastname.getText());
                             updateStatement.setString(3, firstname.getText());
@@ -526,11 +567,10 @@ public class ClientPanel extends javax.swing.JPanel {
                             updateStatement.setString(5, address.getText());
                             updateStatement.setString(6, phonenumber.getText());
                             updateStatement.setString(7, rateclass.getSelectedItem().toString());
-                            updateStatement.setDouble(8, Double.parseDouble(metersize.getText()));
-                            updateStatement.setInt(9, Integer.parseInt(meternumber.getText()));
+                            updateStatement.setString(8, status.getSelectedItem().toString());
+                            updateStatement.setDouble(9, Double.parseDouble(metersize.getText()));
                             updateStatement.setInt(10, Integer.parseInt(meterreading.getText()));
-                            updateStatement.setString(11, status.getSelectedItem().toString());
-                            updateStatement.setInt(12, Integer.parseInt(id.getText()));
+                            updateStatement.setInt(11, Integer.parseInt(id.getText()));
 
                             updateStatement.executeUpdate();
 
@@ -601,9 +641,18 @@ public class ClientPanel extends javax.swing.JPanel {
         delete.setEnabled(false);
     }//GEN-LAST:event_searchFocusGained
 
+    private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
+        if (table.getSelectedRowCount() > 0) {
+            clearTextFields();
+            table.clearSelection();
+            delete.setEnabled(false);
+        }
+        this.requestFocus();
+    }//GEN-LAST:event_formMouseClicked
+
     public boolean checkTextFields() {
         if (lastname.getText().equals("") && firstname.getText().equals("") && address.getText().equals("") && phonenumber.getText().equals("")
-                && metersize.getText().equals("") && meternumber.getText().equals("")) {
+                && metersize.getText().equals("") && meterId.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Fill up the required fields!", "Client", JOptionPane.ERROR_MESSAGE);
             return false;
         } else if (lastname.getText().equals("") && firstname.getText().equals("")) {
@@ -618,8 +667,8 @@ public class ClientPanel extends javax.swing.JPanel {
         } else if (metersize.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Meter Size is required!", "Meter Size", JOptionPane.ERROR_MESSAGE);
             return false;
-        } else if (meternumber.getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "Meter Number is required!", "Meter Number", JOptionPane.ERROR_MESSAGE);
+        } else if (meterId.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Meter Id is required!", "Meter Id", JOptionPane.ERROR_MESSAGE);
             return false;
         }
         return true;
@@ -629,14 +678,18 @@ public class ClientPanel extends javax.swing.JPanel {
         try {
             Statement statement = connect.createStatement();
 
-            ResultSet selectStatement = statement.executeQuery("SELECT * FROM Client");
+            ResultSet selectStatement = statement.executeQuery("SELECT * FROM Client JOIN  Meter ON Client.meter_id = Meter.meter_id;");
 
+            meters.clear();
             clients.clear();
             while (selectStatement.next()) {
+                meters.add(new Meter(selectStatement.getString("meter_id"), selectStatement.getDouble("meter_size"), selectStatement.getInt("meter_reading"),
+                        selectStatement.getInt("meter_consumption")));
+
                 clients.add(new Client(selectStatement.getInt("client_id"), selectStatement.getString("client_lastname"),
                         selectStatement.getString("client_firstname"), selectStatement.getString("client_middlename"), selectStatement.getString("client_address"),
-                        selectStatement.getString("client_phonenumber"), selectStatement.getString("client_rateclass"), selectStatement.getDouble("client_metersize"), selectStatement.getInt("client_meternumber"),
-                        selectStatement.getInt("client_meterreading"), selectStatement.getString("client_status")
+                        selectStatement.getString("client_phonenumber"), selectStatement.getString("client_rateclass"), selectStatement.getString("meter_id"),
+                        selectStatement.getString("client_status")
                 ));
             }
         } catch (SQLException ex) {
@@ -656,9 +709,9 @@ public class ClientPanel extends javax.swing.JPanel {
 
         for (int i = 0; i < clients.size(); i++) {
             row[0] = clients.get(i).getId();
-            row[1] = clients.get(i).getFirstName() + " " + clients.get(i).getMiddleName() + " " + clients.get(i).getLastName();
+            row[1] = clients.get(i).getFirstname() + " " + clients.get(i).getMiddlename() + " " + clients.get(i).getLastname();
             row[2] = clients.get(i).getAddress();
-            row[3] = clients.get(i).getMeternumber();
+            row[3] = clients.get(i).getMeterId();
             row[4] = clients.get(i).getRateclass();
             row[5] = clients.get(i).getStatus();
             model.addRow(row);
@@ -674,7 +727,7 @@ public class ClientPanel extends javax.swing.JPanel {
         phonenumber.setText("");
         rateclass.setSelectedItem("Connected");
         metersize.setText("");
-        meternumber.setText("");
+        meterId.setText("");
         meterreading.setText("");
         status.setSelectedItem("Active");
     }
@@ -704,9 +757,9 @@ public class ClientPanel extends javax.swing.JPanel {
     private javax.swing.JTextField lastname;
     private javax.swing.JLabel lastnameLabel;
     private javax.swing.JLabel listOfAcccountLabel;
-    private javax.swing.JLabel meternoLabel;
-    private javax.swing.JTextField meternumber;
-    private javax.swing.JTextField meterreading;
+    private javax.swing.JPasswordField meterId;
+    private javax.swing.JLabel meterIdLabel;
+    private javax.swing.JPasswordField meterreading;
     private javax.swing.JLabel meterreadingLabel;
     private javax.swing.JTextField metersize;
     private javax.swing.JLabel metersizeLabel;

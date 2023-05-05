@@ -31,6 +31,15 @@ CREATE TABLE IF NOT EXISTS Staff(
 
 INSERT IGNORE INTO Staff (staff_username, staff_password, staff_status) VALUES ('clyde_staff', '1234clyde', 'Active');
 
+CREATE TABLE IF NOT EXISTS Meter(
+	meter_id VARCHAR(6) PRIMARY KEY, 
+        meter_size DOUBLE,
+        meter_reading INT,
+        meter_consumption INT     
+);
+
+INSERT IGNORE INTO Meter VALUES (123456, 0.5, 224, 0);
+
 CREATE TABLE IF NOT EXISTS Client(
 	client_id INT PRIMARY KEY AUTO_INCREMENT, 
         client_lastname VARCHAR(25),
@@ -39,27 +48,23 @@ CREATE TABLE IF NOT EXISTS Client(
         client_address VARCHAR(50),
         client_phonenumber VARCHAR(25),
 	client_rateclass SET('Residential', 'Semi-Business', 'Business'),  
-        meter_id INT,
+        meter_id VARCHAR(6),
         client_status SET('Connected', 'Disconnected'),
         FOREIGN KEY (meter_id) REFERENCES Meter(meter_id)
         
 )AUTO_INCREMENT = 1001;
 
-INSERT IGNORE INTO Client VALUES (1001, 'Ragos', 'Ryan', 'M', 'Bustos, Bulacan', '09', 'Residential', 012345, 'Connected');
-
-CREATE TABLE IF NOT EXISTS Meter(
-	meter_id INT PRIMARY KEY AUTO_INCREMENT, 
-        meter_size DOUBLE,
-        meter_reading INT,
-        meter_consumption INT     
-);
-
-INSERT IGNORE INTO Meter VALUES (012345, 0.5, 224, 0);
+INSERT IGNORE INTO Client VALUES (1001, 'Ragos', 'Ryan', 'M', 'Bustos, Bulacan', '09', 'Residential', 123456, 'Connected');
 
 SELECT * FROM Admin;
 
 SELECT * FROM Staff;
 
 SELECT * FROM Client;
+
+SELECT * FROM Meter;
+
+SELECT * FROM Client JOIN  Meter 
+ON Client.meter_id = Meter.meter_id;
 
 -- DROP DATABASE WaterBilling;
