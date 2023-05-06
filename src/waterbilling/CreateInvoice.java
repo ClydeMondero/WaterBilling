@@ -6,20 +6,20 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.PreparedStatement;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.text.AbstractDocument;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.DocumentFilter;
 import static waterbilling.ClientPanel.clients;
 import static waterbilling.ClientPanel.meters;
+import static waterbilling.AdminPanel.admins;
+import static waterbilling.StaffPanel.staffs;
 
 public class CreateInvoice extends javax.swing.JFrame {
 
@@ -29,7 +29,8 @@ public class CreateInvoice extends javax.swing.JFrame {
     static ArrayList<Invoice> invoices = new ArrayList<>();
 
     Connection connect = null;
-
+    
+    SimpleDateFormat dateFormat;
     public CreateInvoice(int id, String username, String password) {
         initComponents();
 
@@ -61,8 +62,8 @@ public class CreateInvoice extends javax.swing.JFrame {
                 }
             }
         }
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM dd yyyy");
+        
+        dateFormat = new SimpleDateFormat("MMMM dd yyyy");
         meterreadingDate.setText(dateFormat.format(period.getDate()));
 
         Calendar calendar = Calendar.getInstance();
@@ -74,35 +75,35 @@ public class CreateInvoice extends javax.swing.JFrame {
         consumption.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                computeBasicCharge();               
+                computeBasicCharge();
                 basic.setText(chargeFormat.format(basiccharge));
-                
+
                 computeTransitoryCharge();
                 transitory.setText(chargeFormat.format(transitorycharge));
-                
+
                 computeEnvironmentalCharge();
                 environmental.setText(chargeFormat.format(environmentalcharge));
-                
+
                 computeSewerageCharge();
                 sewerage.setText(chargeFormat.format(seweragecharge));
-                
+
                 computeMaintenanceCharge();
                 maintenance.setText(chargeFormat.format(maintenancecharge));
-                
+
                 computeTotalBeforeTax();
-                beforeTax.setText(chargeFormat.format(beforeTax));
-                
+                beforeTax.setText(chargeFormat.format(totalbeforetax));
+
                 computeTax();
                 tax.setText(chargeFormat.format(taxcharge));
-                
+
                 computeTotal();
                 totalamount.setText(chargeFormat.format(total));
             }
 
             @Override
-            public void removeUpdate(DocumentEvent e) {                
+            public void removeUpdate(DocumentEvent e) {
                 basic.setText(chargeFormat.format(0));
-                transitory.setText(chargeFormat.format(0));                
+                transitory.setText(chargeFormat.format(0));
                 environmental.setText(chargeFormat.format(0));
                 sewerage.setText(chargeFormat.format(0));
                 maintenance.setText(chargeFormat.format(0));
@@ -113,27 +114,27 @@ public class CreateInvoice extends javax.swing.JFrame {
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                computeBasicCharge();               
+                computeBasicCharge();
                 basic.setText(chargeFormat.format(basiccharge));
-                
+
                 computeTransitoryCharge();
                 transitory.setText(chargeFormat.format(transitorycharge));
-                
+
                 computeEnvironmentalCharge();
                 environmental.setText(chargeFormat.format(environmentalcharge));
-                
+
                 computeSewerageCharge();
                 sewerage.setText(chargeFormat.format(seweragecharge));
-                
+
                 computeMaintenanceCharge();
                 maintenance.setText(chargeFormat.format(maintenancecharge));
-                
+
                 computeTotalBeforeTax();
                 beforeTax.setText(chargeFormat.format(beforeTax));
-                
+
                 computeTax();
                 tax.setText(chargeFormat.format(taxcharge));
-                
+
                 computeTotal();
                 totalamount.setText(chargeFormat.format(total));
             }
@@ -170,9 +171,9 @@ public class CreateInvoice extends javax.swing.JFrame {
         previousreading = new javax.swing.JLabel();
         presentreadingLabel = new javax.swing.JLabel();
         serviceInformationLabel1 = new javax.swing.JLabel();
-        presentreading = new javax.swing.JTextField();
+        presentreading = new javax.swing.JPasswordField();
         consumptionLabel = new javax.swing.JLabel();
-        consumption = new javax.swing.JTextField();
+        consumption = new javax.swing.JPasswordField();
         serviceInformationLabel2 = new javax.swing.JLabel();
         invoicePeriod2 = new javax.swing.JLabel();
         period2 = new javax.swing.JLabel();
@@ -339,6 +340,11 @@ public class CreateInvoice extends javax.swing.JFrame {
         });
 
         save.setText("Save");
+        save.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveActionPerformed(evt);
+            }
+        });
 
         sewerageLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         sewerageLabel.setText("Sewerage Charge:");
@@ -377,7 +383,7 @@ public class CreateInvoice extends javax.swing.JFrame {
                                 .addComponent(transitorylabel)
                                 .addGap(18, 18, 18)
                                 .addComponent(transitory, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(188, 566, Short.MAX_VALUE))
+                                .addGap(188, 556, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -396,7 +402,7 @@ public class CreateInvoice extends javax.swing.JFrame {
                                                 .addComponent(meterreadingDateLabel)
                                                 .addGap(18, 18, 18)
                                                 .addComponent(meterreadingDate, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 188, Short.MAX_VALUE))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 179, Short.MAX_VALUE))
                                             .addGroup(layout.createSequentialGroup()
                                                 .addComponent(presentreadingLabel)
                                                 .addGap(18, 18, 18)
@@ -430,8 +436,7 @@ public class CreateInvoice extends javax.swing.JFrame {
                                                 .addComponent(basic, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                         .addGap(0, 0, Short.MAX_VALUE)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                        .addComponent(invoicePeriod7)
-                        .addGap(0, 1, Short.MAX_VALUE))
+                        .addComponent(invoicePeriod7))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -463,16 +468,16 @@ public class CreateInvoice extends javax.swing.JFrame {
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(environmentalLabel)
                                         .addGap(18, 18, 18)
-                                        .addComponent(environmental))
+                                        .addComponent(environmental, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(taxLabel)
                                         .addGap(18, 18, 18)
-                                        .addComponent(tax)
+                                        .addComponent(tax, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addComponent(isDiscounted)
                                         .addGap(18, 18, 18)
                                         .addComponent(discount, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(18, 18, 18)
+                                .addGap(6, 6, 6)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(totalamountLabel)
@@ -486,7 +491,7 @@ public class CreateInvoice extends javax.swing.JFrame {
                                         .addComponent(sewerageLabel)
                                         .addGap(22, 22, 22)
                                         .addComponent(sewerage, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 4, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -573,8 +578,6 @@ public class CreateInvoice extends javax.swing.JFrame {
                                 .addComponent(beforetaxLabel)
                                 .addComponent(beforeTax))
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(discount)
-                                .addComponent(isDiscounted)
                                 .addComponent(taxLabel)
                                 .addComponent(tax))))
                     .addGroup(layout.createSequentialGroup()
@@ -588,6 +591,9 @@ public class CreateInvoice extends javax.swing.JFrame {
                             .addComponent(maintenance))
                         .addGap(27, 27, 27)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(discount)
+                                .addComponent(isDiscounted))
                             .addComponent(totalamountLabel)
                             .addComponent(totalamount))))
                 .addGap(11, 11, 11)
@@ -602,13 +608,99 @@ public class CreateInvoice extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-   
+
     private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
         period.setDate(null);
         presentreading.setText("");
         consumption.setText("");
         this.dispose();
     }//GEN-LAST:event_cancelActionPerformed
+
+    private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
+        JPasswordField passwordField = new JPasswordField();
+        String password = null;
+        int option = JOptionPane.showConfirmDialog(null, passwordField, "Enter your password", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+        if (option == JOptionPane.OK_OPTION) {
+            password = passwordField.getText();
+            if (password != null && password.equals(accountPassword)) {
+                String suffix = accountUsername.substring(accountUsername.indexOf("_") + 1);
+                if (suffix.equals("admin")) {
+                    PreparedStatement insertStatement;
+                    try {
+                        insertStatement = connect.prepareStatement("INSERT IGNORE INTO Invoice (invoice_id, invoice_amount, "
+                                + "invoice_period_date, invoice_status, client_id, admin_id) VALUES (?, ?, ?, ?, ?, ?)");
+
+                        insertStatement.setInt(1, Integer.parseInt(id.getText()));
+                        insertStatement.setDouble(2, Double.parseDouble(removeCurrency(totalamount.getText())));
+                        
+                        dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                        insertStatement.setString(3, dateFormat.format(period.getDate()));
+                        
+                        insertStatement.setString(4, "UnPaid");
+                        insertStatement.setInt(5, client);
+                        
+                        int adminId = 0;
+                        for(Admin admin : admins){
+                            if(accountUsername.equals(admin.getUsername())){
+                                adminId = admin.getId();
+                            }
+                        }
+                        insertStatement.setInt(6, adminId);
+
+                        insertStatement.executeUpdate();
+                    } catch (SQLException ex) {
+                        Logger.getLogger(CreateInvoice.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                    updateDatas();
+
+                    id.setText(Integer.toString(invoices.get(invoices.size() - 1).getId() + 1));
+                    this.dispose();
+
+                    JOptionPane.showMessageDialog(null, "Invoice Created!", "Create Invoice", JOptionPane.INFORMATION_MESSAGE);
+                } else if (suffix.equals("staff")) {
+                    PreparedStatement insertStatement;
+                    try {
+                        insertStatement = connect.prepareStatement("INSERT IGNORE INTO Invoice (invoice_id, invoice_amount, "
+                                + "invoice_period_date, invoice_status, client_id, staff_id) VALUES (?, ?, ?, ?, ?, ?)");
+
+                        insertStatement.setInt(1, Integer.parseInt(id.getText()));
+                        insertStatement.setDouble(2, Double.parseDouble(removeCurrency(totalamount.getText())));
+                        
+                        dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                        insertStatement.setString(3, dateFormat.format(period.getDate()));
+                        
+                        insertStatement.setString(4, "UnPaid");
+                        insertStatement.setInt(5, client);
+                        
+                        int staffId = 0;
+                        for(Staff staff : staffs){
+                            if(accountUsername.equals(staff.getId())){
+                                staffId = staff.getId();
+                            }
+                        }
+                        insertStatement.setInt(6, staffId);
+
+                        insertStatement.executeUpdate();
+                        
+                        
+                    } catch (SQLException ex) {
+                        Logger.getLogger(CreateInvoice.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                    updateDatas();
+
+                    id.setText(Integer.toString(invoices.get(invoices.size() - 1).getId() + 1));
+                    this.dispose();
+
+                    JOptionPane.showMessageDialog(null, "Invoice Created!", "Create Invoice", JOptionPane.INFORMATION_MESSAGE);
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Incorrect password!", "Wrong Password", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_saveActionPerformed
 
     public void updateDatas() {
         try {
@@ -639,9 +731,9 @@ public class CreateInvoice extends javax.swing.JFrame {
         }
     }
 
-    double basiccharge, transitorycharge, environmentalcharge, seweragecharge, maintenancecharge, beforetax, taxcharge, total;
+    double basiccharge, transitorycharge, environmentalcharge, seweragecharge, maintenancecharge, totalbeforetax, taxcharge, total;
 
-    public double computeBasicCharge() {       
+    public double computeBasicCharge() {
         try {
             if (rateclass.getText().equals("Residential")) {
                 if (Integer.parseInt(consumption.getText()) <= 10) {
@@ -925,63 +1017,64 @@ public class CreateInvoice extends javax.swing.JFrame {
     }
 
     double metersize;
-    public double computeMaintenanceCharge() {        
-            switch (Double.toString(metersize)) {
-                case "0.5":
-                    maintenancecharge = 1.50;
-                    break;
-                case "0.75":
-                    maintenancecharge = 2.00;
-                    break;
-                case "1":
-                    maintenancecharge = 3.00;
-                    break;
-                case "1.25":
-                    maintenancecharge = 4.00;
-                    break;
-                case "2":
-                    maintenancecharge = 6.00;
-                    break;
-                case "3":
-                    maintenancecharge = 10.00;
-                    break;
-                case "4":
-                    maintenancecharge = 20.00;
-                    break;
-                case "6":
-                    maintenancecharge = 35.00;
-                    break;
-                case "8":
-                    maintenancecharge = 50.00;
-                    break;
 
-                default:
+    public double computeMaintenanceCharge() {
+        switch (Double.toString(metersize)) {
+            case "0.5":
+                maintenancecharge = 1.50;
+                break;
+            case "0.75":
+                maintenancecharge = 2.00;
+                break;
+            case "1":
+                maintenancecharge = 3.00;
+                break;
+            case "1.25":
+                maintenancecharge = 4.00;
+                break;
+            case "2":
+                maintenancecharge = 6.00;
+                break;
+            case "3":
+                maintenancecharge = 10.00;
+                break;
+            case "4":
+                maintenancecharge = 20.00;
+                break;
+            case "6":
+                maintenancecharge = 35.00;
+                break;
+            case "8":
+                maintenancecharge = 50.00;
+                break;
 
-                    maintenancecharge = 0;
-                    break;
-            }        
+            default:
+
+                maintenancecharge = 0;
+                break;
+        }
         return maintenancecharge;
     }
 
-    public double computeTotalBeforeTax(){
-        beforetax = basiccharge + transitorycharge + environmentalcharge + seweragecharge
-                +  maintenancecharge;
-        
-        return beforetax;
+    public double computeTotalBeforeTax() {
+        totalbeforetax = basiccharge + transitorycharge + environmentalcharge + seweragecharge
+                + maintenancecharge;
+
+        return totalbeforetax;
     }
-    
-    public double computeTax() {        
-        taxcharge = beforetax * 0.02825;
+
+    public double computeTax() {
+        taxcharge = totalbeforetax * 0.02825;
 
         return taxcharge;
     }
 
     public double computeTotal() {
-        total = beforetax + taxcharge;
+        total = totalbeforetax + taxcharge;
 
         return total;
     }
-    
+
     public String removeCurrency(String s) {
         s = s.replace("₱", "");
 
@@ -1003,7 +1096,7 @@ public class CreateInvoice extends javax.swing.JFrame {
     private javax.swing.JLabel clientName;
     private javax.swing.JLabel clientNameLabel;
     private javax.swing.JSeparator clientinformationseparator;
-    private javax.swing.JTextField consumption;
+    private javax.swing.JPasswordField consumption;
     private javax.swing.JLabel consumptionLabel;
     private javax.swing.JLabel discount;
     private javax.swing.JLabel environmental;
@@ -1025,7 +1118,7 @@ public class CreateInvoice extends javax.swing.JFrame {
     private javax.swing.JLabel meterreadingDateLabel;
     private com.toedter.calendar.JDateChooser period;
     private javax.swing.JLabel period2;
-    private javax.swing.JTextField presentreading;
+    private javax.swing.JPasswordField presentreading;
     private javax.swing.JLabel presentreadingLabel;
     private javax.swing.JLabel previousreading;
     private javax.swing.JLabel previousreadingLabel;

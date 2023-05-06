@@ -459,7 +459,7 @@ public class AdminPanel extends javax.swing.JPanel {
 
         JPasswordField passwordField = new JPasswordField();
         String password = null;
-        int option = JOptionPane.showConfirmDialog(null, passwordField, "Enter your password:", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+        int option = JOptionPane.showConfirmDialog(null, passwordField, "Enter your password", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
 
         if (option == JOptionPane.OK_OPTION) {
             password = passwordField.getText();

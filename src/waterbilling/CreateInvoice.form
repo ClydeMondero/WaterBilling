@@ -55,7 +55,7 @@
                               <Component id="transitorylabel" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="transitory" min="-2" pref="100" max="-2" attributes="0"/>
-                              <EmptySpace min="188" pref="566" max="32767" attributes="0"/>
+                              <EmptySpace min="188" pref="556" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
@@ -78,7 +78,7 @@
                                               <Component id="meterreadingDateLabel" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace type="separate" max="-2" attributes="0"/>
                                               <Component id="meterreadingDate" min="-2" pref="200" max="-2" attributes="0"/>
-                                              <EmptySpace pref="188" max="32767" attributes="0"/>
+                                              <EmptySpace pref="179" max="32767" attributes="0"/>
                                           </Group>
                                           <Group type="102" alignment="0" attributes="0">
                                               <Component id="presentreadingLabel" min="-2" max="-2" attributes="0"/>
@@ -125,7 +125,6 @@
                           </Group>
                       </Group>
                       <Component id="invoicePeriod7" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="1" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
@@ -165,19 +164,19 @@
                                   <Group type="102" alignment="0" attributes="0">
                                       <Component id="environmentalLabel" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="environmental" min="-2" max="-2" attributes="0"/>
+                                      <Component id="environmental" min="-2" pref="100" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
                                       <Component id="taxLabel" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="tax" min="-2" max="-2" attributes="0"/>
+                                      <Component id="tax" min="-2" pref="56" max="-2" attributes="0"/>
                                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                       <Component id="isDiscounted" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
                                       <Component id="discount" min="-2" pref="60" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" alignment="0" attributes="0">
                                       <Component id="totalamountLabel" min="-2" max="-2" attributes="0"/>
@@ -197,7 +196,7 @@
                               </Group>
                           </Group>
                       </Group>
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="4" max="32767" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -310,8 +309,6 @@
                               <Component id="beforeTax" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Group type="103" alignment="1" groupAlignment="3" attributes="0">
-                              <Component id="discount" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="isDiscounted" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="taxLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="tax" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
@@ -330,7 +327,11 @@
                       </Group>
                       <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="totalamountLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" alignment="0" groupAlignment="3" attributes="0">
+                              <Component id="discount" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="isDiscounted" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="totalamountLabel" min="-2" max="-2" attributes="0"/>
                           <Component id="totalamount" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -706,6 +707,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Save"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="saveActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JSeparator" name="clientinformationseparator">
     </Component>

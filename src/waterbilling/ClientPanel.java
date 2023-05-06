@@ -688,6 +688,7 @@ public class ClientPanel extends javax.swing.JPanel {
 
     private void createInvoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createInvoiceActionPerformed
         Object client = table.getValueAt(row, 0);
+        System.out.println(client);
         new CreateInvoice(Integer.parseInt(client.toString()), accountUsername, accountPassword).setVisible(true);
     }//GEN-LAST:event_createInvoiceActionPerformed
 
