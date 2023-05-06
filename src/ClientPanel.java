@@ -177,6 +177,7 @@ public class ClientPanel extends javax.swing.JPanel {
         this.accountPassword = password;
 
         delete.setEnabled(false);
+        createInvoice.setEnabled(false);
 
         sorter = new TableRowSorter<>(table.getModel());
         table.setRowSorter(sorter);
@@ -493,6 +494,7 @@ public class ClientPanel extends javax.swing.JPanel {
             delete.setEnabled(false);
         } else {
             delete.setEnabled(true);
+            createInvoice.setEnabled(true);
         }
 
         id.setText(Integer.toString(clients.get(row).getId()));
@@ -512,6 +514,7 @@ public class ClientPanel extends javax.swing.JPanel {
         clearTextFields();
         table.clearSelection();
         delete.setEnabled(false);
+        createInvoice.setEnabled(false);
     }//GEN-LAST:event_cancelActionPerformed
 
     private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
@@ -652,6 +655,7 @@ public class ClientPanel extends javax.swing.JPanel {
     private void searchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_searchFocusGained
         table.clearSelection();
         delete.setEnabled(false);
+        createInvoice.setEnabled(false);
     }//GEN-LAST:event_searchFocusGained
 
     private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
@@ -659,12 +663,18 @@ public class ClientPanel extends javax.swing.JPanel {
             clearTextFields();
             table.clearSelection();
             delete.setEnabled(false);
+            createInvoice.setEnabled(false);
         }
         this.requestFocus();
     }//GEN-LAST:event_formMouseClicked
 
     private void createInvoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createInvoiceActionPerformed
+        int[] selectedRows = table.getSelectedRows();
         
+        for (int i = 0; i < selectedRows.length; i++) {
+            Object client = table.getValueAt(selectedRows[i], 0);
+            new CreateInvoice().setVisible(true);
+        }
     }//GEN-LAST:event_createInvoiceActionPerformed
 
     public boolean checkTextFields() {
