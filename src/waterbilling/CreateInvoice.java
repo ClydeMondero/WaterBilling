@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
@@ -27,7 +28,7 @@ public class CreateInvoice extends javax.swing.JFrame {
 
     static ArrayList<Invoice> invoices = new ArrayList<>();
 
-    Connection connect = null;        
+    Connection connect = null;
 
     public CreateInvoice(int id, String username, String password) {
         initComponents();
@@ -55,6 +56,7 @@ public class CreateInvoice extends javax.swing.JFrame {
                     if (client.getMeterId().equals(meter.getId())) {
                         meterId.setText(meter.getId());
                         previousreading.setText(Integer.toString(meter.getReading()));
+                        metersize = meter.getSize();
                     }
                 }
             }
@@ -67,26 +69,73 @@ public class CreateInvoice extends javax.swing.JFrame {
         calendar.setTime(period.getDate());
         calendar.add(Calendar.MONTH, -1);
         period2.setText(dateFormat.format(calendar.getTime()) + " TO " + dateFormat.format(period.getDate()));
-        
+
         NumberFormat chargeFormat = NumberFormat.getCurrencyInstance();
         consumption.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                computeBasicCharge();
+                computeBasicCharge();               
                 basic.setText(chargeFormat.format(basiccharge));
                 
+                computeTransitoryCharge();
+                transitory.setText(chargeFormat.format(transitorycharge));
+                
+                computeEnvironmentalCharge();
+                environmental.setText(chargeFormat.format(environmentalcharge));
+                
+                computeSewerageCharge();
+                sewerage.setText(chargeFormat.format(seweragecharge));
+                
+                computeMaintenanceCharge();
+                maintenance.setText(chargeFormat.format(maintenancecharge));
+                
+                computeTotalBeforeTax();
+                beforeTax.setText(chargeFormat.format(beforeTax));
+                
+                computeTax();
+                tax.setText(chargeFormat.format(taxcharge));
+                
+                computeTotal();
+                totalamount.setText(chargeFormat.format(total));
             }
 
             @Override
-            public void removeUpdate(DocumentEvent e) {
-                computeBasicCharge();
-                basic.setText(chargeFormat.format(basiccharge));
+            public void removeUpdate(DocumentEvent e) {                
+                basic.setText(chargeFormat.format(0));
+                transitory.setText(chargeFormat.format(0));                
+                environmental.setText(chargeFormat.format(0));
+                sewerage.setText(chargeFormat.format(0));
+                maintenance.setText(chargeFormat.format(0));
+                beforeTax.setText(chargeFormat.format(0));
+                tax.setText(chargeFormat.format(0));
+                totalamount.setText(chargeFormat.format(0));
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                computeBasicCharge();
+                computeBasicCharge();               
                 basic.setText(chargeFormat.format(basiccharge));
+                
+                computeTransitoryCharge();
+                transitory.setText(chargeFormat.format(transitorycharge));
+                
+                computeEnvironmentalCharge();
+                environmental.setText(chargeFormat.format(environmentalcharge));
+                
+                computeSewerageCharge();
+                sewerage.setText(chargeFormat.format(seweragecharge));
+                
+                computeMaintenanceCharge();
+                maintenance.setText(chargeFormat.format(maintenancecharge));
+                
+                computeTotalBeforeTax();
+                beforeTax.setText(chargeFormat.format(beforeTax));
+                
+                computeTax();
+                tax.setText(chargeFormat.format(taxcharge));
+                
+                computeTotal();
+                totalamount.setText(chargeFormat.format(total));
             }
 
         });
@@ -149,6 +198,8 @@ public class CreateInvoice extends javax.swing.JFrame {
         clientinformationseparator = new javax.swing.JSeparator();
         meterinformationSeparator = new javax.swing.JSeparator();
         invoicesummarySeparator = new javax.swing.JSeparator();
+        sewerageLabel = new javax.swing.JLabel();
+        sewerage = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -227,32 +278,32 @@ public class CreateInvoice extends javax.swing.JFrame {
         invoicePeriod2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         invoicePeriod2.setText("Invoice Period:");
 
-        period2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        period2.setFont(new java.awt.Font("Segoe UI", 0, 10)); // NOI18N
         period2.setText("Invoice Period");
 
         basiclabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         basiclabel.setText("Basic Charge:");
 
         basic.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        basic.setText("Basic Charge");
+        basic.setText("₱0.0");
 
         transitorylabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         transitorylabel.setText("Transitory Charge:");
 
         transitory.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        transitory.setText("Transitory Charge");
+        transitory.setText("₱0.0");
 
         environmentalLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         environmentalLabel.setText("Environmental Charge:");
 
         environmental.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        environmental.setText("Environmental");
+        environmental.setText("₱0.0");
 
         maintenanceLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         maintenanceLabel.setText("Maintenance Charge:");
 
         maintenance.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        maintenance.setText("Maintenance");
+        maintenance.setText("₱0.0");
 
         invoicePeriod7.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
@@ -263,22 +314,22 @@ public class CreateInvoice extends javax.swing.JFrame {
         taxLabel.setText("Tax:");
 
         tax.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        tax.setText("Tax");
+        tax.setText("₱0.0");
 
         discount.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        discount.setText("Discount");
+        discount.setText("₱0.0");
 
         isDiscounted.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         isDiscounted.setText("Discount:");
 
         beforeTax.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        beforeTax.setText("Before Tax");
+        beforeTax.setText("₱0.0");
 
         totalamountLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         totalamountLabel.setText("Total Amount:");
 
         totalamount.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        totalamount.setText("Total Amount");
+        totalamount.setText("₱0.0");
 
         cancel.setText("Cancel");
         cancel.addActionListener(new java.awt.event.ActionListener() {
@@ -288,6 +339,12 @@ public class CreateInvoice extends javax.swing.JFrame {
         });
 
         save.setText("Save");
+
+        sewerageLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        sewerageLabel.setText("Sewerage Charge:");
+
+        sewerage.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        sewerage.setText("₱0.0");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -317,76 +374,64 @@ public class CreateInvoice extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(meterIdLabel)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(meterId))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(previousreadingLabel)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(previousreading)))
-                                .addGap(32, 32, 32)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(meterreadingDateLabel)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(meterreadingDate, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(presentreadingLabel)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(presentreading, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
-                                        .addComponent(consumptionLabel)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(consumption, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(15, 15, 15))))
+                                .addComponent(transitorylabel)
+                                .addGap(18, 18, 18)
+                                .addComponent(transitory, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(188, 566, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(idLabel)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(id)
-                                        .addGap(124, 124, 124)
-                                        .addComponent(invoiceperiodLabel)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(period, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(meterIdLabel)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(meterId))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(previousreadingLabel)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(previousreading)))
+                                        .addGap(32, 32, 32)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(meterreadingDateLabel)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(meterreadingDate, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 188, Short.MAX_VALUE))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(presentreadingLabel)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(presentreading, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(consumptionLabel)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(consumption, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(22, 22, 22))))
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(serviceInformationLabel2)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(clientinformationseparator)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(clientinformationseparator))
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(transitorylabel)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(transitory)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(environmental))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(invoicePeriod2)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(period2, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(12, 12, 12)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(maintenanceLabel)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(maintenance))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(basiclabel)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(basic))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(totalamountLabel)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(totalamount)))
-                                .addGap(31, 31, 31)))
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(idLabel)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(id)
+                                                .addGap(124, 124, 124)
+                                                .addComponent(invoiceperiodLabel)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(period, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(invoicePeriod2)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(period2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(basiclabel)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(basic, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addGap(0, 0, Short.MAX_VALUE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                         .addComponent(invoicePeriod7)
-                        .addGap(0, 9, Short.MAX_VALUE))
+                        .addGap(0, 1, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -412,10 +457,13 @@ public class CreateInvoice extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(beforetaxLabel)
                                 .addGap(18, 18, 18)
-                                .addComponent(beforeTax)
-                                .addGap(65, 65, 65)
+                                .addComponent(beforeTax, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(24, 24, 24)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(environmentalLabel)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(environmentalLabel)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(environmental))
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(taxLabel)
                                         .addGap(18, 18, 18)
@@ -423,7 +471,21 @@ public class CreateInvoice extends javax.swing.JFrame {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addComponent(isDiscounted)
                                         .addGap(18, 18, 18)
-                                        .addComponent(discount)))))
+                                        .addComponent(discount, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(totalamountLabel)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(totalamount, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(maintenanceLabel)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(maintenance, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(sewerageLabel)
+                                        .addGap(22, 22, 22)
+                                        .addComponent(sewerage, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -458,66 +520,76 @@ public class CreateInvoice extends javax.swing.JFrame {
                     .addComponent(address)
                     .addComponent(rateclassLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(rateclass, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(26, 26, 26)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(serviceInformationLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(meterinformationSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(22, 22, 22)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(meterIdLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(meterId)
-                    .addComponent(meterreadingDateLabel)
-                    .addComponent(meterreadingDate))
-                .addGap(28, 28, 28)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(previousreadingLabel)
-                    .addComponent(previousreading)
-                    .addComponent(presentreadingLabel)
-                    .addComponent(presentreading, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(consumptionLabel)
-                    .addComponent(consumption, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(27, 27, 27)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(26, 26, 26)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(serviceInformationLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(meterinformationSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(22, 22, 22)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(meterIdLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(meterId)
+                            .addComponent(meterreadingDateLabel)
+                            .addComponent(meterreadingDate))
+                        .addGap(28, 28, 28)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(previousreadingLabel)
+                            .addComponent(previousreading)
+                            .addComponent(presentreadingLabel)
+                            .addComponent(presentreading, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(consumptionLabel)
+                            .addComponent(consumption, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(27, 27, 27)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(serviceInformationLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(clientinformationseparator, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(20, 20, 20)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(invoicePeriod2)
+                                    .addComponent(period2))
+                                .addGap(65, 65, 65))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(basiclabel)
+                                    .addComponent(basic))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(environmentalLabel)
+                                    .addComponent(environmental)
+                                    .addComponent(transitorylabel)
+                                    .addComponent(transitory))
+                                .addGap(27, 27, 27)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(beforetaxLabel)
+                                .addComponent(beforeTax))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(discount)
+                                .addComponent(isDiscounted)
+                                .addComponent(taxLabel)
+                                .addComponent(tax))))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(serviceInformationLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(clientinformationseparator, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(20, 20, 20)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(invoicePeriod2)
-                            .addComponent(period2))
-                        .addGap(65, 65, 65))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(basiclabel)
-                            .addComponent(basic))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(sewerageLabel)
+                            .addComponent(sewerage))
+                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(maintenanceLabel)
-                            .addComponent(maintenance)
-                            .addComponent(environmentalLabel)
-                            .addComponent(environmental)
-                            .addComponent(transitorylabel)
-                            .addComponent(transitory))
-                        .addGap(27, 27, 27)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(beforetaxLabel)
-                            .addComponent(beforeTax))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(discount)
-                            .addComponent(isDiscounted)
-                            .addComponent(taxLabel)
-                            .addComponent(tax)))
-                    .addComponent(totalamountLabel)
-                    .addComponent(totalamount))
+                            .addComponent(maintenance))
+                        .addGap(27, 27, 27)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(totalamountLabel)
+                            .addComponent(totalamount))))
                 .addGap(11, 11, 11)
                 .addComponent(invoicePeriod7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
@@ -530,27 +602,7 @@ public class CreateInvoice extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
-    DocumentFilter numbersFilter = new DocumentFilter() {
-            @Override
-            public void insertString(DocumentFilter.FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
-                if (string.matches("\\d*") || string.matches("^[\\\\d.]*$")) {
-                    super.insertString(fb, offset, string, attr);
-                } else {
-                    JOptionPane.showMessageDialog(null, "Please enter only numeric characters!", "Error", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-
-            @Override
-            public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String string, AttributeSet attr) throws BadLocationException {
-                if (string.matches("\\d*") || string.matches("^[\\\\d.]*$")) {
-                    super.replace(fb, offset, length, string, attr);
-                } else {
-                    JOptionPane.showMessageDialog(null, "Please enter only numeric characters!", "Error", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        };
-    
+   
     private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
         period.setDate(null);
         presentreading.setText("");
@@ -587,268 +639,356 @@ public class CreateInvoice extends javax.swing.JFrame {
         }
     }
 
-    double basiccharge;
+    double basiccharge, transitorycharge, environmentalcharge, seweragecharge, maintenancecharge, beforetax, taxcharge, total;
 
-    public double computeBasicCharge() {
-        try{
-        if (rateclass.getText().equals("Residential")) {
-            if (Integer.parseInt(consumption.getText()) <= 10) {
-                basiccharge = 96.32;
-            } else if (Integer.parseInt(consumption.getText()) > 10 && Integer.parseInt(consumption.getText()) <= 20) {
-                basiccharge = 184.19;
-                for (int i = 11; i < Integer.parseInt(consumption.getText()); i++) {
-                    basiccharge += 20.03;
+    public double computeBasicCharge() {       
+        try {
+            if (rateclass.getText().equals("Residential")) {
+                if (Integer.parseInt(consumption.getText()) <= 10) {
+                    basiccharge = 96.32;
+                } else if (Integer.parseInt(consumption.getText()) > 10 && Integer.parseInt(consumption.getText()) <= 20) {
+                    basiccharge = 184.19;
+                    for (int i = 11; i < Integer.parseInt(consumption.getText()); i++) {
+                        basiccharge += 20.03;
+                    }
+                } else if (Integer.parseInt(consumption.getText()) > 20 && Integer.parseInt(consumption.getText()) <= 40) {
+                    basiccharge = 402.55;
+                    for (int i = 21; i < Integer.parseInt(consumption.getText()); i++) {
+                        basiccharge += 38.09;
+                    }
+                } else if (Integer.parseInt(consumption.getText()) > 40 && Integer.parseInt(consumption.getText()) <= 60) {
+                    basiccharge = 1176.29;
+                    for (int i = 41; i < Integer.parseInt(consumption.getText()); i++) {
+                        basiccharge += 50.03;
+                    }
+                } else if (Integer.parseInt(consumption.getText()) > 60 && Integer.parseInt(consumption.getText()) <= 80) {
+                    basiccharge = 2185.31;
+                    for (int i = 61; i < Integer.parseInt(consumption.getText()); i++) {
+                        basiccharge += 58.45;
+                    }
+                } else if (Integer.parseInt(consumption.getText()) > 80 && Integer.parseInt(consumption.getText()) <= 100) {
+                    basiccharge = 3356.99;
+                    for (int i = 81; i < Integer.parseInt(consumption.getText()); i++) {
+                        basiccharge += 61.13;
+                    }
+                } else if (Integer.parseInt(consumption.getText()) > 100 && Integer.parseInt(consumption.getText()) <= 150) {
+                    basiccharge = 4582.39;
+                    for (int i = 101; i < Integer.parseInt(consumption.getText()); i++) {
+                        basiccharge += 63.93;
+                    }
+                } else if (Integer.parseInt(consumption.getText()) > 150 && Integer.parseInt(consumption.getText()) <= 200) {
+                    basiccharge = 7781.74;
+                    for (int i = 151; i < Integer.parseInt(consumption.getText()); i++) {
+                        basiccharge += 66.78;
+                    }
+                } else {
+                    basiccharge = 11123.56;
+                    for (int i = 201; i < Integer.parseInt(consumption.getText()); i++) {
+                        basiccharge += 69.60;
+                    }
                 }
-            } else if (Integer.parseInt(consumption.getText()) > 20 && Integer.parseInt(consumption.getText()) <= 40) {
-                basiccharge = 402.55;
-                for (int i = 21; i < Integer.parseInt(consumption.getText()); i++) {
-                    basiccharge += 38.09;
+            } else if (rateclass.getText().equals("Semi-Business")) {
+                if (Integer.parseInt(consumption.getText()) <= 10) {
+                    basiccharge = 164.16;
+                } else if (Integer.parseInt(consumption.getText()) > 10 && Integer.parseInt(consumption.getText()) <= 20) {
+                    basiccharge = 197.78;
+                    for (int i = 11; i < Integer.parseInt(consumption.getText()); i++) {
+                        basiccharge += 33.62;
+                    }
+                } else if (Integer.parseInt(consumption.getText()) > 20 && Integer.parseInt(consumption.getText()) <= 40) {
+                    basiccharge = 541.81;
+                    for (int i = 21; i < Integer.parseInt(consumption.getText()); i++) {
+                        basiccharge += 41.45;
+                    }
+                } else if (Integer.parseInt(consumption.getText()) > 40 && Integer.parseInt(consumption.getText()) <= 60) {
+                    basiccharge = 1381.93;
+                    for (int i = 41; i < Integer.parseInt(consumption.getText()); i++) {
+                        basiccharge += 52.57;
+                    }
+                } else if (Integer.parseInt(consumption.getText()) > 60 && Integer.parseInt(consumption.getText()) <= 80) {
+                    basiccharge = 2441.89;
+                    for (int i = 61; i < Integer.parseInt(consumption.getText()); i++) {
+                        basiccharge += 61.13;
+                    }
+                } else if (Integer.parseInt(consumption.getText()) > 80 && Integer.parseInt(consumption.getText()) <= 100) {
+                    basiccharge = 3667.32;
+                    for (int i = 81; i < Integer.parseInt(consumption.getText()); i++) {
+                        basiccharge += 63.96;
+                    }
+                } else if (Integer.parseInt(consumption.getText()) > 100 && Integer.parseInt(consumption.getText()) <= 150) {
+                    basiccharge = 4949.34;
+                    for (int i = 101; i < Integer.parseInt(consumption.getText()); i++) {
+                        basiccharge += 66.78;
+                    }
+                } else if (Integer.parseInt(consumption.getText()) > 150 && Integer.parseInt(consumption.getText()) <= 200) {
+                    basiccharge = 8291.16;
+                    for (int i = 151; i < Integer.parseInt(consumption.getText()); i++) {
+                        basiccharge += 69.60;
+                    }
+                } else {
+                    basiccharge = 11773.90;
+                    for (int i = 201; i < Integer.parseInt(consumption.getText()); i++) {
+                        basiccharge += 72.34;
+                    }
                 }
-            } else if (Integer.parseInt(consumption.getText()) > 40 && Integer.parseInt(consumption.getText()) <= 60) {
-                basiccharge = 1176.29;
-                for (int i = 41; i < Integer.parseInt(consumption.getText()); i++) {
-                    basiccharge += 50.03;
-                }
-            } else if (Integer.parseInt(consumption.getText()) > 60 && Integer.parseInt(consumption.getText()) <= 80) {
-                basiccharge = 2185.31;
-                for (int i = 61; i < Integer.parseInt(consumption.getText()); i++) {
-                    basiccharge += 58.45;
-                }
-            } else if (Integer.parseInt(consumption.getText()) > 80 && Integer.parseInt(consumption.getText()) <= 100) {
-                basiccharge = 3356.99;
-                for (int i = 81; i < Integer.parseInt(consumption.getText()); i++) {
-                    basiccharge += 61.13;
-                }
-            } else if (Integer.parseInt(consumption.getText()) > 100 && Integer.parseInt(consumption.getText()) <= 150) {
-                basiccharge = 4582.39;
-                for (int i = 101; i < Integer.parseInt(consumption.getText()); i++) {
-                    basiccharge += 63.93;
-                }
-            } else if (Integer.parseInt(consumption.getText()) > 150 && Integer.parseInt(consumption.getText()) <= 200) {
-                basiccharge = 7781.74;
-                for (int i = 151; i < Integer.parseInt(consumption.getText()); i++) {
-                    basiccharge += 66.78;
-                }
-            } else {
-                basiccharge = 11123.56;
-                for (int i = 201; i < Integer.parseInt(consumption.getText()); i++) {
-                    basiccharge += 69.60;
+            } else if (rateclass.getText().equals("Business")) {
+                if (Integer.parseInt(consumption.getText()) <= 10) {
+                    basiccharge = 746.05;
+                } else if (Integer.parseInt(consumption.getText()) > 10 && Integer.parseInt(consumption.getText()) <= 100) {
+                    basiccharge = 821;
+                    for (int i = 11; i < Integer.parseInt(consumption.getText()); i++) {
+                        basiccharge += 74.95;
+                    }
+                } else if (Integer.parseInt(consumption.getText()) > 100 && Integer.parseInt(consumption.getText()) <= 200) {
+                    basiccharge = 7566.70;
+                    for (int i = 101; i < Integer.parseInt(consumption.getText()); i++) {
+                        basiccharge += 75.15;
+                    }
+                } else if (Integer.parseInt(consumption.getText()) > 200 && Integer.parseInt(consumption.getText()) <= 300) {
+                    basiccharge = 15081.93;
+                    for (int i = 201; i < Integer.parseInt(consumption.getText()); i++) {
+                        basiccharge += 75.38;
+                    }
+                } else if (Integer.parseInt(consumption.getText()) > 300 && Integer.parseInt(consumption.getText()) <= 400) {
+                    basiccharge = 22620.18;
+                    for (int i = 301; i < Integer.parseInt(consumption.getText()); i++) {
+                        basiccharge += 75.63;
+                    }
+                } else if (Integer.parseInt(consumption.getText()) > 400 && Integer.parseInt(consumption.getText()) <= 500) {
+                    basiccharge = 30183.43;
+                    for (int i = 401; i < Integer.parseInt(consumption.getText()); i++) {
+                        basiccharge += 75.88;
+                    }
+                } else if (Integer.parseInt(consumption.getText()) > 500 && Integer.parseInt(consumption.getText()) <= 600) {
+                    basiccharge = 37771.78;
+                    for (int i = 501; i < Integer.parseInt(consumption.getText()); i++) {
+                        basiccharge += 76.23;
+                    }
+                } else if (Integer.parseInt(consumption.getText()) > 600 && Integer.parseInt(consumption.getText()) <= 700) {
+                    basiccharge = 45395.11;
+                    for (int i = 601; i < Integer.parseInt(consumption.getText()); i++) {
+                        basiccharge += 76.56;
+                    }
+                } else if (Integer.parseInt(consumption.getText()) > 700 && Integer.parseInt(consumption.getText()) <= 800) {
+                    basiccharge = 53051.37;
+                    for (int i = 701; i < Integer.parseInt(consumption.getText()); i++) {
+                        basiccharge += 76.82;
+                    }
+                } else if (Integer.parseInt(consumption.getText()) > 800 && Integer.parseInt(consumption.getText()) <= 900) {
+                    basiccharge = 60733.62;
+                    for (int i = 801; i < Integer.parseInt(consumption.getText()); i++) {
+                        basiccharge += 77.07;
+                    }
+                } else if (Integer.parseInt(consumption.getText()) > 900 && Integer.parseInt(consumption.getText()) <= 1000) {
+                    basiccharge = 68440.86;
+                    for (int i = 901; i < Integer.parseInt(consumption.getText()); i++) {
+                        basiccharge += 77.31;
+                    }
+                } else if (Integer.parseInt(consumption.getText()) > 1000 && Integer.parseInt(consumption.getText()) <= 1200) {
+                    basiccharge = 76172.21;
+                    for (int i = 1001; i < Integer.parseInt(consumption.getText()); i++) {
+                        basiccharge += 77.66;
+                    }
+                } else if (Integer.parseInt(consumption.getText()) > 1200 && Integer.parseInt(consumption.getText()) <= 1400) {
+                    basiccharge = 91704.44;
+                    for (int i = 1201; i < Integer.parseInt(consumption.getText()); i++) {
+                        basiccharge += 77.89;
+                    }
+                } else if (Integer.parseInt(consumption.getText()) > 1400 && Integer.parseInt(consumption.getText()) <= 1600) {
+                    basiccharge = 107282.85;
+                    for (int i = 1401; i < Integer.parseInt(consumption.getText()); i++) {
+                        basiccharge += 78.30;
+                    }
+                } else if (Integer.parseInt(consumption.getText()) > 1600 && Integer.parseInt(consumption.getText()) <= 1800) {
+                    basiccharge = 122943.06;
+                    for (int i = 1601; i < Integer.parseInt(consumption.getText()); i++) {
+                        basiccharge += 78.51;
+                    }
+                } else if (Integer.parseInt(consumption.getText()) > 1800 && Integer.parseInt(consumption.getText()) <= 2000) {
+                    basiccharge = 138645.25;
+                    for (int i = 1801; i < Integer.parseInt(consumption.getText()); i++) {
+                        basiccharge += 78.70;
+                    }
+                } else if (Integer.parseInt(consumption.getText()) > 2000 && Integer.parseInt(consumption.getText()) <= 2500) {
+                    basiccharge = 154285.48;
+                    for (int i = 2001; i < Integer.parseInt(consumption.getText()); i++) {
+                        basiccharge += 78.93;
+                    }
+                } else if (Integer.parseInt(consumption.getText()) > 2500 && Integer.parseInt(consumption.getText()) <= 3000) {
+                    basiccharge = 193850.90;
+                    for (int i = 2501; i < Integer.parseInt(consumption.getText()); i++) {
+                        basiccharge += 79.35;
+                    }
+                } else if (Integer.parseInt(consumption.getText()) > 3000 && Integer.parseInt(consumption.getText()) <= 3500) {
+                    basiccharge = 233526.17;
+                    for (int i = 3001; i < Integer.parseInt(consumption.getText()); i++) {
+                        basiccharge += 79.62;
+                    }
+                } else if (Integer.parseInt(consumption.getText()) > 3500 && Integer.parseInt(consumption.getText()) <= 4000) {
+                    basiccharge = 273336.45;
+                    for (int i = 3501; i < Integer.parseInt(consumption.getText()); i++) {
+                        basiccharge += 79.90;
+                    }
+                } else if (Integer.parseInt(consumption.getText()) > 4000 && Integer.parseInt(consumption.getText()) <= 4500) {
+                    basiccharge = 313286.60;
+                    for (int i = 4001; i < Integer.parseInt(consumption.getText()); i++) {
+                        basiccharge += 80.05;
+                    }
+                } else if (Integer.parseInt(consumption.getText()) > 4500 && Integer.parseInt(consumption.getText()) <= 5000) {
+                    basiccharge = 353311.94;
+                    for (int i = 4501; i < Integer.parseInt(consumption.getText()); i++) {
+                        basiccharge += 80.39;
+                    }
+                } else if (Integer.parseInt(consumption.getText()) > 5000 && Integer.parseInt(consumption.getText()) <= 5500) {
+                    basiccharge = 393507.28;
+                    for (int i = 5001; i < Integer.parseInt(consumption.getText()); i++) {
+                        basiccharge += 80.73;
+                    }
+                } else if (Integer.parseInt(consumption.getText()) > 5500 && Integer.parseInt(consumption.getText()) <= 6000) {
+                    basiccharge = 433872.47;
+                    for (int i = 5501; i < Integer.parseInt(consumption.getText()); i++) {
+                        basiccharge += 80.92;
+                    }
+                } else if (Integer.parseInt(consumption.getText()) > 6000 && Integer.parseInt(consumption.getText()) <= 6500) {
+                    basiccharge = 474332.80;
+                    for (int i = 6001; i < Integer.parseInt(consumption.getText()); i++) {
+                        basiccharge += 81.25;
+                    }
+                } else if (Integer.parseInt(consumption.getText()) > 6500 && Integer.parseInt(consumption.getText()) <= 7000) {
+                    basiccharge = 514958.08;
+                    for (int i = 6501; i < Integer.parseInt(consumption.getText()); i++) {
+                        basiccharge += 81.53;
+                    }
+                } else if (Integer.parseInt(consumption.getText()) > 7000 && Integer.parseInt(consumption.getText()) <= 7500) {
+                    basiccharge = 555723.29;
+                    for (int i = 7001; i < Integer.parseInt(consumption.getText()); i++) {
+                        basiccharge += 81.74;
+                    }
+                } else if (Integer.parseInt(consumption.getText()) > 7500 && Integer.parseInt(consumption.getText()) <= 8000) {
+                    basiccharge = 596593.61;
+                    for (int i = 7501; i < Integer.parseInt(consumption.getText()); i++) {
+                        basiccharge += 82.06;
+                    }
+                } else if (Integer.parseInt(consumption.getText()) > 8000 && Integer.parseInt(consumption.getText()) <= 8500) {
+                    basiccharge = 637623.95;
+                    for (int i = 8001; i < Integer.parseInt(consumption.getText()); i++) {
+                        basiccharge += 82.40;
+                    }
+                } else if (Integer.parseInt(consumption.getText()) > 8500 && Integer.parseInt(consumption.getText()) <= 9000) {
+                    basiccharge = 678824.18;
+                    for (int i = 8501; i < Integer.parseInt(consumption.getText()); i++) {
+                        basiccharge += 82.63;
+                    }
+                } else if (Integer.parseInt(consumption.getText()) > 9000 && Integer.parseInt(consumption.getText()) <= 9500) {
+                    basiccharge = 720139.47;
+                    for (int i = 9001; i < Integer.parseInt(consumption.getText()); i++) {
+                        basiccharge += 82.92;
+                    }
+                } else if (Integer.parseInt(consumption.getText()) > 9500 && Integer.parseInt(consumption.getText()) <= 10000) {
+                    basiccharge = 761599.76;
+                    for (int i = 9501; i < Integer.parseInt(consumption.getText()); i++) {
+                        basiccharge += 83.21;
+                    }
+                } else {
+                    basiccharge = 803205.01;
+                    for (int i = 10001; i < Integer.parseInt(consumption.getText()); i++) {
+                        basiccharge += 83.46;
+                    }
                 }
             }
-        } else if (rateclass.getText().equals("Semi-Business")) {
-            if (Integer.parseInt(consumption.getText()) <= 10) {
-                basiccharge = 164.16;
-            } else if (Integer.parseInt(consumption.getText()) > 10 && Integer.parseInt(consumption.getText()) <= 20) {
-                basiccharge = 197.78;
-                for (int i = 11; i < Integer.parseInt(consumption.getText()); i++) {
-                    basiccharge += 33.62;
-                }
-            } else if (Integer.parseInt(consumption.getText()) > 20 && Integer.parseInt(consumption.getText()) <= 40) {
-                basiccharge = 541.81;
-                for (int i = 21; i < Integer.parseInt(consumption.getText()); i++) {
-                    basiccharge += 41.45;
-                }
-            } else if (Integer.parseInt(consumption.getText()) > 40 && Integer.parseInt(consumption.getText()) <= 60) {
-                basiccharge = 1381.93;
-                for (int i = 41; i < Integer.parseInt(consumption.getText()); i++) {
-                    basiccharge += 52.57;
-                }
-            } else if (Integer.parseInt(consumption.getText()) > 60 && Integer.parseInt(consumption.getText()) <= 80) {
-                basiccharge = 2441.89;
-                for (int i = 61; i < Integer.parseInt(consumption.getText()); i++) {
-                    basiccharge += 61.13;
-                }
-            } else if (Integer.parseInt(consumption.getText()) > 80 && Integer.parseInt(consumption.getText()) <= 100) {
-                basiccharge = 3667.32;
-                for (int i = 81; i < Integer.parseInt(consumption.getText()); i++) {
-                    basiccharge += 63.96;
-                }
-            } else if (Integer.parseInt(consumption.getText()) > 100 && Integer.parseInt(consumption.getText()) <= 150) {
-                basiccharge = 4949.34;
-                for (int i = 101; i < Integer.parseInt(consumption.getText()); i++) {
-                    basiccharge += 66.78;
-                }
-            } else if (Integer.parseInt(consumption.getText()) > 150 && Integer.parseInt(consumption.getText()) <= 200) {
-                basiccharge = 8291.16;
-                for (int i = 151; i < Integer.parseInt(consumption.getText()); i++) {
-                    basiccharge += 69.60;
-                }
-            } else {
-                basiccharge = 11773.90;
-                for (int i = 201; i < Integer.parseInt(consumption.getText()); i++) {
-                    basiccharge += 72.34;
-                }
-            }
-        } else if (rateclass.getText().equals("Business")) {
-            if (Integer.parseInt(consumption.getText()) <= 10) {
-                basiccharge = 746.05;
-            } else if (Integer.parseInt(consumption.getText()) > 10 && Integer.parseInt(consumption.getText()) <= 100) {
-                basiccharge = 821;
-                for (int i = 11; i < Integer.parseInt(consumption.getText()); i++) {
-                    basiccharge += 74.95;
-                }
-            } else if (Integer.parseInt(consumption.getText()) > 100 && Integer.parseInt(consumption.getText()) <= 200) {
-                basiccharge = 7566.70;
-                for (int i = 101; i < Integer.parseInt(consumption.getText()); i++) {
-                    basiccharge += 75.15;
-                }
-            } else if (Integer.parseInt(consumption.getText()) > 200 && Integer.parseInt(consumption.getText()) <= 300) {
-                basiccharge = 15081.93;
-                for (int i = 201; i < Integer.parseInt(consumption.getText()); i++) {
-                    basiccharge += 75.38;
-                }
-            } else if (Integer.parseInt(consumption.getText()) > 300 && Integer.parseInt(consumption.getText()) <= 400) {
-                basiccharge = 22620.18;
-                for (int i = 301; i < Integer.parseInt(consumption.getText()); i++) {
-                    basiccharge += 75.63;
-                }
-            } else if (Integer.parseInt(consumption.getText()) > 400 && Integer.parseInt(consumption.getText()) <= 500) {
-                basiccharge = 30183.43;
-                for (int i = 401; i < Integer.parseInt(consumption.getText()); i++) {
-                    basiccharge += 75.88;
-                }
-            } else if (Integer.parseInt(consumption.getText()) > 500 && Integer.parseInt(consumption.getText()) <= 600) {
-                basiccharge = 37771.78;
-                for (int i = 501; i < Integer.parseInt(consumption.getText()); i++) {
-                    basiccharge += 76.23;
-                }
-            } else if (Integer.parseInt(consumption.getText()) > 600 && Integer.parseInt(consumption.getText()) <= 700) {
-                basiccharge = 45395.11;
-                for (int i = 601; i < Integer.parseInt(consumption.getText()); i++) {
-                    basiccharge += 76.56;
-                }
-            } else if (Integer.parseInt(consumption.getText()) > 700 && Integer.parseInt(consumption.getText()) <= 800) {
-                basiccharge = 53051.37;
-                for (int i = 701; i < Integer.parseInt(consumption.getText()); i++) {
-                    basiccharge += 76.82;
-                }
-            } else if (Integer.parseInt(consumption.getText()) > 800 && Integer.parseInt(consumption.getText()) <= 900) {
-                basiccharge = 60733.62;
-                for (int i = 801; i < Integer.parseInt(consumption.getText()); i++) {
-                    basiccharge += 77.07;
-                }
-            } else if (Integer.parseInt(consumption.getText()) > 900 && Integer.parseInt(consumption.getText()) <= 1000) {
-                basiccharge = 68440.86;
-                for (int i = 901; i < Integer.parseInt(consumption.getText()); i++) {
-                    basiccharge += 77.31;
-                }
-            } else if (Integer.parseInt(consumption.getText()) > 1000 && Integer.parseInt(consumption.getText()) <= 1200) {
-                basiccharge = 76172.21;
-                for (int i = 1001; i < Integer.parseInt(consumption.getText()); i++) {
-                    basiccharge += 77.66;
-                }
-            } else if (Integer.parseInt(consumption.getText()) > 1200 && Integer.parseInt(consumption.getText()) <= 1400) {
-                basiccharge = 91704.44;
-                for (int i = 1201; i < Integer.parseInt(consumption.getText()); i++) {
-                    basiccharge += 77.89;
-                }
-            } else if (Integer.parseInt(consumption.getText()) > 1400 && Integer.parseInt(consumption.getText()) <= 1600) {
-                basiccharge = 107282.85;
-                for (int i = 1401; i < Integer.parseInt(consumption.getText()); i++) {
-                    basiccharge += 78.30;
-                }
-            } else if (Integer.parseInt(consumption.getText()) > 1600 && Integer.parseInt(consumption.getText()) <= 1800) {
-                basiccharge = 122943.06;
-                for (int i = 1601; i < Integer.parseInt(consumption.getText()); i++) {
-                    basiccharge += 78.51;
-                }
-            } else if (Integer.parseInt(consumption.getText()) > 1800 && Integer.parseInt(consumption.getText()) <= 2000) {
-                basiccharge = 138645.25;
-                for (int i = 1801; i < Integer.parseInt(consumption.getText()); i++) {
-                    basiccharge += 78.70;
-                }
-            } else if (Integer.parseInt(consumption.getText()) > 2000 && Integer.parseInt(consumption.getText()) <= 2500) {
-                basiccharge = 154285.48;
-                for (int i = 2001; i < Integer.parseInt(consumption.getText()); i++) {
-                    basiccharge += 78.93;
-                }
-            } else if (Integer.parseInt(consumption.getText()) > 2500 && Integer.parseInt(consumption.getText()) <= 3000) {
-                basiccharge = 193850.90;
-                for (int i = 2501; i < Integer.parseInt(consumption.getText()); i++) {
-                    basiccharge += 79.35;
-                }
-            } else if (Integer.parseInt(consumption.getText()) > 3000 && Integer.parseInt(consumption.getText()) <= 3500) {
-                basiccharge = 233526.17;
-                for (int i = 3001; i < Integer.parseInt(consumption.getText()); i++) {
-                    basiccharge += 79.62;
-                }
-            } else if (Integer.parseInt(consumption.getText()) > 3500 && Integer.parseInt(consumption.getText()) <= 4000) {
-                basiccharge = 273336.45;
-                for (int i = 3501; i < Integer.parseInt(consumption.getText()); i++) {
-                    basiccharge += 79.90;
-                }
-            } else if (Integer.parseInt(consumption.getText()) > 4000 && Integer.parseInt(consumption.getText()) <= 4500) {
-                basiccharge = 313286.60;
-                for (int i = 4001; i < Integer.parseInt(consumption.getText()); i++) {
-                    basiccharge += 80.05;
-                }
-            } else if (Integer.parseInt(consumption.getText()) > 4500 && Integer.parseInt(consumption.getText()) <= 5000) {
-                basiccharge = 353311.94;
-                for (int i = 4501; i < Integer.parseInt(consumption.getText()); i++) {
-                    basiccharge += 80.39;
-                }
-            } else if (Integer.parseInt(consumption.getText()) > 5000 && Integer.parseInt(consumption.getText()) <= 5500) {
-                basiccharge = 393507.28;
-                for (int i = 5001; i < Integer.parseInt(consumption.getText()); i++) {
-                    basiccharge += 80.73;
-                }
-            } else if (Integer.parseInt(consumption.getText()) > 5500 && Integer.parseInt(consumption.getText()) <= 6000) {
-                basiccharge = 433872.47;
-                for (int i = 5501; i < Integer.parseInt(consumption.getText()); i++) {
-                    basiccharge += 80.92;
-                }
-            } else if (Integer.parseInt(consumption.getText()) > 6000 && Integer.parseInt(consumption.getText()) <= 6500) {
-                basiccharge = 474332.80;
-                for (int i = 6001; i < Integer.parseInt(consumption.getText()); i++) {
-                    basiccharge += 81.25;
-                }
-            } else if (Integer.parseInt(consumption.getText()) > 6500 && Integer.parseInt(consumption.getText()) <= 7000) {
-                basiccharge = 514958.08;
-                for (int i = 6501; i < Integer.parseInt(consumption.getText()); i++) {
-                    basiccharge += 81.53;
-                }
-            } else if (Integer.parseInt(consumption.getText()) > 7000 && Integer.parseInt(consumption.getText()) <= 7500) {
-                basiccharge = 555723.29;
-                for (int i = 7001; i < Integer.parseInt(consumption.getText()); i++) {
-                    basiccharge += 81.74;
-                }
-            } else if (Integer.parseInt(consumption.getText()) > 7500 && Integer.parseInt(consumption.getText()) <= 8000) {
-                basiccharge = 596593.61;
-                for (int i = 7501; i < Integer.parseInt(consumption.getText()); i++) {
-                    basiccharge += 82.06;
-                }
-            } else if (Integer.parseInt(consumption.getText()) > 8000 && Integer.parseInt(consumption.getText()) <= 8500) {
-                basiccharge = 637623.95;
-                for (int i = 8001; i < Integer.parseInt(consumption.getText()); i++) {
-                    basiccharge += 82.40;
-                }
-            } else if (Integer.parseInt(consumption.getText()) > 8500 && Integer.parseInt(consumption.getText()) <= 9000) {
-                basiccharge = 678824.18;
-                for (int i = 8501; i < Integer.parseInt(consumption.getText()); i++) {
-                    basiccharge += 82.63;
-                }
-            } else if (Integer.parseInt(consumption.getText()) > 9000 && Integer.parseInt(consumption.getText()) <= 9500) {
-                basiccharge = 720139.47;
-                for (int i = 9001; i < Integer.parseInt(consumption.getText()); i++) {
-                    basiccharge += 82.92;
-                }
-            } else if (Integer.parseInt(consumption.getText()) > 9500 && Integer.parseInt(consumption.getText()) <= 10000) {
-                basiccharge = 761599.76;
-                for (int i = 9501; i < Integer.parseInt(consumption.getText()); i++) {
-                    basiccharge += 83.21;
-                }
-            } else {
-                basiccharge = 803205.01;
-                for (int i = 10001; i < Integer.parseInt(consumption.getText()); i++) {
-                    basiccharge += 83.46;
-                }
-            }
-        }
-        }catch(NumberFormatException e){
-            
+        } catch (NumberFormatException e) {
+
         }
         return basiccharge;
     }
+
+    public double computeTransitoryCharge() {
+        transitorycharge = -basiccharge * 0.0055;
+
+        return transitorycharge;
+    }
+
+    public double computeEnvironmentalCharge() {
+        environmentalcharge = basiccharge + transitorycharge;
+        environmentalcharge = environmentalcharge * 0.20;
+
+        return environmentalcharge;
+    }
+
+    public double computeSewerageCharge() {
+        if (rateclass.getText().equals("Business")) {
+            seweragecharge = basiccharge + transitorycharge;
+            seweragecharge = seweragecharge * 0.20;
+        }
+
+        return seweragecharge;
+    }
+
+    double metersize;
+    public double computeMaintenanceCharge() {        
+            switch (Double.toString(metersize)) {
+                case "0.5":
+                    maintenancecharge = 1.50;
+                    break;
+                case "0.75":
+                    maintenancecharge = 2.00;
+                    break;
+                case "1":
+                    maintenancecharge = 3.00;
+                    break;
+                case "1.25":
+                    maintenancecharge = 4.00;
+                    break;
+                case "2":
+                    maintenancecharge = 6.00;
+                    break;
+                case "3":
+                    maintenancecharge = 10.00;
+                    break;
+                case "4":
+                    maintenancecharge = 20.00;
+                    break;
+                case "6":
+                    maintenancecharge = 35.00;
+                    break;
+                case "8":
+                    maintenancecharge = 50.00;
+                    break;
+
+                default:
+
+                    maintenancecharge = 0;
+                    break;
+            }        
+        return maintenancecharge;
+    }
+
+    public double computeTotalBeforeTax(){
+        beforetax = basiccharge + transitorycharge + environmentalcharge + seweragecharge
+                +  maintenancecharge;
+        
+        return beforetax;
+    }
+    
+    public double computeTax() {        
+        taxcharge = beforetax * 0.02825;
+
+        return taxcharge;
+    }
+
+    public double computeTotal() {
+        total = beforetax + taxcharge;
+
+        return total;
+    }
+    
+    public String removeCurrency(String s) {
+        s = s.replace("₱", "");
+
+        s = s.replace(",", "");
+        return s;
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel address;
@@ -895,6 +1035,8 @@ public class CreateInvoice extends javax.swing.JFrame {
     private javax.swing.JLabel serviceInformationLabel;
     private javax.swing.JLabel serviceInformationLabel1;
     private javax.swing.JLabel serviceInformationLabel2;
+    private javax.swing.JLabel sewerage;
+    private javax.swing.JLabel sewerageLabel;
     private javax.swing.JLabel tax;
     private javax.swing.JLabel taxLabel;
     private javax.swing.JLabel totalamount;
