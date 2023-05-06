@@ -1,3 +1,5 @@
+package waterbilling;
+
 import java.awt.Color;
 import java.sql.Connection;
 import javax.swing.SwingUtilities;

@@ -1,3 +1,5 @@
+package waterbilling;
+
 
 import javax.swing.JPanel;
 
@@ -39,7 +41,6 @@ public class Main extends javax.swing.JFrame {
         homePanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(820, 660));
         setResizable(false);
 
         usernameLabel.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
@@ -64,7 +65,7 @@ public class Main extends javax.swing.JFrame {
         );
         homePanelLayout.setVerticalGroup(
             homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 530, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
 
         mainTabbedPane.addTab("Home", homePanel);

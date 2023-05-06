@@ -1,3 +1,4 @@
+package waterbilling;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -231,7 +232,7 @@ public class ClientPanel extends javax.swing.JPanel {
         metersizeLabel = new javax.swing.JLabel();
         metersize = new javax.swing.JTextField();
         meterIdLabel = new javax.swing.JLabel();
-        meterId = new javax.swing.JPasswordField();
+        meterId = new javax.swing.JTextField();
         statusLabel = new javax.swing.JLabel();
         status = new javax.swing.JComboBox<>();
         cancel = new javax.swing.JButton();
@@ -241,7 +242,7 @@ public class ClientPanel extends javax.swing.JPanel {
         rateclassLabel = new javax.swing.JLabel();
         rateclass = new javax.swing.JComboBox<>();
         meterreadingLabel = new javax.swing.JLabel();
-        meterreading = new javax.swing.JPasswordField();
+        meterreading = new javax.swing.JTextField();
         createInvoice = new javax.swing.JButton();
 
         addMouseListener(new java.awt.event.MouseAdapter() {
@@ -596,13 +597,13 @@ public class ClientPanel extends javax.swing.JPanel {
                             updateStatement.setString(8, status.getSelectedItem().toString());
                             updateStatement.setDouble(9, Double.parseDouble(metersize.getText()));
                             updateStatement.setInt(10, Integer.parseInt(meterreading.getText()));
-                            
+
                             Date currentDate = new Date();
                             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
                             java.sql.Date sqlDate = java.sql.Date.valueOf(formatter.format(currentDate));
 
                             updateStatement.setDate(11, sqlDate);
-                            
+
                             updateStatement.setInt(12, Integer.parseInt(id.getText()));
 
                             updateStatement.executeUpdate();
@@ -686,12 +687,8 @@ public class ClientPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_formMouseClicked
 
     private void createInvoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createInvoiceActionPerformed
-        int[] selectedRows = table.getSelectedRows();
-
-        for (int i = 0; i < selectedRows.length; i++) {
-            Object client = table.getValueAt(selectedRows[i], 0);
-            new CreateInvoice().setVisible(true);
-        }
+        Object client = table.getValueAt(row, 0);
+        new CreateInvoice(Integer.parseInt(client.toString()), accountUsername, accountPassword).setVisible(true);
     }//GEN-LAST:event_createInvoiceActionPerformed
 
     public boolean checkTextFields() {
@@ -722,7 +719,7 @@ public class ClientPanel extends javax.swing.JPanel {
         try {
             Statement statement = connect.createStatement();
 
-            ResultSet selectStatement = statement.executeQuery("SELECT * FROM Client JOIN  Meter ON Client.meter_id = Meter.meter_id;");
+            ResultSet selectStatement = statement.executeQuery("SELECT * FROM Client JOIN  Meter ON Client.meter_id = Meter.meter_id");
 
             meters.clear();
             clients.clear();
@@ -802,9 +799,9 @@ public class ClientPanel extends javax.swing.JPanel {
     private javax.swing.JTextField lastname;
     private javax.swing.JLabel lastnameLabel;
     private javax.swing.JLabel listOfAcccountLabel;
-    private javax.swing.JPasswordField meterId;
+    private javax.swing.JTextField meterId;
     private javax.swing.JLabel meterIdLabel;
-    private javax.swing.JPasswordField meterreading;
+    private javax.swing.JTextField meterreading;
     private javax.swing.JLabel meterreadingLabel;
     private javax.swing.JTextField metersize;
     private javax.swing.JLabel metersizeLabel;

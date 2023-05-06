@@ -1,3 +1,5 @@
+package waterbilling;
+
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -32,7 +34,7 @@ public class DatabaseConnection {
             connect = DriverManager.getConnection("jdbc:mysql://localhost/", "root", "root");
 
             ScriptRunner scriptRunner = new ScriptRunner(connect);
-            Reader reader = new BufferedReader(new FileReader("src/Database.sql"));
+            Reader reader = new BufferedReader(new FileReader("src/waterbilling/Database.sql"));
 
             scriptRunner.runScript(reader);
 
