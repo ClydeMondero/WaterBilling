@@ -171,9 +171,9 @@ public class CreateInvoice extends javax.swing.JFrame {
         previousreading = new javax.swing.JLabel();
         presentreadingLabel = new javax.swing.JLabel();
         serviceInformationLabel1 = new javax.swing.JLabel();
-        presentreading = new javax.swing.JPasswordField();
+        presentreading = new javax.swing.JTextField();
         consumptionLabel = new javax.swing.JLabel();
-        consumption = new javax.swing.JPasswordField();
+        consumption = new javax.swing.JTextField();
         serviceInformationLabel2 = new javax.swing.JLabel();
         invoicePeriod2 = new javax.swing.JLabel();
         period2 = new javax.swing.JLabel();
@@ -1096,7 +1096,7 @@ public class CreateInvoice extends javax.swing.JFrame {
     private javax.swing.JLabel clientName;
     private javax.swing.JLabel clientNameLabel;
     private javax.swing.JSeparator clientinformationseparator;
-    private javax.swing.JPasswordField consumption;
+    private javax.swing.JTextField consumption;
     private javax.swing.JLabel consumptionLabel;
     private javax.swing.JLabel discount;
     private javax.swing.JLabel environmental;
@@ -1118,7 +1118,7 @@ public class CreateInvoice extends javax.swing.JFrame {
     private javax.swing.JLabel meterreadingDateLabel;
     private com.toedter.calendar.JDateChooser period;
     private javax.swing.JLabel period2;
-    private javax.swing.JPasswordField presentreading;
+    private javax.swing.JTextField presentreading;
     private javax.swing.JLabel presentreadingLabel;
     private javax.swing.JLabel previousreading;
     private javax.swing.JLabel previousreadingLabel;
