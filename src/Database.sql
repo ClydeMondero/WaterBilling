@@ -25,8 +25,7 @@ CREATE TABLE IF NOT EXISTS Staff(
         staff_phonenumber VARCHAR(25),
 	staff_username VARCHAR(25) UNIQUE, 
         staff_password VARCHAR(25),
-        staff_status SET('Active', 'Deactivated')
-        
+        staff_status SET('Active', 'Deactivated')        
 )AUTO_INCREMENT = 1001;
 
 INSERT IGNORE INTO Staff (staff_username, staff_password, staff_status) VALUES ('clyde_staff', '1234clyde', 'Active');
@@ -56,6 +55,26 @@ CREATE TABLE IF NOT EXISTS Client(
 
 INSERT IGNORE INTO Client VALUES (1001, 'Ragos', 'Ryan', 'M', 'Bustos, Bulacan', '09', 'Residential', 123456, 'Connected');
 
+CREATE TABLE IF NOT EXISTS Invoice(
+		invoice_id INT PRIMARY KEY AUTO_INCREMENT, 
+        invoice_period_date DATE,        
+        invoice_amount DOUBLE,
+        invoice_due_date DATE,
+        invoice_payment DOUBLE,
+        invoice_payment_date DATE,
+        client_id INT,
+        meter_id VARCHAR(6),
+        staff_id INT,
+        admin_id INT,
+        FOREIGN KEY (client_id) REFERENCES Client(client_id),
+        FOREIGN KEY (meter_id) REFERENCES Meter(meter_id),
+        FOREIGN KEY (staff_id) REFERENCES Staff(staff_id),
+        FOREIGN KEY (admin_id) REFERENCES Admin(admin_id)        
+)AUTO_INCREMENT = 1001;
+
+INSERT IGNORE INTO Invoice (invoice_id, invoice_period_date, invoice_amount, invoice_due_date, client_id, meter_id, staff_id) 
+VALUES (1001, '2023-05-06', 6000, '2023-06-06', 1001, 123456, 1001);
+
 SELECT * FROM Admin;
 
 SELECT * FROM Staff;
@@ -64,7 +83,6 @@ SELECT * FROM Client;
 
 SELECT * FROM Meter;
 
-SELECT * FROM Client JOIN  Meter 
-ON Client.meter_id = Meter.meter_id;
+SELECT * FROM Invoice;
 
 -- DROP DATABASE WaterBilling;
