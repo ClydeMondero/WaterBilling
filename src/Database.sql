@@ -57,8 +57,7 @@ CREATE TABLE IF NOT EXISTS Client(
 INSERT IGNORE INTO Client VALUES (1001, 'Ragos', 'Ryan', 'M', 'Bustos, Bulacan', '09', 'Residential', 123456, 'Connected');
 
 CREATE TABLE IF NOT EXISTS Invoice(
-		invoice_id INT PRIMARY KEY AUTO_INCREMENT, 
-        invoice_period_date DATE,        
+		invoice_id INT PRIMARY KEY AUTO_INCREMENT,                 
         invoice_amount DOUBLE,
         invoice_due_date DATE,
         invoice_payment DOUBLE,
@@ -74,8 +73,8 @@ CREATE TABLE IF NOT EXISTS Invoice(
         FOREIGN KEY (admin_id) REFERENCES Admin(admin_id)        
 )AUTO_INCREMENT = 1001;
 
-INSERT IGNORE INTO Invoice (invoice_id, invoice_period_date, invoice_amount, invoice_due_date, client_id, meter_id, staff_id) 
-VALUES (1001, '2023-05-06', 6000, '2023-06-06','Unpaid', 1001, 123456, 1001);
+INSERT IGNORE INTO Invoice (invoice_id, invoice_amount, invoice_due_date, client_id, meter_id, staff_id) 
+VALUES (1001, 6000, '2023-06-06','Unpaid', 1001, 123456, 1001);
 
 SELECT * FROM Admin;
 
