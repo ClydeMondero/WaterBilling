@@ -4,7 +4,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.PatternSyntaxException;
@@ -544,11 +547,18 @@ public class ClientPanel extends javax.swing.JPanel {
                 if (password.equals(accountPassword)) {
                     try {
                         if (Integer.parseInt(id.getText()) > clients.get(clients.size() - 1).getId()) {
-                            PreparedStatement insertStatement = connect.prepareStatement("INSERT IGNORE INTO Meter VALUES (?, ?, ?, ?)");
+                            PreparedStatement insertStatement = connect.prepareStatement("INSERT IGNORE INTO Meter VALUES (?, ?, ?, ?, ?)");
                             insertStatement.setString(1, meterId.getText());
                             insertStatement.setDouble(2, Double.parseDouble(metersize.getText()));
-                            insertStatement.setInt(3, Integer.parseInt(meterreading.getText()));
-                            insertStatement.setInt(4, 0);
+
+                            Date currentDate = new Date();
+                            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                            java.sql.Date sqlDate = java.sql.Date.valueOf(formatter.format(currentDate));
+
+                            insertStatement.setDate(3, sqlDate);
+
+                            insertStatement.setInt(4, Integer.parseInt(meterreading.getText()));
+                            insertStatement.setInt(5, 0);
 
                             insertStatement.executeUpdate();
 
@@ -575,7 +585,7 @@ public class ClientPanel extends javax.swing.JPanel {
                             PreparedStatement updateStatement = connect.prepareStatement("UPDATE Client JOIN Meter ON Client.meter_id = Meter.meter_id "
                                     + "SET  client_id = ?, client_lastname = ?, client_firstname = ?, client_middlename = ?, client_address =  ?, "
                                     + "client_phonenumber = ?, client_rateclass = ?, "
-                                    + "client_status = ?, meter_size = ?, meter_reading = ? WHERE client_id = ?");
+                                    + "client_status = ?, meter_size = ?, meter_reading = ?, meter_reading_date = ? WHERE client_id = ?");
                             updateStatement.setInt(1, Integer.parseInt(id.getText()));
                             updateStatement.setString(2, lastname.getText());
                             updateStatement.setString(3, firstname.getText());
@@ -586,7 +596,14 @@ public class ClientPanel extends javax.swing.JPanel {
                             updateStatement.setString(8, status.getSelectedItem().toString());
                             updateStatement.setDouble(9, Double.parseDouble(metersize.getText()));
                             updateStatement.setInt(10, Integer.parseInt(meterreading.getText()));
-                            updateStatement.setInt(11, Integer.parseInt(id.getText()));
+                            
+                            Date currentDate = new Date();
+                            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                            java.sql.Date sqlDate = java.sql.Date.valueOf(formatter.format(currentDate));
+
+                            updateStatement.setDate(11, sqlDate);
+                            
+                            updateStatement.setInt(12, Integer.parseInt(id.getText()));
 
                             updateStatement.executeUpdate();
 
@@ -670,7 +687,7 @@ public class ClientPanel extends javax.swing.JPanel {
 
     private void createInvoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createInvoiceActionPerformed
         int[] selectedRows = table.getSelectedRows();
-        
+
         for (int i = 0; i < selectedRows.length; i++) {
             Object client = table.getValueAt(selectedRows[i], 0);
             new CreateInvoice().setVisible(true);

@@ -33,11 +33,12 @@ INSERT IGNORE INTO Staff (staff_username, staff_password, staff_status) VALUES (
 CREATE TABLE IF NOT EXISTS Meter(
 	meter_id VARCHAR(6) PRIMARY KEY, 
         meter_size DOUBLE,
+        meter_reading_date DATE,
         meter_reading INT,
         meter_consumption INT     
 );
 
-INSERT IGNORE INTO Meter VALUES (123456, 0.5, 224, 0);
+INSERT IGNORE INTO Meter VALUES (123456, 0.5, '2023-06-06', 224, 0);
 
 CREATE TABLE IF NOT EXISTS Client(
 	client_id INT PRIMARY KEY AUTO_INCREMENT, 
@@ -62,6 +63,7 @@ CREATE TABLE IF NOT EXISTS Invoice(
         invoice_due_date DATE,
         invoice_payment DOUBLE,
         invoice_payment_date DATE,
+        invoice_status SET ('Paid', 'UnPaid'),
         client_id INT,
         meter_id VARCHAR(6),
         staff_id INT,
@@ -73,7 +75,7 @@ CREATE TABLE IF NOT EXISTS Invoice(
 )AUTO_INCREMENT = 1001;
 
 INSERT IGNORE INTO Invoice (invoice_id, invoice_period_date, invoice_amount, invoice_due_date, client_id, meter_id, staff_id) 
-VALUES (1001, '2023-05-06', 6000, '2023-06-06', 1001, 123456, 1001);
+VALUES (1001, '2023-05-06', 6000, '2023-06-06','Unpaid', 1001, 123456, 1001);
 
 SELECT * FROM Admin;
 
