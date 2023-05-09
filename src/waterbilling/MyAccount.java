@@ -369,7 +369,7 @@ public class MyAccount extends javax.swing.JPanel {
                 staffs.add(new Staff(selectStaff.getInt("staff_id"), selectStaff.getString("staff_lastname"),
                         selectStaff.getString("staff_firstname"), selectStaff.getString("staff_middlename"), selectStaff.getString("staff_address"),
                         selectStaff.getString("staff_phonenumber"), selectStaff.getString("staff_username"), selectStaff.getString("staff_password"),
-                        selectStaff.getString("staff_status")
+                        selectStaff.getString("staff_status"), selectStaff.getInt("admin_id")
                 ));
             }
         } catch (SQLException ex) {

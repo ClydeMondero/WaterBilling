@@ -21,6 +21,8 @@ import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+import static waterbilling.AdminPanel.admins;
+import static waterbilling.StaffPanel.staffs;
 
 class Client {
 
@@ -29,8 +31,9 @@ class Client {
     private String rateclass;
     private String meterId;
     private String status;
+    private int officerId;
 
-    public Client(int id, String lastname, String firstname, String middlename, String address, String phonenumber, String rateclass, String meterId, String status) {
+    public Client(int id, String lastname, String firstname, String middlename, String address, String phonenumber, String rateclass, String meterId, String status, int officerId) {
         this.id = id;
         this.lastname = lastname;
         this.firstname = firstname;
@@ -40,6 +43,7 @@ class Client {
         this.rateclass = rateclass;
         this.meterId = meterId;
         this.status = status;
+        this.officerId = officerId;
     }
 
     public int getId() {
@@ -113,6 +117,15 @@ class Client {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public int getOfficerId() {
+        return officerId;
+    }
+
+    public void setOfficerId(int officerId) {
+        this.officerId = officerId;
+    }
+
 }
 
 class Meter {
@@ -170,6 +183,8 @@ public class ClientPanel extends javax.swing.JPanel {
 
     String accountUsername, accountPassword;
 
+    int accountId;
+
     TableRowSorter<TableModel> sorter;
 
     public ClientPanel(String username, String password) {
@@ -179,6 +194,18 @@ public class ClientPanel extends javax.swing.JPanel {
 
         this.accountUsername = username;
         this.accountPassword = password;
+
+        for (Admin admin : admins) {
+            if (accountUsername.equals(admin.getUsername())) {
+                accountId = admin.getId();
+            }
+        }
+
+        for (Staff staff : staffs) {
+            if (accountUsername.equals(staff.getUsername())) {
+                accountId = staff.getId();
+            }
+        }
 
         delete.setEnabled(false);
         createInvoice.setEnabled(false);
@@ -563,60 +590,129 @@ public class ClientPanel extends javax.swing.JPanel {
 
                             insertStatement.executeUpdate();
 
-                            insertStatement = connect.prepareStatement("INSERT IGNORE INTO Client VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-                            insertStatement.setInt(1, Integer.parseInt(id.getText()));
-                            insertStatement.setString(2, lastname.getText());
-                            insertStatement.setString(3, firstname.getText());
-                            insertStatement.setString(4, middlename.getText());
-                            insertStatement.setString(5, address.getText());
-                            insertStatement.setString(6, phonenumber.getText());
-                            insertStatement.setString(7, rateclass.getSelectedItem().toString());
-                            insertStatement.setString(8, meterId.getText());
-                            insertStatement.setString(9, status.getSelectedItem().toString());
+                            String suffix = accountUsername.substring(accountUsername.indexOf("_") + 1);
+                            if (suffix.equals("admin")) {
+                                insertStatement = connect.prepareStatement("INSERT IGNORE INTO Client (client_id, client_lastname, client_firstname, client_middlename, "
+                                        + "client_address, client_phonenumber, client_rateclass, meter_id, client_status, admin_id) VALUES (?, '?', '?', '?', "
+                                        + "'?, ?', '?', '?', ?, '?', ?)");
+                                insertStatement.setInt(1, Integer.parseInt(id.getText()));
+                                insertStatement.setString(2, lastname.getText());
+                                insertStatement.setString(3, firstname.getText());
+                                insertStatement.setString(4, middlename.getText());
+                                insertStatement.setString(5, address.getText());
+                                insertStatement.setString(6, phonenumber.getText());
+                                insertStatement.setString(7, rateclass.getSelectedItem().toString());
+                                insertStatement.setString(8, meterId.getText());
+                                insertStatement.setString(9, status.getSelectedItem().toString());
+                                insertStatement.setInt(10, accountId);
 
-                            insertStatement.executeUpdate();
+                                insertStatement.executeUpdate();
 
-                            showDataInTable();
+                                showDataInTable();
 
-                            id.setText(Integer.toString(clients.get(clients.size() - 1).getId() + 1));
-                            clearTextFields();
+                                id.setText(Integer.toString(clients.get(clients.size() - 1).getId() + 1));
+                                clearTextFields();
 
-                            JOptionPane.showMessageDialog(null, "Client Created!", "Create", JOptionPane.INFORMATION_MESSAGE);
+                                JOptionPane.showMessageDialog(null, "Client Created!", "Create", JOptionPane.INFORMATION_MESSAGE);
+                            } else if (suffix.equals("staff")) {
+                                insertStatement = connect.prepareStatement("INSERT IGNORE INTO Client (client_id, client_lastname, client_firstname, client_middlename, "
+                                        + "client_address, client_phonenumber, client_rateclass, meter_id, client_status, staff_id) VALUES (?, '?', '?', '?', "
+                                        + "'?, ?', '?', '?', ?, '?', ?)");
+                                insertStatement.setInt(1, Integer.parseInt(id.getText()));
+                                insertStatement.setString(2, lastname.getText());
+                                insertStatement.setString(3, firstname.getText());
+                                insertStatement.setString(4, middlename.getText());
+                                insertStatement.setString(5, address.getText());
+                                insertStatement.setString(6, phonenumber.getText());
+                                insertStatement.setString(7, rateclass.getSelectedItem().toString());
+                                insertStatement.setString(8, meterId.getText());
+                                insertStatement.setString(9, status.getSelectedItem().toString());
+                                insertStatement.setInt(10, accountId);
+
+                                insertStatement.executeUpdate();
+
+                                showDataInTable();
+
+                                id.setText(Integer.toString(clients.get(clients.size() - 1).getId() + 1));
+                                clearTextFields();
+
+                                JOptionPane.showMessageDialog(null, "Client Created!", "Create", JOptionPane.INFORMATION_MESSAGE);
+                            }
                         } else {
-                            PreparedStatement updateStatement = connect.prepareStatement("UPDATE Client JOIN Meter ON Client.meter_id = Meter.meter_id "
-                                    + "SET  client_id = ?, client_lastname = ?, client_firstname = ?, client_middlename = ?, client_address =  ?, "
-                                    + "client_phonenumber = ?, client_rateclass = ?, "
-                                    + "client_status = ?, meter_size = ?, meter_reading = ?, meter_reading_date = ? WHERE client_id = ?");
-                            updateStatement.setInt(1, Integer.parseInt(id.getText()));
-                            updateStatement.setString(2, lastname.getText());
-                            updateStatement.setString(3, firstname.getText());
-                            updateStatement.setString(4, middlename.getText());
-                            updateStatement.setString(5, address.getText());
-                            updateStatement.setString(6, phonenumber.getText());
-                            updateStatement.setString(7, rateclass.getSelectedItem().toString());
-                            updateStatement.setString(8, status.getSelectedItem().toString());
-                            updateStatement.setDouble(9, Double.parseDouble(metersize.getText()));
-                            updateStatement.setInt(10, Integer.parseInt(meterreading.getText()));
+                            String suffix = accountUsername.substring(accountUsername.indexOf("_") + 1);
+                            if (suffix.equals("admin")) {
+                                PreparedStatement updateStatement = connect.prepareStatement("UPDATE Client JOIN Meter ON Client.meter_id = Meter.meter_id "
+                                        + "SET  client_id = ?, client_lastname = ?, client_firstname = ?, client_middlename = ?, client_address =  ?, "
+                                        + "client_phonenumber = ?, client_rateclass = ?, "
+                                        + "client_status = ?, meter_size = ?, meter_reading = ?, meter_reading_date = ?, admin_id = ?  WHERE client_id = ?");
+                                updateStatement.setInt(1, Integer.parseInt(id.getText()));
+                                updateStatement.setString(2, lastname.getText());
+                                updateStatement.setString(3, firstname.getText());
+                                updateStatement.setString(4, middlename.getText());
+                                updateStatement.setString(5, address.getText());
+                                updateStatement.setString(6, phonenumber.getText());
+                                updateStatement.setString(7, rateclass.getSelectedItem().toString());
+                                updateStatement.setString(8, status.getSelectedItem().toString());
+                                updateStatement.setDouble(9, Double.parseDouble(metersize.getText()));
+                                updateStatement.setInt(10, accountId);
+                                updateStatement.setInt(11, Integer.parseInt(meterreading.getText()));
 
-                            Date currentDate = new Date();
-                            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-                            java.sql.Date sqlDate = java.sql.Date.valueOf(formatter.format(currentDate));
+                                Date currentDate = new Date();
+                                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                                java.sql.Date sqlDate = java.sql.Date.valueOf(formatter.format(currentDate));
 
-                            updateStatement.setDate(11, sqlDate);
+                                updateStatement.setDate(11, sqlDate);
 
-                            updateStatement.setInt(12, Integer.parseInt(id.getText()));
+                                updateStatement.setInt(12, Integer.parseInt(id.getText()));
 
-                            updateStatement.executeUpdate();
+                                updateStatement.executeUpdate();
 
-                            showDataInTable();
+                                showDataInTable();
 
-                            id.setText(Integer.toString(clients.get(clients.size() - 1).getId() + 1));
+                                id.setText(Integer.toString(clients.get(clients.size() - 1).getId() + 1));
 
-                            clearTextFields();
-                            table.clearSelection();
-                            delete.setEnabled(false);
+                                clearTextFields();
+                                table.clearSelection();
+                                delete.setEnabled(false);
 
-                            JOptionPane.showMessageDialog(null, "Client Updated!", "Update", JOptionPane.INFORMATION_MESSAGE);
+                                JOptionPane.showMessageDialog(null, "Client Updated!", "Update", JOptionPane.INFORMATION_MESSAGE);
+                            } else if (suffix.equals("staff")) {
+                                PreparedStatement updateStatement = connect.prepareStatement("UPDATE Client JOIN Meter ON Client.meter_id = Meter.meter_id "
+                                        + "SET  client_id = ?, client_lastname = ?, client_firstname = ?, client_middlename = ?, client_address =  ?, "
+                                        + "client_phonenumber = ?, client_rateclass = ?, "
+                                        + "client_status = ?, meter_size = ?, meter_reading = ?, meter_reading_date = ?, staff_id = ?  WHERE client_id = ?");
+                                updateStatement.setInt(1, Integer.parseInt(id.getText()));
+                                updateStatement.setString(2, lastname.getText());
+                                updateStatement.setString(3, firstname.getText());
+                                updateStatement.setString(4, middlename.getText());
+                                updateStatement.setString(5, address.getText());
+                                updateStatement.setString(6, phonenumber.getText());
+                                updateStatement.setString(7, rateclass.getSelectedItem().toString());
+                                updateStatement.setString(8, status.getSelectedItem().toString());
+                                updateStatement.setDouble(9, Double.parseDouble(metersize.getText()));
+                                updateStatement.setInt(10, accountId);
+                                updateStatement.setInt(11, Integer.parseInt(meterreading.getText()));
+
+                                Date currentDate = new Date();
+                                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                                java.sql.Date sqlDate = java.sql.Date.valueOf(formatter.format(currentDate));
+
+                                updateStatement.setDate(11, sqlDate);
+
+                                updateStatement.setInt(12, Integer.parseInt(id.getText()));
+
+                                updateStatement.executeUpdate();
+
+                                showDataInTable();
+
+                                id.setText(Integer.toString(clients.get(clients.size() - 1).getId() + 1));
+
+                                clearTextFields();
+                                table.clearSelection();
+                                delete.setEnabled(false);
+
+                                JOptionPane.showMessageDialog(null, "Client Updated!", "Update", JOptionPane.INFORMATION_MESSAGE);
+                            }
                         }
                     } catch (SQLException ex) {
                         Logger.getLogger(AdminPanel.class.getName()).log(Level.SEVERE, null, ex);
@@ -728,11 +824,20 @@ public class ClientPanel extends javax.swing.JPanel {
                 meters.add(new Meter(selectStatement.getString("meter_id"), selectStatement.getDouble("meter_size"), selectStatement.getInt("meter_reading"),
                         selectStatement.getInt("meter_consumption")));
 
-                clients.add(new Client(selectStatement.getInt("client_id"), selectStatement.getString("client_lastname"),
-                        selectStatement.getString("client_firstname"), selectStatement.getString("client_middlename"), selectStatement.getString("client_address"),
-                        selectStatement.getString("client_phonenumber"), selectStatement.getString("client_rateclass"), selectStatement.getString("meter_id"),
-                        selectStatement.getString("client_status")
-                ));
+                String suffix = accountUsername.substring(accountUsername.indexOf("_") + 1);
+                if (suffix.equals("admin")) {
+                    clients.add(new Client(selectStatement.getInt("client_id"), selectStatement.getString("client_lastname"),
+                            selectStatement.getString("client_firstname"), selectStatement.getString("client_middlename"), selectStatement.getString("client_address"),
+                            selectStatement.getString("client_phonenumber"), selectStatement.getString("client_rateclass"), selectStatement.getString("meter_id"),
+                            selectStatement.getString("client_status"), selectStatement.getInt("admin_id")
+                    ));
+                }else if (suffix.equals("staff")){
+                    clients.add(new Client(selectStatement.getInt("client_id"), selectStatement.getString("client_lastname"),
+                            selectStatement.getString("client_firstname"), selectStatement.getString("client_middlename"), selectStatement.getString("client_address"),
+                            selectStatement.getString("client_phonenumber"), selectStatement.getString("client_rateclass"), selectStatement.getString("meter_id"),
+                            selectStatement.getString("client_status"), selectStatement.getInt("staff_id")
+                    ));
+                }
             }
         } catch (SQLException ex) {
             Logger.getLogger(AdminPanel.class.getName()).log(Level.SEVERE, null, ex);

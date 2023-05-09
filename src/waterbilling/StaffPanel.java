@@ -19,6 +19,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+import static waterbilling.AdminPanel.admins;
 
 class Staff {
 
@@ -26,6 +27,7 @@ class Staff {
     private String lastName, firstName, middleName, address, phonNumber;
     private String username, password;
     private String status;
+    private int adminId;
 
     public Staff(int id, String username, String password, String status) {
         this.id = id;
@@ -35,7 +37,7 @@ class Staff {
     }
 
     public Staff(int id, String lastName, String firstName, String middleName, String address,
-            String phonNumber, String username, String password, String status) {
+            String phonNumber, String username, String password, String status, int adminId) {
         this.id = id;
         this.lastName = lastName;
         this.firstName = firstName;
@@ -45,6 +47,7 @@ class Staff {
         this.username = username;
         this.password = password;
         this.status = status;
+        this.adminId = adminId;
     }
 
     public int getId() {
@@ -118,6 +121,15 @@ class Staff {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public int getAdminId() {
+        return adminId;
+    }
+
+    public void setAdminId(int adminId) {
+        this.adminId = adminId;
+    }
+    
 }
 
 public class StaffPanel extends javax.swing.JPanel {
@@ -126,6 +138,8 @@ public class StaffPanel extends javax.swing.JPanel {
     Connection connect = null;
 
     String accountUsername, accountPassword;
+    
+    int accountId;
 
     TableRowSorter<TableModel> sorter;
 
@@ -136,6 +150,12 @@ public class StaffPanel extends javax.swing.JPanel {
 
         this.accountUsername = username;
         this.accountPassword = password;
+        
+        for (Admin admin : admins){
+            if(accountUsername.equals(admin.getUsername())){
+                accountId = admin.getId();
+            }
+        }
 
         delete.setEnabled(false);
 
@@ -472,7 +492,7 @@ public class StaffPanel extends javax.swing.JPanel {
                     try {
                         if (Integer.parseInt(id.getText()) > staffs.get(staffs.size() - 1).getId()) {
                             PreparedStatement insertStatement;
-                            insertStatement = connect.prepareStatement("INSERT IGNORE INTO Staff VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                            insertStatement = connect.prepareStatement("INSERT IGNORE INTO Staff VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
                             insertStatement.setInt(1, Integer.parseInt(id.getText()));
                             insertStatement.setString(2, lastname.getText());
                             insertStatement.setString(3, firstname.getText());
@@ -482,6 +502,7 @@ public class StaffPanel extends javax.swing.JPanel {
                             insertStatement.setString(7, username.getText());
                             insertStatement.setString(8, this.password.getText());
                             insertStatement.setString(9, status.getSelectedItem().toString());
+                            insertStatement.setInt(10, accountId);
 
                             insertStatement.executeUpdate();
 
@@ -493,7 +514,8 @@ public class StaffPanel extends javax.swing.JPanel {
                             JOptionPane.showMessageDialog(null, "Account Created!", "Create", JOptionPane.INFORMATION_MESSAGE);
                         } else {
                             PreparedStatement updateStatement = connect.prepareStatement("UPDATE Staff SET staff_id = ?, staff_lastname = ?, staff_firstname = ?,"
-                                    + " staff_middlename = ?, staff_address =  ?, staff_phonenumber = ?, staff_username =  ?, staff_password = ?, staff_status = ? WHERE staff_id = ?");
+                                    + " staff_middlename = ?, staff_address =  ?, staff_phonenumber = ?, staff_username =  ?, staff_password = ?, staff_status = ? "
+                                    + "admin_id = ? WHERE staff_id = ?");
                             updateStatement.setInt(1, Integer.parseInt(id.getText()));
                             updateStatement.setString(2, lastname.getText());
                             updateStatement.setString(3, firstname.getText());
@@ -503,7 +525,8 @@ public class StaffPanel extends javax.swing.JPanel {
                             updateStatement.setString(7, username.getText());
                             updateStatement.setString(8, this.password.getText());
                             updateStatement.setString(9, status.getSelectedItem().toString());
-                            updateStatement.setInt(10, Integer.parseInt(id.getText()));
+                            updateStatement.setInt(9, accountId);
+                            updateStatement.setInt(11, Integer.parseInt(id.getText()));
 
                             updateStatement.executeUpdate();
 
@@ -618,7 +641,7 @@ public class StaffPanel extends javax.swing.JPanel {
                 staffs.add(new Staff(selectStatement.getInt("staff_id"), selectStatement.getString("staff_lastname"),
                         selectStatement.getString("staff_firstname"), selectStatement.getString("staff_middlename"), selectStatement.getString("staff_address"),
                         selectStatement.getString("staff_phonenumber"), selectStatement.getString("staff_username"), selectStatement.getString("staff_password"),
-                        selectStatement.getString("staff_status")
+                        selectStatement.getString("staff_status"), selectStatement.getInt("admin_id")
                 ));
             }
         } catch (SQLException ex) {
