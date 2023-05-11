@@ -171,9 +171,9 @@ public class CreateInvoice extends javax.swing.JFrame {
         previousreading = new javax.swing.JLabel();
         presentreadingLabel = new javax.swing.JLabel();
         serviceInformationLabel1 = new javax.swing.JLabel();
-        presentreading = new javax.swing.JTextField();
+        presentreading = new javax.swing.JPasswordField();
         consumptionLabel = new javax.swing.JLabel();
-        consumption = new javax.swing.JTextField();
+        consumption = new javax.swing.JPasswordField();
         serviceInformationLabel2 = new javax.swing.JLabel();
         invoicePeriod2 = new javax.swing.JLabel();
         period2 = new javax.swing.JLabel();
@@ -189,8 +189,6 @@ public class CreateInvoice extends javax.swing.JFrame {
         beforetaxLabel = new javax.swing.JLabel();
         taxLabel = new javax.swing.JLabel();
         tax = new javax.swing.JLabel();
-        discount = new javax.swing.JLabel();
-        isDiscounted = new javax.swing.JCheckBox();
         beforeTax = new javax.swing.JLabel();
         totalamountLabel = new javax.swing.JLabel();
         totalamount = new javax.swing.JLabel();
@@ -316,12 +314,6 @@ public class CreateInvoice extends javax.swing.JFrame {
 
         tax.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         tax.setText("₱0.0");
-
-        discount.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        discount.setText("₱0.0");
-
-        isDiscounted.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        isDiscounted.setText("Discount:");
 
         beforeTax.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         beforeTax.setText("₱0.0");
@@ -472,12 +464,8 @@ public class CreateInvoice extends javax.swing.JFrame {
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(taxLabel)
                                         .addGap(18, 18, 18)
-                                        .addComponent(tax, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(isDiscounted)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(discount, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(6, 6, 6)
+                                        .addComponent(tax, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(15, 15, 15)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(totalamountLabel)
@@ -591,9 +579,6 @@ public class CreateInvoice extends javax.swing.JFrame {
                             .addComponent(maintenance))
                         .addGap(27, 27, 27)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(discount)
-                                .addComponent(isDiscounted))
                             .addComponent(totalamountLabel)
                             .addComponent(totalamount))))
                 .addGap(11, 11, 11)
@@ -1096,9 +1081,8 @@ public class CreateInvoice extends javax.swing.JFrame {
     private javax.swing.JLabel clientName;
     private javax.swing.JLabel clientNameLabel;
     private javax.swing.JSeparator clientinformationseparator;
-    private javax.swing.JTextField consumption;
+    private javax.swing.JPasswordField consumption;
     private javax.swing.JLabel consumptionLabel;
-    private javax.swing.JLabel discount;
     private javax.swing.JLabel environmental;
     private javax.swing.JLabel environmentalLabel;
     private javax.swing.JLabel id;
@@ -1107,7 +1091,6 @@ public class CreateInvoice extends javax.swing.JFrame {
     private javax.swing.JLabel invoicePeriod7;
     private javax.swing.JLabel invoiceperiodLabel;
     private javax.swing.JSeparator invoicesummarySeparator;
-    private javax.swing.JCheckBox isDiscounted;
     private javax.swing.JLabel listOfAcccountLabel;
     private javax.swing.JLabel maintenance;
     private javax.swing.JLabel maintenanceLabel;
@@ -1118,7 +1101,7 @@ public class CreateInvoice extends javax.swing.JFrame {
     private javax.swing.JLabel meterreadingDateLabel;
     private com.toedter.calendar.JDateChooser period;
     private javax.swing.JLabel period2;
-    private javax.swing.JTextField presentreading;
+    private javax.swing.JPasswordField presentreading;
     private javax.swing.JLabel presentreadingLabel;
     private javax.swing.JLabel previousreading;
     private javax.swing.JLabel previousreadingLabel;

@@ -11,10 +11,10 @@ CREATE TABLE IF NOT EXISTS Admin(
         admin_phonenumber VARCHAR(25),
 	admin_username VARCHAR(25) UNIQUE, 
         admin_password VARCHAR(25),
-        admin_status SET('Active', 'Deactivated')
+        admin_status SET('Active', 'Deactivated')        
 )AUTO_INCREMENT = 1001;
 
-INSERT IGNORE INTO Admin (admin_username, admin_password, admin_status) VALUES ('main_admin', '1234main', 'Active');
+INSERT IGNORE INTO Admin VALUES (1001, 'Mondero', 'Clyde', 'Cruz', 'Baliuag, Bulacan', '09565317151', 'main_admin', '1234main', 'Active');
 
 CREATE TABLE IF NOT EXISTS Staff(
 	staff_id INT PRIMARY KEY AUTO_INCREMENT, 
@@ -25,10 +25,13 @@ CREATE TABLE IF NOT EXISTS Staff(
         staff_phonenumber VARCHAR(25),
 	staff_username VARCHAR(25) UNIQUE, 
         staff_password VARCHAR(25),
-        staff_status SET('Active', 'Deactivated')        
+        staff_status SET('Active', 'Deactivated'),
+        admin_id INT,
+        FOREIGN KEY (admin_id) REFERENCES Admin(admin_id)
 )AUTO_INCREMENT = 1001;
 
-INSERT IGNORE INTO Staff (staff_username, staff_password, staff_status) VALUES ('clyde_staff', '1234clyde', 'Active');
+INSERT IGNORE INTO Staff VALUES (1001, 'Madrideo', 'Joseph', 'Manelese', 'Baliuag, Bulacan', '09453268912', 'joseph_staff', '1234joseph', 'Active', 1001);
+INSERT IGNORE INTO Staff VALUES (1002, 'Poma', 'Andrei', 'Vergel De Dios', 'Baliuag, Bulacan', '09487628412', 'poma_staff', '1234poma', 'Active', 1001);
 
 CREATE TABLE IF NOT EXISTS Meter(
 	meter_id VARCHAR(6) PRIMARY KEY, 
@@ -50,11 +53,16 @@ CREATE TABLE IF NOT EXISTS Client(
 	client_rateclass SET('Residential', 'Semi-Business', 'Business'),  
         meter_id VARCHAR(6),
         client_status SET('Connected', 'Disconnected'),
-        FOREIGN KEY (meter_id) REFERENCES Meter(meter_id)
-        
+        FOREIGN KEY (meter_id) REFERENCES Meter(meter_id),
+        admin_id INT,
+        staff_id INT,
+        FOREIGN KEY (admin_id) REFERENCES Admin(admin_id),
+        FOREIGN KEY (staff_id) REFERENCES Staff(staff_id)
 )AUTO_INCREMENT = 1001;
 
-INSERT IGNORE INTO Client VALUES (1001, 'Ragos', 'Ryan', 'M', 'Bustos, Bulacan', '09', 'Residential', 123456, 'Connected');
+INSERT IGNORE INTO Client (client_id, client_lastname, client_firstname, client_middlename, client_address, client_phonenumber, 
+client_rateclass, meter_id, client_status, staff_id) 
+VALUES (1001, 'Ragos', 'Ryan', 'M', 'Bustos, Bulacan', '09', 'Residential', 123456, 'Connected', 1002);
 
 CREATE TABLE IF NOT EXISTS Invoice(
 		invoice_id INT PRIMARY KEY AUTO_INCREMENT,                 
@@ -74,6 +82,9 @@ CREATE TABLE IF NOT EXISTS Invoice(
 INSERT IGNORE INTO Invoice (invoice_id, invoice_amount, invoice_period_date, invoice_status, client_id, staff_id) 
 VALUES (1001, 6000, '2023-06-06','Unpaid', 1001, 1001);
 
+INSERT IGNORE INTO Invoice (invoice_id, invoice_amount, invoice_period_date, invoice_status, client_id, admin_id) 
+VALUES (1002, 6000, '2023-06-06','Unpaid', 1001, 1001);
+
 SELECT * FROM Admin;
 
 SELECT * FROM Staff;
@@ -87,5 +98,9 @@ SELECT * FROM Invoice;
 SELECT * FROM Invoice
 JOIN Client ON Invoice.client_id = Client.client_id
 JOIN Staff ON Invoice.staff_id = Staff.staff_id;
+
+SELECT * FROM Invoice
+JOIN Client ON Invoice.client_id = Client.client_id
+JOIN Admin ON Invoice.admin_id = Admin.admin_id;
 
 -- DROP DATABASE WaterBilling;

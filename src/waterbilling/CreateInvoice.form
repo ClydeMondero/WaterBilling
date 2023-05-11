@@ -170,13 +170,9 @@
                                       <Component id="taxLabel" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
                                       <Component id="tax" min="-2" pref="56" max="-2" attributes="0"/>
-                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                      <Component id="isDiscounted" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="discount" min="-2" pref="60" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" alignment="0" attributes="0">
                                       <Component id="totalamountLabel" min="-2" max="-2" attributes="0"/>
@@ -327,10 +323,6 @@
                       </Group>
                       <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="103" alignment="0" groupAlignment="3" attributes="0">
-                              <Component id="discount" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="isDiscounted" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
                           <Component id="totalamountLabel" min="-2" max="-2" attributes="0"/>
                           <Component id="totalamount" min="-2" max="-2" attributes="0"/>
                       </Group>
@@ -653,22 +645,6 @@
           <Font name="Segoe UI" size="14" style="0"/>
         </Property>
         <Property name="text" type="java.lang.String" value="&#x20b1;0.0"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JLabel" name="discount">
-      <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Segoe UI" size="14" style="0"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="&#x20b1;0.0"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JCheckBox" name="isDiscounted">
-      <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Segoe UI" size="14" style="0"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="Discount:"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="beforeTax">

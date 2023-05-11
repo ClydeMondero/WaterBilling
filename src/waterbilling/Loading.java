@@ -1,14 +1,19 @@
 package waterbilling;
 
 import java.awt.Color;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.sql.Connection;
 import javax.swing.SwingUtilities;
 import javax.swing.plaf.basic.BasicProgressBarUI;
 
 public class Loading extends javax.swing.JFrame {
-
+    
+    Image icon = Toolkit.getDefaultToolkit().getImage("images\\icon.png");  
     
     public Loading() {
+        setIconImage(icon);
+        
         this.getContentPane().setBackground(Color.decode("#2EC4B6"));
         initComponents();
         loadingProgressBar.setUI(new BasicProgressBarUI() {
@@ -25,20 +30,20 @@ public class Loading extends javax.swing.JFrame {
 
     
     public void run() {
-        for (int i = 0; i <= 100; i++) {
-            try {
-                Thread.sleep(50);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            int progress = i;
-            SwingUtilities.invokeLater(new Runnable() {
-                public void run() {
-                    loadingProgressBar.setValue(progress);
-                    loadingProgressBar.repaint();
-                }
-            });
-        }
+//        for (int i = 0; i <= 100; i++) {
+//            try {
+//                Thread.sleep(50);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//            int progress = i;
+//            SwingUtilities.invokeLater(new Runnable() {
+//                public void run() {
+//                    loadingProgressBar.setValue(progress);
+//                    loadingProgressBar.repaint();
+//                }
+//            });
+//        }
         
         dispose();
         new Login().setVisible(true);

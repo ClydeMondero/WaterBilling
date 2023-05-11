@@ -16,6 +16,8 @@ public class Main extends javax.swing.JFrame {
         usernameLabel.setText(accountUsername);
         
         mainTabbedPane.add("Clients", new ClientPanel(accountUsername, accountPassword));
+        
+        mainTabbedPane.add("Invoices", new InvoicePanel(accountUsername, accountPassword));
 
         int index = accountUsername.indexOf("_");
         if (!accountUsername.substring(index + 1).equals("staff")) {
