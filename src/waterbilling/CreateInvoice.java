@@ -32,6 +32,8 @@ public class CreateInvoice extends javax.swing.JFrame {
     SimpleDateFormat dateFormat;
 
     NumberFormat chargeFormat = NumberFormat.getCurrencyInstance();
+    
+    Calendar calendar = Calendar.getInstance(); 
 
     public CreateInvoice(int id, String username, String password) {
         initComponents();
@@ -40,7 +42,9 @@ public class CreateInvoice extends javax.swing.JFrame {
         accountUsername = username;
         accountPassword = password;
 
-        period.setDate(new Date());
+        calendar.setTime(new Date());
+        calendar.add(Calendar.MONTH, +1);
+        period.setDate(calendar.getTime());
 
         connect = DatabaseConnection.connectDatabase();
 
