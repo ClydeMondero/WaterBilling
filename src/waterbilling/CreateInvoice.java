@@ -29,8 +29,11 @@ public class CreateInvoice extends javax.swing.JFrame {
     static ArrayList<Invoice> invoices = new ArrayList<>();
 
     Connection connect = null;
-    
+
     SimpleDateFormat dateFormat;
+    
+    NumberFormat chargeFormat = NumberFormat.getCurrencyInstance();
+
     public CreateInvoice(int id, String username, String password) {
         initComponents();
 
@@ -62,7 +65,7 @@ public class CreateInvoice extends javax.swing.JFrame {
                 }
             }
         }
-        
+
         dateFormat = new SimpleDateFormat("MMMM dd yyyy");
         meterreadingDate.setText(dateFormat.format(period.getDate()));
 
@@ -70,8 +73,7 @@ public class CreateInvoice extends javax.swing.JFrame {
         calendar.setTime(period.getDate());
         calendar.add(Calendar.MONTH, -1);
         period2.setText(dateFormat.format(calendar.getTime()) + " TO " + dateFormat.format(period.getDate()));
-
-        NumberFormat chargeFormat = NumberFormat.getCurrencyInstance();
+        
         consumption.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -171,9 +173,9 @@ public class CreateInvoice extends javax.swing.JFrame {
         previousreading = new javax.swing.JLabel();
         presentreadingLabel = new javax.swing.JLabel();
         serviceInformationLabel1 = new javax.swing.JLabel();
-        presentreading = new javax.swing.JTextField();
+        presentreading = new javax.swing.JPasswordField();
         consumptionLabel = new javax.swing.JLabel();
-        consumption = new javax.swing.JTextField();
+        consumption = new javax.swing.JPasswordField();
         serviceInformationLabel2 = new javax.swing.JLabel();
         invoicePeriod2 = new javax.swing.JLabel();
         period2 = new javax.swing.JLabel();
@@ -199,7 +201,8 @@ public class CreateInvoice extends javax.swing.JFrame {
         invoicesummarySeparator = new javax.swing.JSeparator();
         sewerageLabel = new javax.swing.JLabel();
         sewerage = new javax.swing.JLabel();
-        consumption1 = new javax.swing.JTextField();
+        discountCheckBox = new javax.swing.JCheckBox();
+        discount = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -345,6 +348,15 @@ public class CreateInvoice extends javax.swing.JFrame {
         sewerage.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         sewerage.setText("₱0.0");
 
+        discountCheckBox.setText("Discount:");
+        discountCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                discountCheckBoxActionPerformed(evt);
+            }
+        });
+
+        discount.setText("₱0.0");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -451,9 +463,7 @@ public class CreateInvoice extends javax.swing.JFrame {
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(clientNameLabel)
                                         .addGap(18, 18, 18)
-                                        .addComponent(clientName, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(consumption1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                        .addComponent(clientName, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(beforetaxLabel)
                                 .addGap(18, 18, 18)
@@ -467,7 +477,11 @@ public class CreateInvoice extends javax.swing.JFrame {
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(taxLabel)
                                         .addGap(18, 18, 18)
-                                        .addComponent(tax, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addComponent(tax, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(discountCheckBox)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(discount, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(15, 15, 15)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
@@ -505,18 +519,12 @@ public class CreateInvoice extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(invoicesummarySeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(22, 22, 22)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(clientIdLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(clientId, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(clientNameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(clientName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(28, 28, 28))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(9, 9, 9)
-                        .addComponent(consumption1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(clientIdLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(clientId, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(clientNameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(clientName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(28, 28, 28)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addressLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(address)
@@ -576,7 +584,9 @@ public class CreateInvoice extends javax.swing.JFrame {
                                 .addComponent(beforeTax))
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(taxLabel)
-                                .addComponent(tax))))
+                                .addComponent(tax)
+                                .addComponent(discountCheckBox)
+                                .addComponent(discount))))
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -627,16 +637,16 @@ public class CreateInvoice extends javax.swing.JFrame {
 
                         insertStatement.setInt(1, Integer.parseInt(id.getText()));
                         insertStatement.setDouble(2, Double.parseDouble(removeCurrency(totalamount.getText())));
-                        
+
                         dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                         insertStatement.setString(3, dateFormat.format(period.getDate()));
-                        
+
                         insertStatement.setString(4, "UnPaid");
                         insertStatement.setInt(5, client);
-                        
+
                         int adminId = 0;
-                        for(Admin admin : admins){
-                            if(accountUsername.equals(admin.getUsername())){
+                        for (Admin admin : admins) {
+                            if (accountUsername.equals(admin.getUsername())) {
                                 adminId = admin.getId();
                             }
                         }
@@ -661,24 +671,23 @@ public class CreateInvoice extends javax.swing.JFrame {
 
                         insertStatement.setInt(1, Integer.parseInt(id.getText()));
                         insertStatement.setDouble(2, Double.parseDouble(removeCurrency(totalamount.getText())));
-                        
+
                         dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                         insertStatement.setString(3, dateFormat.format(period.getDate()));
-                        
+
                         insertStatement.setString(4, "UnPaid");
                         insertStatement.setInt(5, client);
-                        
+
                         int staffId = 0;
-                        for(Staff staff : staffs){
-                            if(accountUsername.equals(staff.getId())){
+                        for (Staff staff : staffs) {
+                            if (accountUsername.equals(staff.getId())) {
                                 staffId = staff.getId();
                             }
                         }
                         insertStatement.setInt(6, staffId);
 
                         insertStatement.executeUpdate();
-                        
-                        
+
                     } catch (SQLException ex) {
                         Logger.getLogger(CreateInvoice.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -695,6 +704,23 @@ public class CreateInvoice extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_saveActionPerformed
+
+    private void discountCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_discountCheckBoxActionPerformed
+        if (discountCheckBox.isSelected()) {
+            computeDiscountCharge();
+            discount.setText(chargeFormat.format(discountcharge));
+            
+            computeTotal();            
+            totalamount.setText(chargeFormat.format(total));
+        }else{
+            discountcharge = 0;
+            discount.setText("₱0.0");
+            
+            computeTotal();            
+            totalamount.setText(chargeFormat.format(total));
+        }
+
+    }//GEN-LAST:event_discountCheckBoxActionPerformed
 
     public void updateDatas() {
         try {
@@ -725,7 +751,7 @@ public class CreateInvoice extends javax.swing.JFrame {
         }
     }
 
-    double basiccharge, transitorycharge, environmentalcharge, seweragecharge, maintenancecharge, totalbeforetax, taxcharge, total;
+    double basiccharge, discountcharge, transitorycharge, environmentalcharge, seweragecharge, maintenancecharge, totalbeforetax, taxcharge, total;
 
     public double computeBasicCharge() {
         try {
@@ -988,6 +1014,14 @@ public class CreateInvoice extends javax.swing.JFrame {
         return basiccharge;
     }
 
+    public double computeDiscountCharge() {
+        if (discountCheckBox.isSelected()) {
+            discountcharge = basiccharge * 0.05;
+        }
+
+        return discountcharge;
+    }
+
     public double computeTransitoryCharge() {
         transitorycharge = -basiccharge * 0.0055;
 
@@ -1064,7 +1098,7 @@ public class CreateInvoice extends javax.swing.JFrame {
     }
 
     public double computeTotal() {
-        total = totalbeforetax + taxcharge;
+        total = (totalbeforetax + taxcharge) - discountcharge;
 
         return total;
     }
@@ -1090,9 +1124,10 @@ public class CreateInvoice extends javax.swing.JFrame {
     private javax.swing.JLabel clientName;
     private javax.swing.JLabel clientNameLabel;
     private javax.swing.JSeparator clientinformationseparator;
-    private javax.swing.JTextField consumption;
-    private javax.swing.JTextField consumption1;
+    private javax.swing.JPasswordField consumption;
     private javax.swing.JLabel consumptionLabel;
+    private javax.swing.JLabel discount;
+    private javax.swing.JCheckBox discountCheckBox;
     private javax.swing.JLabel environmental;
     private javax.swing.JLabel environmentalLabel;
     private javax.swing.JLabel id;
@@ -1111,7 +1146,7 @@ public class CreateInvoice extends javax.swing.JFrame {
     private javax.swing.JLabel meterreadingDateLabel;
     private com.toedter.calendar.JDateChooser period;
     private javax.swing.JLabel period2;
-    private javax.swing.JTextField presentreading;
+    private javax.swing.JPasswordField presentreading;
     private javax.swing.JLabel presentreadingLabel;
     private javax.swing.JLabel previousreading;
     private javax.swing.JLabel previousreadingLabel;

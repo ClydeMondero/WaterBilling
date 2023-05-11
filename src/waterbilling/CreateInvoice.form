@@ -152,8 +152,6 @@
                                       <Component id="clientNameLabel" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
                                       <Component id="clientName" min="-2" pref="240" max="-2" attributes="0"/>
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="consumption1" min="-2" pref="100" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
@@ -172,6 +170,10 @@
                                       <Component id="taxLabel" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
                                       <Component id="tax" min="-2" pref="56" max="-2" attributes="0"/>
+                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                      <Component id="discountCheckBox" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                      <Component id="discount" min="-2" pref="59" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                               <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
@@ -226,22 +228,13 @@
                       <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="clientIdLabel" alignment="3" max="32767" attributes="0"/>
-                          <Component id="clientId" alignment="3" max="32767" attributes="0"/>
-                          <Component id="clientNameLabel" alignment="3" max="32767" attributes="0"/>
-                          <Component id="clientName" alignment="3" max="32767" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
-                      <Component id="consumption1" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
-                  </Group>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="clientIdLabel" alignment="3" max="32767" attributes="0"/>
+                  <Component id="clientId" alignment="3" max="32767" attributes="0"/>
+                  <Component id="clientNameLabel" alignment="3" max="32767" attributes="0"/>
+                  <Component id="clientName" alignment="3" max="32767" attributes="0"/>
               </Group>
+              <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="addressLabel" alignment="3" max="32767" attributes="0"/>
                   <Component id="address" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -318,6 +311,8 @@
                           <Group type="103" alignment="1" groupAlignment="3" attributes="0">
                               <Component id="taxLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="tax" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="discountCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="discount" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -720,7 +715,18 @@
         <Property name="text" type="java.lang.String" value="&#x20b1;0.0"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="consumption1">
+    <Component class="javax.swing.JCheckBox" name="discountCheckBox">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Discount:"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="discountCheckBoxActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="discount">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="&#x20b1;0.0"/>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>
