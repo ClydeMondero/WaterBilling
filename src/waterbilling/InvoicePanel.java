@@ -320,7 +320,7 @@ public class InvoicePanel extends javax.swing.JPanel {
             while (selectStatementStaff.next()) {
                 invoices.add(new Invoice(selectStatementStaff.getInt("invoice_id"), selectStatementStaff.getString("invoice_period_date"), 
                         selectStatementStaff.getDouble("invoice_basic_charge"), selectStatementStaff.getDouble("invoice_transitory_charge"), 
-                        selectStatementStaff.getDouble("invoice_environmental_charge"),selectStatementStaff.getDouble("invoice_maitenance_charge"), 
+                        selectStatementStaff.getDouble("invoice_environmental_charge"),selectStatementStaff.getDouble("invoice_maintenance_charge"), 
                         selectStatementStaff.getDouble("invoice_before_tax"), selectStatementStaff.getDouble("invoice_tax"),
                         selectStatementStaff.getDouble("invoice_discount"), selectStatementStaff.getDouble("invoice_amount"),
                         selectStatementStaff.getDouble("invoice_payment"), selectStatementStaff.getString("invoice_payment_date"), selectStatementStaff.getString("invoice_status"), 
@@ -329,7 +329,7 @@ public class InvoicePanel extends javax.swing.JPanel {
             while (selectStatementAdmin.next()) {
                 invoices.add(new Invoice(selectStatementAdmin.getInt("invoice_id"), selectStatementAdmin.getString("invoice_period_date"), 
                         selectStatementAdmin.getDouble("invoice_basic_charge"), selectStatementAdmin.getDouble("invoice_transitory_charge"), 
-                        selectStatementAdmin.getDouble("invoice_environmental_charge"),selectStatementAdmin.getDouble("invoice_maitenance_charge"), 
+                        selectStatementAdmin.getDouble("invoice_environmental_charge"),selectStatementAdmin.getDouble("invoice_maintenance_charge"), 
                         selectStatementAdmin.getDouble("invoice_before_tax"), selectStatementAdmin.getDouble("invoice_tax"),
                         selectStatementAdmin.getDouble("invoice_discount"), selectStatementAdmin.getDouble("invoice_amount"),
                         selectStatementAdmin.getDouble("invoice_payment"), selectStatementAdmin.getString("invoice_payment_date"), selectStatementAdmin.getString("invoice_status"), 
