@@ -53,6 +53,7 @@ CREATE TABLE IF NOT EXISTS Client(
 	client_rateclass SET('Residential', 'Semi-Business', 'Business'),  
         meter_id VARCHAR(6),
         client_status SET('Connected', 'Disconnected'),
+        client_balance DOUBLE,
         FOREIGN KEY (meter_id) REFERENCES Meter(meter_id),
         admin_id INT,
         staff_id INT,

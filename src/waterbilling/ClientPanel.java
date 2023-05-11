@@ -31,9 +31,10 @@ class Client {
     private String rateclass;
     private String meterId;
     private String status;
-    private int officerId;
+    private double balance;
+    private int officerId;    
 
-    public Client(int id, String lastname, String firstname, String middlename, String address, String phonenumber, String rateclass, String meterId, String status, int officerId) {
+    public Client(int id, String lastname, String firstname, String middlename, String address, String phonenumber, String rateclass, String meterId, double balance, String status, int officerId) {
         this.id = id;
         this.lastname = lastname;
         this.firstname = firstname;
@@ -43,6 +44,7 @@ class Client {
         this.rateclass = rateclass;
         this.meterId = meterId;
         this.status = status;
+        this.balance = balance;
         this.officerId = officerId;
     }
 
@@ -827,14 +829,14 @@ public class ClientPanel extends javax.swing.JPanel {
                 if (suffix.equals("admin")) {
                     clients.add(new Client(selectStatement.getInt("client_id"), selectStatement.getString("client_lastname"),
                             selectStatement.getString("client_firstname"), selectStatement.getString("client_middlename"), selectStatement.getString("client_address"),
-                            selectStatement.getString("client_phonenumber"), selectStatement.getString("client_rateclass"), selectStatement.getString("meter_id"),
-                            selectStatement.getString("client_status"), selectStatement.getInt("admin_id")
+                            selectStatement.getString("client_phonenumber"), selectStatement.getString("client_rateclass"), selectStatement.getString("meter_id"), 
+                            selectStatement.getDouble("client_balance"), selectStatement.getString("client_status"), selectStatement.getInt("admin_id")
                     ));
                 }else if (suffix.equals("staff")){
                     clients.add(new Client(selectStatement.getInt("client_id"), selectStatement.getString("client_lastname"),
                             selectStatement.getString("client_firstname"), selectStatement.getString("client_middlename"), selectStatement.getString("client_address"),
-                            selectStatement.getString("client_phonenumber"), selectStatement.getString("client_rateclass"), selectStatement.getString("meter_id"),
-                            selectStatement.getString("client_status"), selectStatement.getInt("staff_id")
+                            selectStatement.getString("client_phonenumber"), selectStatement.getString("client_rateclass"), selectStatement.getString("meter_id"), 
+                            selectStatement.getDouble("client_balance"), selectStatement.getString("client_status"), selectStatement.getInt("staff_id")
                     ));
                 }
             }
