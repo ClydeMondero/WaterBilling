@@ -16,18 +16,25 @@ import static waterbilling.StaffPanel.staffs;
 
 class Invoice {
 
-    private int id;
-    private double amount;
-    private String period;
+    private int id;    
+    private String period;    
+    private double basic, transitory, environmental, maintenance, before, tax, discount, amount;
     private double payment;
     private String paymentDate;
     private String status;
     private int clientId, officerId;
 
-    public Invoice(int id, double amount, String period, double payment, String paymentDate, String status, int clientId, int officerId) {
+    public Invoice(int id, String period, double basic, double transitory, double environmental, double maintenance, double before, double tax, double discount, double amount, double payment, String paymentDate, String status, int clientId, int officerId) {
         this.id = id;
-        this.amount = amount;
         this.period = period;
+        this.basic = basic;
+        this.transitory = transitory;
+        this.environmental = environmental;
+        this.maintenance = maintenance;
+        this.before = before;
+        this.tax = tax;
+        this.discount = discount;
+        this.amount = amount;
         this.payment = payment;
         this.paymentDate = paymentDate;
         this.status = status;
@@ -43,20 +50,76 @@ class Invoice {
         this.id = id;
     }
 
-    public double getAmount() {
-        return amount;
-    }
-
-    public void setAmount(double amount) {
-        this.amount = amount;
-    }
-
     public String getPeriod() {
         return period;
     }
 
     public void setPeriod(String period) {
         this.period = period;
+    }
+
+    public double getBasic() {
+        return basic;
+    }
+
+    public void setBasic(double basic) {
+        this.basic = basic;
+    }
+
+    public double getTransitory() {
+        return transitory;
+    }
+
+    public void setTransitory(double transitory) {
+        this.transitory = transitory;
+    }
+
+    public double getEnvironmental() {
+        return environmental;
+    }
+
+    public void setEnvironmental(double environmental) {
+        this.environmental = environmental;
+    }
+
+    public double getMaintenance() {
+        return maintenance;
+    }
+
+    public void setMaintenance(double maintenance) {
+        this.maintenance = maintenance;
+    }
+
+    public double getBefore() {
+        return before;
+    }
+
+    public void setBefore(double before) {
+        this.before = before;
+    }
+
+    public double getTax() {
+        return tax;
+    }
+
+    public void setTax(double tax) {
+        this.tax = tax;
+    }
+
+    public double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(double discount) {
+        this.discount = discount;
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
     }
 
     public double getPayment() {
@@ -99,6 +162,8 @@ class Invoice {
         this.officerId = officerId;
     }
 
+       
+        
 }
 
 public class InvoicePanel extends javax.swing.JPanel {
@@ -108,7 +173,7 @@ public class InvoicePanel extends javax.swing.JPanel {
     static ArrayList<Invoice> invoices = new ArrayList<>();
 
     String accountUsername, accountPassword;
-
+    
     public InvoicePanel(String username, String password) {
         initComponents();
 
@@ -129,6 +194,8 @@ public class InvoicePanel extends javax.swing.JPanel {
         listOfAcccountLabel = new javax.swing.JLabel();
         search = new javax.swing.JTextField();
         createInvoice = new javax.swing.JButton();
+        payInvoice = new javax.swing.JButton();
+        refresh = new javax.swing.JButton();
 
         addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -152,6 +219,11 @@ public class InvoicePanel extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
+        table.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableMouseClicked(evt);
+            }
+        });
         scrollpane.setViewportView(table);
 
         listOfAcccountLabel.setFont(new java.awt.Font("sansserif", 1, 28)); // NOI18N
@@ -166,18 +238,38 @@ public class InvoicePanel extends javax.swing.JPanel {
             }
         });
 
+        payInvoice.setText("Pay Invoice");
+        payInvoice.setEnabled(false);
+        payInvoice.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                payInvoiceActionPerformed(evt);
+            }
+        });
+
+        refresh.setText("Refresh");
+        refresh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                refreshActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 313, Short.MAX_VALUE)
-                .addComponent(listOfAcccountLabel)
-                .addGap(304, 304, 304))
             .addGroup(layout.createSequentialGroup()
                 .addGap(37, 37, 37)
-                .addComponent(createInvoice, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(refresh)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(listOfAcccountLabel)
+                        .addGap(304, 304, 304))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(createInvoice, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(27, 27, 27)
+                        .addComponent(payInvoice, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(36, Short.MAX_VALUE))))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -193,9 +285,13 @@ public class InvoicePanel extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(15, 15, 15)
-                .addComponent(listOfAcccountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(listOfAcccountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(refresh))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 410, Short.MAX_VALUE)
-                .addComponent(createInvoice, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(createInvoice, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(payInvoice, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(26, 26, 26))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
@@ -222,13 +318,21 @@ public class InvoicePanel extends javax.swing.JPanel {
 
             invoices.clear();
             while (selectStatementStaff.next()) {
-                invoices.add(new Invoice(selectStatementStaff.getInt("invoice_id"), selectStatementStaff.getDouble("invoice_amount"), selectStatementStaff.getString("invoice_period_date"),
-                        selectStatementStaff.getDouble("invoice_payment"), selectStatementStaff.getString("invoice_payment_date"), selectStatementStaff.getString("invoice_status"),
+                invoices.add(new Invoice(selectStatementStaff.getInt("invoice_id"), selectStatementStaff.getString("invoice_period_date"), 
+                        selectStatementStaff.getDouble("invoice_basic_charge"), selectStatementStaff.getDouble("invoice_transitory_charge"), 
+                        selectStatementStaff.getDouble("invoice_environmental_charge"),selectStatementStaff.getDouble("invoice_maitenance_charge"), 
+                        selectStatementStaff.getDouble("invoice_before_tax"), selectStatementStaff.getDouble("invoice_tax"),
+                        selectStatementStaff.getDouble("invoice_discount"), selectStatementStaff.getDouble("invoice_amount"),
+                        selectStatementStaff.getDouble("invoice_payment"), selectStatementStaff.getString("invoice_payment_date"), selectStatementStaff.getString("invoice_status"), 
                         selectStatementStaff.getInt("client_id"), selectStatementStaff.getInt("staff_id")));
             }
             while (selectStatementAdmin.next()) {
-                invoices.add(new Invoice(selectStatementAdmin.getInt("invoice_id"), selectStatementAdmin.getDouble("invoice_amount"), selectStatementAdmin.getString("invoice_period_date"),
-                        selectStatementAdmin.getDouble("invoice_payment"), selectStatementAdmin.getString("invoice_payment_date"), selectStatementAdmin.getString("invoice_status"),
+                invoices.add(new Invoice(selectStatementAdmin.getInt("invoice_id"), selectStatementAdmin.getString("invoice_period_date"), 
+                        selectStatementAdmin.getDouble("invoice_basic_charge"), selectStatementAdmin.getDouble("invoice_transitory_charge"), 
+                        selectStatementAdmin.getDouble("invoice_environmental_charge"),selectStatementAdmin.getDouble("invoice_maitenance_charge"), 
+                        selectStatementAdmin.getDouble("invoice_before_tax"), selectStatementAdmin.getDouble("invoice_tax"),
+                        selectStatementAdmin.getDouble("invoice_discount"), selectStatementAdmin.getDouble("invoice_amount"),
+                        selectStatementAdmin.getDouble("invoice_payment"), selectStatementAdmin.getString("invoice_payment_date"), selectStatementAdmin.getString("invoice_status"), 
                         selectStatementAdmin.getInt("client_id"), selectStatementAdmin.getInt("admin_id")));
             }
         } catch (SQLException ex) {
@@ -279,8 +383,7 @@ public class InvoicePanel extends javax.swing.JPanel {
             if (isExisting == false) {
                 JOptionPane.showMessageDialog(null, "Client name not found!", "Create Invoice", JOptionPane.WARNING_MESSAGE);
             } else {
-                new CreateInvoice(id, accountUsername, accountPassword).setVisible(true);
-                showDataInTable();
+                new CreateInvoice(id, accountUsername, accountPassword).setVisible(true);                
             }
         }
     }//GEN-LAST:event_createInvoiceActionPerformed
@@ -288,14 +391,39 @@ public class InvoicePanel extends javax.swing.JPanel {
     private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
         if (table.getSelectedRowCount() > 0) {
             table.clearSelection();
+            createInvoice.setEnabled(true);
+            payInvoice.setEnabled(false);
         }
         this.requestFocus();
     }//GEN-LAST:event_formMouseClicked
+
+    private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
+        createInvoice.setEnabled(false);
+        payInvoice.setEnabled(true);
+    }//GEN-LAST:event_tableMouseClicked
+
+    private void payInvoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_payInvoiceActionPerformed
+        int row = table.getSelectedRow();
+        Object id = table.getValueAt(row, 1);
+
+        new PayInvoice(Integer.parseInt(id.toString()), accountUsername, accountPassword).setVisible(true);
+        
+        createInvoice.setEnabled(true);
+        payInvoice.setEnabled(false);
+        
+        showDataInTable();
+    }//GEN-LAST:event_payInvoiceActionPerformed
+
+    private void refreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshActionPerformed
+        showDataInTable();
+    }//GEN-LAST:event_refreshActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton createInvoice;
     private javax.swing.JLabel listOfAcccountLabel;
+    private javax.swing.JButton payInvoice;
+    private javax.swing.JButton refresh;
     private javax.swing.JScrollPane scrollpane;
     private javax.swing.JTextField search;
     private javax.swing.JTable table;

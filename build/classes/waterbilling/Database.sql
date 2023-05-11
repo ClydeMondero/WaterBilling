@@ -65,12 +65,19 @@ client_rateclass, meter_id, client_status, staff_id)
 VALUES (1001, 'Ragos', 'Ryan', 'M', 'Bustos, Bulacan', '09', 'Residential', 123456, 'Connected', 1002);
 
 CREATE TABLE IF NOT EXISTS Invoice(
-		invoice_id INT PRIMARY KEY AUTO_INCREMENT,                 
-        invoice_amount DOUBLE,
+		invoice_id INT PRIMARY KEY AUTO_INCREMENT,                 	
         invoice_period_date DATE,
         invoice_payment DOUBLE,
         invoice_payment_date DATE,
         invoice_status SET ('Paid', 'UnPaid'),
+        invoice_basic_charge DOUBLE,
+        invoice_transitory_charge DOUBLE,
+        invoice_environmental_charge DOUBLE,
+        invoice_maintenance_charge  DOUBLE,
+        invoice_before_tax  DOUBLE,
+        invoice_tax DOUBLE,
+        invoice_discount DOUBLE,
+        invoice_amount DOUBLE,
         client_id INT,        
         staff_id INT,
         admin_id INT,
@@ -78,12 +85,6 @@ CREATE TABLE IF NOT EXISTS Invoice(
         FOREIGN KEY (staff_id) REFERENCES Staff(staff_id),
         FOREIGN KEY (admin_id) REFERENCES Admin(admin_id)        
 )AUTO_INCREMENT = 1001;
-
-INSERT IGNORE INTO Invoice (invoice_id, invoice_amount, invoice_period_date, invoice_status, client_id, staff_id) 
-VALUES (1001, 6000, '2023-06-06','Unpaid', 1001, 1001);
-
-INSERT IGNORE INTO Invoice (invoice_id, invoice_amount, invoice_period_date, invoice_status, client_id, admin_id) 
-VALUES (1002, 6000, '2023-06-06','Unpaid', 1001, 1001);
 
 SELECT * FROM Admin;
 

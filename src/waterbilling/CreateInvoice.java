@@ -20,18 +20,17 @@ import static waterbilling.ClientPanel.clients;
 import static waterbilling.ClientPanel.meters;
 import static waterbilling.AdminPanel.admins;
 import static waterbilling.StaffPanel.staffs;
+import static waterbilling.InvoicePanel.invoices;
 
 public class CreateInvoice extends javax.swing.JFrame {
 
     int client;
-    String accountUsername, accountPassword;
-
-    static ArrayList<Invoice> invoices = new ArrayList<>();
+    String accountUsername, accountPassword;  
 
     Connection connect = null;
 
     SimpleDateFormat dateFormat;
-    
+
     NumberFormat chargeFormat = NumberFormat.getCurrencyInstance();
 
     public CreateInvoice(int id, String username, String password) {
@@ -47,8 +46,12 @@ public class CreateInvoice extends javax.swing.JFrame {
 
         updateDatas();
 
-        this.id.setText(Integer.toString(invoices.get(invoices.size() - 1).getId() + 1));
-
+        if(!invoices.isEmpty()){
+            this.id.setText(Integer.toString(invoices.get(invoices.size() - 1).getId() + 1));
+        }else{
+            this.id.setText("1001");
+        }
+        
         clientId.setText(Integer.toString(client));
 
         for (Client client : clients) {
@@ -73,7 +76,7 @@ public class CreateInvoice extends javax.swing.JFrame {
         calendar.setTime(period.getDate());
         calendar.add(Calendar.MONTH, -1);
         period2.setText(dateFormat.format(calendar.getTime()) + " TO " + dateFormat.format(period.getDate()));
-        
+
         consumption.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -98,8 +101,8 @@ public class CreateInvoice extends javax.swing.JFrame {
                 computeTax();
                 tax.setText(chargeFormat.format(taxcharge));
 
-                computeTotal();
-                totalamount.setText(chargeFormat.format(total));
+                computeTotalAmount();
+                amount.setText(chargeFormat.format(total));
             }
 
             @Override
@@ -111,7 +114,7 @@ public class CreateInvoice extends javax.swing.JFrame {
                 maintenance.setText(chargeFormat.format(0));
                 beforeTax.setText(chargeFormat.format(0));
                 tax.setText(chargeFormat.format(0));
-                totalamount.setText(chargeFormat.format(0));
+                amount.setText(chargeFormat.format(0));
             }
 
             @Override
@@ -137,8 +140,8 @@ public class CreateInvoice extends javax.swing.JFrame {
                 computeTax();
                 tax.setText(chargeFormat.format(taxcharge));
 
-                computeTotal();
-                totalamount.setText(chargeFormat.format(total));
+                computeTotalAmount();
+                amount.setText(chargeFormat.format(total));
             }
 
         });
@@ -151,7 +154,7 @@ public class CreateInvoice extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        listOfAcccountLabel = new javax.swing.JLabel();
+        titleLabel = new javax.swing.JLabel();
         idLabel = new javax.swing.JLabel();
         id = new javax.swing.JLabel();
         period = new com.toedter.calendar.JDateChooser();
@@ -192,8 +195,8 @@ public class CreateInvoice extends javax.swing.JFrame {
         taxLabel = new javax.swing.JLabel();
         tax = new javax.swing.JLabel();
         beforeTax = new javax.swing.JLabel();
-        totalamountLabel = new javax.swing.JLabel();
-        totalamount = new javax.swing.JLabel();
+        amountLabel = new javax.swing.JLabel();
+        amount = new javax.swing.JLabel();
         cancel = new javax.swing.JButton();
         save = new javax.swing.JButton();
         clientinformationseparator = new javax.swing.JSeparator();
@@ -207,8 +210,8 @@ public class CreateInvoice extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
 
-        listOfAcccountLabel.setFont(new java.awt.Font("sansserif", 1, 28)); // NOI18N
-        listOfAcccountLabel.setText("Create Invoice");
+        titleLabel.setFont(new java.awt.Font("sansserif", 1, 28)); // NOI18N
+        titleLabel.setText("Create Invoice");
 
         idLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         idLabel.setText("Invoice Id:");
@@ -322,11 +325,11 @@ public class CreateInvoice extends javax.swing.JFrame {
         beforeTax.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         beforeTax.setText("₱0.0");
 
-        totalamountLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        totalamountLabel.setText("Total Amount:");
+        amountLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        amountLabel.setText("Total Amount:");
 
-        totalamount.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        totalamount.setText("₱0.0");
+        amount.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        amount.setText("₱0.0");
 
         cancel.setText("Cancel");
         cancel.addActionListener(new java.awt.event.ActionListener() {
@@ -369,7 +372,7 @@ public class CreateInvoice extends javax.swing.JFrame {
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(listOfAcccountLabel)
+                .addComponent(titleLabel)
                 .addGap(302, 302, 302))
             .addGroup(layout.createSequentialGroup()
                 .addGap(28, 28, 28)
@@ -411,12 +414,12 @@ public class CreateInvoice extends javax.swing.JFrame {
                                             .addGroup(layout.createSequentialGroup()
                                                 .addComponent(presentreadingLabel)
                                                 .addGap(18, 18, 18)
-                                                .addComponent(presentreading, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(presentreading, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                 .addComponent(consumptionLabel)
                                                 .addGap(18, 18, 18)
-                                                .addComponent(consumption, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(22, 22, 22))))
+                                                .addComponent(consumption, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(32, 32, 32))))
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(serviceInformationLabel2)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -482,12 +485,12 @@ public class CreateInvoice extends javax.swing.JFrame {
                                         .addComponent(discountCheckBox)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addComponent(discount, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(15, 15, 15)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(totalamountLabel)
+                                        .addComponent(amountLabel)
                                         .addGap(18, 18, 18)
-                                        .addComponent(totalamount, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(amount, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(maintenanceLabel)
                                         .addGap(18, 18, 18)
@@ -496,14 +499,14 @@ public class CreateInvoice extends javax.swing.JFrame {
                                         .addComponent(sewerageLabel)
                                         .addGap(22, 22, 22)
                                         .addComponent(sewerage, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                        .addGap(0, 4, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(5, 5, 5)
-                .addComponent(listOfAcccountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(titleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(period, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -598,8 +601,8 @@ public class CreateInvoice extends javax.swing.JFrame {
                             .addComponent(maintenance))
                         .addGap(27, 27, 27)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(totalamountLabel)
-                            .addComponent(totalamount))))
+                            .addComponent(amountLabel)
+                            .addComponent(amount))))
                 .addGap(11, 11, 11)
                 .addComponent(invoicePeriod7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
@@ -631,18 +634,27 @@ public class CreateInvoice extends javax.swing.JFrame {
                 String suffix = accountUsername.substring(accountUsername.indexOf("_") + 1);
                 if (suffix.equals("admin")) {
                     PreparedStatement insertStatement;
+                    PreparedStatement updateStatement;
                     try {
-                        insertStatement = connect.prepareStatement("INSERT IGNORE INTO Invoice (invoice_id, invoice_amount, "
-                                + "invoice_period_date, invoice_status, client_id, admin_id) VALUES (?, ?, ?, ?, ?, ?)");
+                        insertStatement = connect.prepareStatement("INSERT IGNORE INTO Invoice (invoice_id, "
+                                + "invoice_period_date, invoice_basic_charge, invoice_transitory_charge, invoice_environmental_charge, invoice_maintenance_charge, "
+                                + "invoice_before_tax, invoice_tax, invoice_discount, invoice_amount, invoice_status, client_id, admin_id)"
+                                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
                         insertStatement.setInt(1, Integer.parseInt(id.getText()));
-                        insertStatement.setDouble(2, Double.parseDouble(removeCurrency(totalamount.getText())));
-
+                        
                         dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                        insertStatement.setString(3, dateFormat.format(period.getDate()));
-
-                        insertStatement.setString(4, "UnPaid");
-                        insertStatement.setInt(5, client);
+                        insertStatement.setString(2, dateFormat.format(period.getDate()));
+                        insertStatement.setDouble(3, Double.parseDouble(removeCurrency(basic.getText())));                       
+                        insertStatement.setDouble(4, Double.parseDouble(removeCurrency(transitory.getText())));
+                        insertStatement.setDouble(5, Double.parseDouble(removeCurrency(environmental.getText())));
+                        insertStatement.setDouble(6, Double.parseDouble(removeCurrency(maintenance.getText())));
+                        insertStatement.setDouble(7, Double.parseDouble(removeCurrency(beforeTax.getText())));
+                        insertStatement.setDouble(8, Double.parseDouble(removeCurrency(tax.getText())));
+                        insertStatement.setDouble(9, Double.parseDouble(removeCurrency(discount.getText())));
+                        insertStatement.setDouble(10, Double.parseDouble(removeCurrency(amount.getText())));
+                        insertStatement.setString(11, "UnPaid");
+                        insertStatement.setInt(12, client);
 
                         int adminId = 0;
                         for (Admin admin : admins) {
@@ -650,9 +662,20 @@ public class CreateInvoice extends javax.swing.JFrame {
                                 adminId = admin.getId();
                             }
                         }
-                        insertStatement.setInt(6, adminId);
+                        insertStatement.setInt(13, adminId);
 
                         insertStatement.executeUpdate();
+                        
+                        updateStatement = connect.prepareStatement("UPDATE Meter SET meter_reading_date = ?, meter_reading = ?, "
+                                + "meter_consumption = ? WHERE meter_id = ?");
+                        
+                        updateStatement.setString(1, dateFormat.format(period.getDate()));
+                        updateStatement.setInt(2, Integer.parseInt(presentreading.getText()));
+                        updateStatement.setInt(3, Integer.parseInt(consumption.getText()));
+                        updateStatement.setInt(4, Integer.parseInt(meterId.getText()));
+                        
+                        updateStatement.executeUpdate();
+                        
                     } catch (SQLException ex) {
                         Logger.getLogger(CreateInvoice.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -660,42 +683,61 @@ public class CreateInvoice extends javax.swing.JFrame {
                     updateDatas();
 
                     id.setText(Integer.toString(invoices.get(invoices.size() - 1).getId() + 1));
-                    this.dispose();
+                    this.dispose();                                                          
 
                     JOptionPane.showMessageDialog(null, "Invoice Created!", "Create Invoice", JOptionPane.INFORMATION_MESSAGE);
                 } else if (suffix.equals("staff")) {
                     PreparedStatement insertStatement;
+                    PreparedStatement updateStatement;
                     try {
-                        insertStatement = connect.prepareStatement("INSERT IGNORE INTO Invoice (invoice_id, invoice_amount, "
-                                + "invoice_period_date, invoice_status, client_id, staff_id) VALUES (?, ?, ?, ?, ?, ?)");
+                        insertStatement = connect.prepareStatement("INSERT IGNORE INTO Invoice (invoice_id, "
+                                + "invoice_period_date, invoice_basic_charge, invoice_transitory_charge, invoice_environmental_charge, invoice_maintenance_charge, "
+                                + "invoice_before_tax, invoice_tax, invoice_discount, invoice_amount, invoice_status, client_id, staff_id)"
+                                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
                         insertStatement.setInt(1, Integer.parseInt(id.getText()));
-                        insertStatement.setDouble(2, Double.parseDouble(removeCurrency(totalamount.getText())));
-
+                        
                         dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                        insertStatement.setString(3, dateFormat.format(period.getDate()));
-
-                        insertStatement.setString(4, "UnPaid");
-                        insertStatement.setInt(5, client);
+                        insertStatement.setString(2, dateFormat.format(period.getDate()));
+                        insertStatement.setDouble(3, Double.parseDouble(removeCurrency(basic.getText())));                       
+                        insertStatement.setDouble(4, Double.parseDouble(removeCurrency(transitory.getText())));
+                        insertStatement.setDouble(5, Double.parseDouble(removeCurrency(environmental.getText())));
+                        insertStatement.setDouble(6, Double.parseDouble(removeCurrency(maintenance.getText())));
+                        insertStatement.setDouble(7, Double.parseDouble(removeCurrency(beforeTax.getText())));
+                        insertStatement.setDouble(8, Double.parseDouble(removeCurrency(tax.getText())));
+                        insertStatement.setDouble(9, Double.parseDouble(removeCurrency(discount.getText())));
+                        insertStatement.setDouble(10, Double.parseDouble(removeCurrency(amount.getText())));
+                        insertStatement.setString(11, "UnPaid");
+                        insertStatement.setInt(12, client);
 
                         int staffId = 0;
                         for (Staff staff : staffs) {
-                            if (accountUsername.equals(staff.getId())) {
+                            if (accountUsername.equals(staff.getUsername())) {
                                 staffId = staff.getId();
                             }
                         }
-                        insertStatement.setInt(6, staffId);
+                        insertStatement.setInt(13, staffId);
 
                         insertStatement.executeUpdate();
+                        
+                        updateStatement = connect.prepareStatement("UPDATE Meter SET meter_reading_date = ?, meter_reading = ?, "
+                                + "meter_consumption = ? WHERE meter_id = ?");
+                        
+                        updateStatement.setString(1, dateFormat.format(period.getDate()));
+                        updateStatement.setInt(2, Integer.parseInt(presentreading.getText()));
+                        updateStatement.setInt(3, Integer.parseInt(consumption.getText()));
+                        updateStatement.setInt(4, Integer.parseInt(meterId.getText()));
+                        
+                        updateStatement.executeUpdate();
 
                     } catch (SQLException ex) {
                         Logger.getLogger(CreateInvoice.class.getName()).log(Level.SEVERE, null, ex);
                     }
 
-                    updateDatas();
+                    updateDatas();                                       
 
                     id.setText(Integer.toString(invoices.get(invoices.size() - 1).getId() + 1));
-                    this.dispose();
+                    this.dispose();                   
 
                     JOptionPane.showMessageDialog(null, "Invoice Created!", "Create Invoice", JOptionPane.INFORMATION_MESSAGE);
                 }
@@ -706,20 +748,19 @@ public class CreateInvoice extends javax.swing.JFrame {
     }//GEN-LAST:event_saveActionPerformed
 
     private void discountCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_discountCheckBoxActionPerformed
-        if (discountCheckBox.isSelected()) {
+        if(discountCheckBox.isSelected() == true){
             computeDiscountCharge();
             discount.setText(chargeFormat.format(discountcharge));
             
-            computeTotal();            
-            totalamount.setText(chargeFormat.format(total));
-        }else{
+            computeTotalAmount();
+            amount.setText(chargeFormat.format(total));            
+        }else if (discountCheckBox.isSelected() == false){
             discountcharge = 0;
             discount.setText("₱0.0");
             
-            computeTotal();            
-            totalamount.setText(chargeFormat.format(total));
+            computeTotalAmount();
+            amount.setText(chargeFormat.format(total));   
         }
-
     }//GEN-LAST:event_discountCheckBoxActionPerformed
 
     public void updateDatas() {
@@ -737,13 +778,21 @@ public class CreateInvoice extends javax.swing.JFrame {
 
             invoices.clear();
             while (selectStatementStaff.next()) {
-                invoices.add(new Invoice(selectStatementStaff.getInt("invoice_id"), selectStatementStaff.getDouble("invoice_amount"), selectStatementStaff.getString("invoice_period_date"),
-                        selectStatementStaff.getDouble("invoice_payment"), selectStatementStaff.getString("invoice_payment_date"), selectStatementStaff.getString("invoice_status"),
+                invoices.add(new Invoice(selectStatementStaff.getInt("invoice_id"), selectStatementStaff.getString("invoice_period_date"), 
+                        selectStatementStaff.getDouble("invoice_basic_charge"), selectStatementStaff.getDouble("invoice_transitory_charge"), 
+                        selectStatementStaff.getDouble("invoice_environmental_charge"),selectStatementStaff.getDouble("invoice_maintenance_charge"), 
+                        selectStatementStaff.getDouble("invoice_before_tax"), selectStatementStaff.getDouble("invoice_tax"),
+                        selectStatementStaff.getDouble("invoice_discount"), selectStatementStaff.getDouble("invoice_amount"),
+                        selectStatementStaff.getDouble("invoice_payment"), selectStatementStaff.getString("invoice_payment_date"), selectStatementStaff.getString("invoice_status"), 
                         selectStatementStaff.getInt("client_id"), selectStatementStaff.getInt("staff_id")));
             }
             while (selectStatementAdmin.next()) {
-                invoices.add(new Invoice(selectStatementAdmin.getInt("invoice_id"), selectStatementAdmin.getDouble("invoice_amount"), selectStatementAdmin.getString("invoice_period_date"),
-                        selectStatementAdmin.getDouble("invoice_payment"), selectStatementAdmin.getString("invoice_payment_date"), selectStatementAdmin.getString("invoice_status"),
+                invoices.add(new Invoice(selectStatementAdmin.getInt("invoice_id"), selectStatementAdmin.getString("invoice_period_date"), 
+                        selectStatementAdmin.getDouble("invoice_basic_charge"), selectStatementAdmin.getDouble("invoice_transitory_charge"), 
+                        selectStatementAdmin.getDouble("invoice_environmental_charge"),selectStatementAdmin.getDouble("invoice_maintenance_charge"), 
+                        selectStatementAdmin.getDouble("invoice_before_tax"), selectStatementAdmin.getDouble("invoice_tax"),
+                        selectStatementAdmin.getDouble("invoice_discount"), selectStatementAdmin.getDouble("invoice_amount"),
+                        selectStatementAdmin.getDouble("invoice_payment"), selectStatementAdmin.getString("invoice_payment_date"), selectStatementAdmin.getString("invoice_status"), 
                         selectStatementAdmin.getInt("client_id"), selectStatementAdmin.getInt("admin_id")));
             }
         } catch (SQLException ex) {
@@ -752,7 +801,7 @@ public class CreateInvoice extends javax.swing.JFrame {
     }
 
     double basiccharge, discountcharge, transitorycharge, environmentalcharge, seweragecharge, maintenancecharge, totalbeforetax, taxcharge, total;
-
+    
     public double computeBasicCharge() {
         try {
             if (rateclass.getText().equals("Residential")) {
@@ -1015,8 +1064,10 @@ public class CreateInvoice extends javax.swing.JFrame {
     }
 
     public double computeDiscountCharge() {
-        if (discountCheckBox.isSelected()) {
+        if (rateclass.getText().equals("Residential") || rateclass.getText().equals("Semi-Business")) {
             discountcharge = basiccharge * 0.05;
+        }else{
+            discountcharge = 0;
         }
 
         return discountcharge;
@@ -1097,7 +1148,7 @@ public class CreateInvoice extends javax.swing.JFrame {
         return taxcharge;
     }
 
-    public double computeTotal() {
+    public double computeTotalAmount() {
         total = (totalbeforetax + taxcharge) - discountcharge;
 
         return total;
@@ -1114,6 +1165,8 @@ public class CreateInvoice extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel address;
     private javax.swing.JLabel addressLabel;
+    private javax.swing.JLabel amount;
+    private javax.swing.JLabel amountLabel;
     private javax.swing.JLabel basic;
     private javax.swing.JLabel basiclabel;
     private javax.swing.JLabel beforeTax;
@@ -1136,7 +1189,6 @@ public class CreateInvoice extends javax.swing.JFrame {
     private javax.swing.JLabel invoicePeriod7;
     private javax.swing.JLabel invoiceperiodLabel;
     private javax.swing.JSeparator invoicesummarySeparator;
-    private javax.swing.JLabel listOfAcccountLabel;
     private javax.swing.JLabel maintenance;
     private javax.swing.JLabel maintenanceLabel;
     private javax.swing.JLabel meterId;
@@ -1160,8 +1212,7 @@ public class CreateInvoice extends javax.swing.JFrame {
     private javax.swing.JLabel sewerageLabel;
     private javax.swing.JLabel tax;
     private javax.swing.JLabel taxLabel;
-    private javax.swing.JLabel totalamount;
-    private javax.swing.JLabel totalamountLabel;
+    private javax.swing.JLabel titleLabel;
     private javax.swing.JLabel transitory;
     private javax.swing.JLabel transitorylabel;
     // End of variables declaration//GEN-END:variables
