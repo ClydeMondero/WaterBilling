@@ -34,6 +34,7 @@ public class CreateInvoice extends javax.swing.JFrame {
     NumberFormat chargeFormat = NumberFormat.getCurrencyInstance();
     
     Calendar calendar = Calendar.getInstance(); 
+    
 
     public CreateInvoice(int id, String username, String password) {
         initComponents();

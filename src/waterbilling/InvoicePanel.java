@@ -7,8 +7,14 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.PatternSyntaxException;
 import javax.swing.JOptionPane;
+import javax.swing.RowFilter;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 import static waterbilling.ClientPanel.clients;
 import static waterbilling.ClientPanel.meters;
 import static waterbilling.AdminPanel.admins;
@@ -174,6 +180,8 @@ public class InvoicePanel extends javax.swing.JPanel {
 
     String accountUsername, accountPassword;
     
+    TableRowSorter<TableModel> sorter;
+    
     public InvoicePanel(String username, String password) {
         initComponents();
 
@@ -182,6 +190,27 @@ public class InvoicePanel extends javax.swing.JPanel {
 
         connect = DatabaseConnection.connectDatabase();
 
+        sorter = new TableRowSorter<>(table.getModel());
+        table.setRowSorter(sorter);
+
+        search.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                updateFilter();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                updateFilter();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                updateFilter();
+            }
+
+        });
+        
         showDataInTable();
     }
 
@@ -364,6 +393,18 @@ public class InvoicePanel extends javax.swing.JPanel {
             row[4] = invoices.get(i).getPaymentDate();
             row[5] = invoices.get(i).getStatus();
             model.addRow(row);
+        }
+    }
+    
+    public void updateFilter() {
+        String text = search.getText();
+        if (text.length() == 0) {
+            sorter.setRowFilter(null);
+        } else {
+            try {
+                sorter.setRowFilter(RowFilter.regexFilter(text));
+            } catch (PatternSyntaxException pse) {
+            }
         }
     }
 
