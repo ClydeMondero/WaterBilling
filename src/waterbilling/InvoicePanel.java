@@ -1,5 +1,6 @@
 package waterbilling;
 
+import java.awt.Rectangle;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,6 +9,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.PatternSyntaxException;
+import javax.swing.GroupLayout;
 import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
 import javax.swing.event.DocumentEvent;
@@ -22,8 +24,8 @@ import static waterbilling.StaffPanel.staffs;
 
 class Invoice {
 
-    private int id;    
-    private String period;    
+    private int id;
+    private String period;
     private double basic, transitory, environmental, maintenance, before, tax, discount, amount;
     private double payment;
     private String paymentDate;
@@ -168,8 +170,6 @@ class Invoice {
         this.officerId = officerId;
     }
 
-       
-        
 }
 
 public class InvoicePanel extends javax.swing.JPanel {
@@ -179,9 +179,11 @@ public class InvoicePanel extends javax.swing.JPanel {
     static ArrayList<Invoice> invoices = new ArrayList<>();
 
     String accountUsername, accountPassword;
-    
+
+    GroupLayout layout = new javax.swing.GroupLayout(this);
+
     TableRowSorter<TableModel> sorter;
-    
+
     public InvoicePanel(String username, String password) {
         initComponents();
 
@@ -210,7 +212,13 @@ public class InvoicePanel extends javax.swing.JPanel {
             }
 
         });
-        
+
+        String suffix = accountUsername.substring(accountUsername.indexOf("_") + 1);
+        if (suffix.equals("cashier")) {
+            createInvoice.setEnabled(false);
+            createInvoice.setText("Cancel");
+        }
+
         showDataInTable();
     }
 
@@ -281,8 +289,7 @@ public class InvoicePanel extends javax.swing.JPanel {
                 refreshActionPerformed(evt);
             }
         });
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+    
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -347,21 +354,21 @@ public class InvoicePanel extends javax.swing.JPanel {
 
             invoices.clear();
             while (selectStatementStaff.next()) {
-                invoices.add(new Invoice(selectStatementStaff.getInt("invoice_id"), selectStatementStaff.getString("invoice_period_date"), 
-                        selectStatementStaff.getDouble("invoice_basic_charge"), selectStatementStaff.getDouble("invoice_transitory_charge"), 
-                        selectStatementStaff.getDouble("invoice_environmental_charge"),selectStatementStaff.getDouble("invoice_maintenance_charge"), 
+                invoices.add(new Invoice(selectStatementStaff.getInt("invoice_id"), selectStatementStaff.getString("invoice_period_date"),
+                        selectStatementStaff.getDouble("invoice_basic_charge"), selectStatementStaff.getDouble("invoice_transitory_charge"),
+                        selectStatementStaff.getDouble("invoice_environmental_charge"), selectStatementStaff.getDouble("invoice_maintenance_charge"),
                         selectStatementStaff.getDouble("invoice_before_tax"), selectStatementStaff.getDouble("invoice_tax"),
                         selectStatementStaff.getDouble("invoice_discount"), selectStatementStaff.getDouble("invoice_amount"),
-                        selectStatementStaff.getDouble("invoice_payment"), selectStatementStaff.getString("invoice_payment_date"), selectStatementStaff.getString("invoice_status"), 
+                        selectStatementStaff.getDouble("invoice_payment"), selectStatementStaff.getString("invoice_payment_date"), selectStatementStaff.getString("invoice_status"),
                         selectStatementStaff.getInt("client_id"), selectStatementStaff.getInt("staff_id")));
             }
             while (selectStatementAdmin.next()) {
-                invoices.add(new Invoice(selectStatementAdmin.getInt("invoice_id"), selectStatementAdmin.getString("invoice_period_date"), 
-                        selectStatementAdmin.getDouble("invoice_basic_charge"), selectStatementAdmin.getDouble("invoice_transitory_charge"), 
-                        selectStatementAdmin.getDouble("invoice_environmental_charge"),selectStatementAdmin.getDouble("invoice_maintenance_charge"), 
+                invoices.add(new Invoice(selectStatementAdmin.getInt("invoice_id"), selectStatementAdmin.getString("invoice_period_date"),
+                        selectStatementAdmin.getDouble("invoice_basic_charge"), selectStatementAdmin.getDouble("invoice_transitory_charge"),
+                        selectStatementAdmin.getDouble("invoice_environmental_charge"), selectStatementAdmin.getDouble("invoice_maintenance_charge"),
                         selectStatementAdmin.getDouble("invoice_before_tax"), selectStatementAdmin.getDouble("invoice_tax"),
                         selectStatementAdmin.getDouble("invoice_discount"), selectStatementAdmin.getDouble("invoice_amount"),
-                        selectStatementAdmin.getDouble("invoice_payment"), selectStatementAdmin.getString("invoice_payment_date"), selectStatementAdmin.getString("invoice_status"), 
+                        selectStatementAdmin.getDouble("invoice_payment"), selectStatementAdmin.getString("invoice_payment_date"), selectStatementAdmin.getString("invoice_status"),
                         selectStatementAdmin.getInt("client_id"), selectStatementAdmin.getInt("admin_id")));
             }
         } catch (SQLException ex) {
@@ -395,7 +402,7 @@ public class InvoicePanel extends javax.swing.JPanel {
             model.addRow(row);
         }
     }
-    
+
     public void updateFilter() {
         String text = search.getText();
         if (text.length() == 0) {
@@ -409,22 +416,35 @@ public class InvoicePanel extends javax.swing.JPanel {
     }
 
     private void createInvoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createInvoiceActionPerformed
-        String clientName = JOptionPane.showInputDialog(null, "Enter client name: ", "Create Invoice", JOptionPane.QUESTION_MESSAGE);
-
-        int id = 0;
-        boolean isExisting = false;
-        if (!clientName.isEmpty()) {
-            for (Client c : clients) {
-                if (clientName.equals(c.getFirstname() + " " + c.getMiddlename() + " " + c.getLastname())) {
-                    isExisting = true;
-                    id = c.getId();
-                }
+        String suffix = accountUsername.substring(accountUsername.indexOf("_") + 1);
+        if (suffix.equals("cashier")) {
+            if (table.getSelectedRowCount() > 0) {
+                table.clearSelection();
+                createInvoice.setEnabled(false);
+                payInvoice.setEnabled(false);
             }
+            this.requestFocus();
+        } else {
+            String clientName = JOptionPane.showInputDialog(null, "Enter client name: ", "Create Invoice", JOptionPane.QUESTION_MESSAGE);
 
-            if (isExisting == false) {
-                JOptionPane.showMessageDialog(null, "Client name not found!", "Create Invoice", JOptionPane.WARNING_MESSAGE);
+            int id = 0;
+            boolean isExisting = false;
+            if (!clientName.isEmpty()) {
+                for (Client c : clients) {
+                    if (clientName.equals(c.getFirstname() + " " + c.getMiddlename() + " " + c.getLastname())) {
+                        isExisting = true;
+                        id = c.getId();
+                    }
+                }
+
+                if (isExisting == false) {
+                    JOptionPane.showMessageDialog(null, "Client name not found!", "Create Invoice", JOptionPane.WARNING_MESSAGE);
+                } else {
+                    new CreateInvoice(id, accountUsername, accountPassword).setVisible(true);
+                }
             } else {
-                new CreateInvoice(id, accountUsername, accountPassword).setVisible(true);                
+                JOptionPane.showMessageDialog(null, "Client name is required", "Create Invoice", JOptionPane.WARNING_MESSAGE);
+                return;
             }
         }
     }//GEN-LAST:event_createInvoiceActionPerformed
@@ -432,14 +452,24 @@ public class InvoicePanel extends javax.swing.JPanel {
     private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
         if (table.getSelectedRowCount() > 0) {
             table.clearSelection();
-            createInvoice.setEnabled(true);
+            String suffix = accountUsername.substring(accountUsername.indexOf("_") + 1);
+            if (suffix.equals("cashier")) {
+                createInvoice.setEnabled(false);
+            } else {
+                createInvoice.setEnabled(true);
+            }
             payInvoice.setEnabled(false);
         }
         this.requestFocus();
     }//GEN-LAST:event_formMouseClicked
 
     private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
-        createInvoice.setEnabled(false);
+        String suffix = accountUsername.substring(accountUsername.indexOf("_") + 1);
+        if (suffix.equals("cashier")) {
+            createInvoice.setEnabled(true);
+        } else {
+            createInvoice.setEnabled(false);
+        }
         payInvoice.setEnabled(true);
     }//GEN-LAST:event_tableMouseClicked
 
@@ -448,10 +478,10 @@ public class InvoicePanel extends javax.swing.JPanel {
         Object id = table.getValueAt(row, 1);
 
         new PayInvoice(Integer.parseInt(id.toString()), accountUsername, accountPassword).setVisible(true);
-        
+
         createInvoice.setEnabled(true);
         payInvoice.setEnabled(false);
-        
+
         showDataInTable();
     }//GEN-LAST:event_payInvoiceActionPerformed
 

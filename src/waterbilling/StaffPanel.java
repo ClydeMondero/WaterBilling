@@ -182,7 +182,11 @@ public class StaffPanel extends javax.swing.JPanel {
 
         showDataInTable();
 
-        id.setText(Integer.toString(staffs.get(staffs.size() - 1).getId() + 1));
+        if(!staffs.isEmpty()){
+            id.setText(Integer.toString(staffs.get(staffs.size() - 1).getId() + 1));
+        }else{
+            this.id.setText("1001");
+        } 
     }
 
     @SuppressWarnings("unchecked")
@@ -607,7 +611,11 @@ public class StaffPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_searchFocusGained
 
     public void clearTextFields() {
-        id.setText(Integer.toString(staffs.get(staffs.size() - 1).getId() + 1));
+        if(!staffs.isEmpty()){
+            id.setText(Integer.toString(staffs.get(staffs.size() - 1).getId() + 1));
+        }else{
+            this.id.setText("1001");
+        } 
         lastname.setText("");
         firstname.setText("");
         middlename.setText("");

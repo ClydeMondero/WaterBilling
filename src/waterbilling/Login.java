@@ -11,10 +11,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
-public class Login extends javax.swing.JFrame {
+import static waterbilling.AdminPanel.admins;
+import static waterbilling.StaffPanel.staffs;
+import static waterbilling.CashierPanel.cashiers;
 
-    static ArrayList<Admin> admins = new ArrayList<>();
-    static ArrayList<Staff> staffs = new ArrayList<>();
+public class Login extends javax.swing.JFrame {   
 
     Connection connect = null;
 
@@ -38,6 +39,14 @@ public class Login extends javax.swing.JFrame {
             while (selectStaff.next()) {
                 staffs.add(new Staff(selectStaff.getInt("staff_id"), selectStaff.getString("staff_username"), selectStaff.getString("staff_password"),
                         selectStaff.getString("staff_status")));
+            }
+            
+            ResultSet selectCashier = statement.executeQuery("SELECT cashier_id, cashier_username, cashier_password, cashier_status FROM Cashier WHERE cashier_status != 'Deleted'");
+
+            cashiers.clear();
+            while (selectCashier.next()) {
+                cashiers.add(new Cashier(selectCashier.getInt("cashier_id"), selectCashier.getString("cashier_username"), selectCashier.getString("cashier_password"),
+                        selectCashier.getString("cashier_status")));
             }
         } catch (SQLException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
@@ -205,6 +214,45 @@ public class Login extends javax.swing.JFrame {
 
                                 statement.executeUpdate();
                                 staffs.get(i).setStatus("Deactivated");
+                            } catch (SQLException ex) {
+                                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                        return;
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Account deactivated!", "Login", JOptionPane.ERROR_MESSAGE);
+                    username.setText("");
+                    password.setText("");
+                    return;
+                }
+            }
+        }
+        
+        for (int i = 0; i < cashiers.size(); i++) {
+            if (username.getText().equals(cashiers.get(i).getUsername())) {
+                if (cashiers.get(i).getStatus().equals("Active")) {
+                    if (password.getText().equals(cashiers.get(i).getPassword())) {
+                        this.dispose();
+                        JOptionPane.showMessageDialog(null, "Login Success!", "Login", JOptionPane.INFORMATION_MESSAGE);
+                        new Main(username.getText(), password.getText()).setVisible(true);
+                        return;
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Login Failed!", "Login", JOptionPane.WARNING_MESSAGE);
+                        username.setText("");
+                        password.setText("");
+                        ++loginCounter;
+                        if (loginCounter == 3) {
+                            JOptionPane.showMessageDialog(null, "Account deactivated!", "Login", JOptionPane.ERROR_MESSAGE);
+                            username.setText("");
+                            password.setText("");
+                            try {
+                                PreparedStatement statement = connect.prepareStatement("UPDATE Cashier SET cashier_status = ? WHERE cashier_username = ?");
+                                statement.setString(1, "Deactivated");
+                                statement.setString(2, cashiers.get(i).getUsername());
+
+                                statement.executeUpdate();
+                                cashiers.get(i).setStatus("Deactivated");
                             } catch (SQLException ex) {
                                 Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
                             }

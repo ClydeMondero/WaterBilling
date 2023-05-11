@@ -1,6 +1,5 @@
 package waterbilling;
 
-
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,13 +10,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
+import static waterbilling.AdminPanel.admins;
+import static waterbilling.StaffPanel.staffs;
+import static waterbilling.CashierPanel.cashiers;
 
 public class MyAccount extends javax.swing.JPanel {
 
     String accountUsername, accountPassword;
-
-    static ArrayList<Admin> admins = new ArrayList<>();
-    static ArrayList<Staff> staffs = new ArrayList<>();
 
     Connection connect = null;
 
@@ -211,7 +210,7 @@ public class MyAccount extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
-        clearTextFields();
+        setTextFields();
     }//GEN-LAST:event_cancelActionPerformed
 
     private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
@@ -219,17 +218,20 @@ public class MyAccount extends javax.swing.JPanel {
             return;
         }
 
-        int i = accountUsername.indexOf("_");
-        if (accountUsername.substring(i + 1).equals("admin")) {
-            int j = username.toString().indexOf("_");
-            if (!username.toString().substring(j + 1).equals("admin")) {
+        String suffix = username.getText().toString().substring(username.getText().toString().indexOf("_") + 1);
+        if (suffix.equals("admin")) {
+            if (!suffix.equals("admin")) {
                 JOptionPane.showMessageDialog(null, "Username should have a admin suffix!", "Invalid Username", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-        }else if (accountUsername.substring(i + 1).equals("staff")){
-            int j = username.toString().indexOf("_");
-            if (!username.toString().substring(j + 1).equals("staff")) {
+        } else if (suffix.equals("staff")) {
+            if (!suffix.equals("staff")) {
                 JOptionPane.showMessageDialog(null, "Username should have a staff suffix!", "Invalid Username", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        } else if (suffix.equals("cashier")) {
+            if (!suffix.equals("staff")) {
+                JOptionPane.showMessageDialog(null, "Username should have a cashier suffix!", "Invalid Username", JOptionPane.ERROR_MESSAGE);
                 return;
             }
         }
@@ -248,6 +250,12 @@ public class MyAccount extends javax.swing.JPanel {
             }
         }
 
+        for (Cashier cashier : cashiers) {
+            if (username.getText().equals(cashier.getUsername())) {
+                isUsernameDuplicate = true;
+            }
+        }
+
         if (isUsernameDuplicate && !username.getText().equals(accountUsername)) {
             JOptionPane.showMessageDialog(null, "Username already exist!", "Invalid Username", JOptionPane.ERROR_MESSAGE);
             return;
@@ -261,8 +269,7 @@ public class MyAccount extends javax.swing.JPanel {
             password = passwordField.getText();
             if (password != null) {
                 if (password.equals(accountPassword)) {
-                    int index = accountUsername.indexOf("_");
-                    if (accountUsername.substring(index + 1).equals("admin")) {
+                    if (suffix.equals("admin")) {
                         try {
                             PreparedStatement updateStatement = connect.prepareStatement("UPDATE Admin SET admin_id = ?, admin_lastname = ?, admin_firstname = ?,"
                                     + " admin_middlename = ?, admin_address =  ?, admin_phonenumber = ?, admin_username =  ?, admin_password = ?, admin_status = ? WHERE admin_id = ?");
@@ -288,10 +295,36 @@ public class MyAccount extends javax.swing.JPanel {
                         } catch (SQLException ex) {
                             Logger.getLogger(AdminPanel.class.getName()).log(Level.SEVERE, null, ex);
                         }
-                    } else if (accountUsername.substring(index + 1).equals("staff")) {
+                    } else if (suffix.equals("staff")) {
                         try {
                             PreparedStatement updateStatement = connect.prepareStatement("UPDATE Staff SET staff_id = ?, staff_lastname = ?, staff_firstname = ?,"
                                     + " staff_middlename = ?, staff_address =  ?, staff_phonenumber = ?, staff_username =  ?, staff_password = ?, staff_status = ? WHERE staff_id = ?");
+                            updateStatement.setInt(1, Integer.parseInt(id.getText()));
+                            updateStatement.setString(2, lastname.getText());
+                            updateStatement.setString(3, firstname.getText());
+                            updateStatement.setString(4, middlename.getText());
+                            updateStatement.setString(5, address.getText());
+                            updateStatement.setString(6, phonenumber.getText());
+                            updateStatement.setString(7, username.getText());
+                            updateStatement.setString(8, this.password.getText());
+                            updateStatement.setString(9, status.getSelectedItem().toString());
+                            updateStatement.setInt(10, Integer.parseInt(id.getText()));
+
+                            updateStatement.executeUpdate();
+
+                            updateDatas();
+
+                            setTextFields();
+
+                            JOptionPane.showMessageDialog(null, "Account Updated!", "Update", JOptionPane.INFORMATION_MESSAGE);
+
+                        } catch (SQLException ex) {
+                            Logger.getLogger(AdminPanel.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    } else if (suffix.equals("cashier")) {
+                        try {
+                            PreparedStatement updateStatement = connect.prepareStatement("UPDATE Cashier SET cashier_id = ?, cashier_lastname = ?, cashier_firstname = ?,"
+                                    + " cashier_middlename = ?, cashier_address =  ?, cashier_phonenumber = ?, cashier_username =  ?, cashier_password = ?, cashier_status = ? WHERE cashier_id = ?");
                             updateStatement.setInt(1, Integer.parseInt(id.getText()));
                             updateStatement.setString(2, lastname.getText());
                             updateStatement.setString(3, firstname.getText());
@@ -324,27 +357,49 @@ public class MyAccount extends javax.swing.JPanel {
     }//GEN-LAST:event_saveActionPerformed
 
     public void setTextFields() {
-        int index = accountUsername.indexOf("_");
-        if (accountUsername.substring(index + 1).equals("admin")) {
-            id.setText(Integer.toString(admins.get(0).getId()));
-            lastname.setText(admins.get(0).getLastName());
-            firstname.setText(admins.get(0).getFirstName());
-            middlename.setText(admins.get(0).getMiddleName());
-            address.setText(admins.get(0).getAddress());
-            phonenumber.setText(admins.get(0).getPhonNumber());
-            username.setText(admins.get(0).getUsername());
-            password.setText(admins.get(0).getPassword());
-            status.setSelectedItem(admins.get(0).getStatus());
-        } else if (accountUsername.substring(index + 1).equals("staff")) {
-            id.setText(Integer.toString(staffs.get(0).getId()));
-            lastname.setText(staffs.get(0).getLastName());
-            firstname.setText(staffs.get(0).getFirstName());
-            middlename.setText(staffs.get(0).getMiddleName());
-            address.setText(staffs.get(0).getAddress());
-            phonenumber.setText(staffs.get(0).getPhonNumber());
-            username.setText(staffs.get(0).getUsername());
-            password.setText(staffs.get(0).getPassword());
-            status.setSelectedItem(staffs.get(0).getStatus());
+        String suffix = accountUsername.substring(accountUsername.indexOf("_") + 1);
+        if (suffix.equals("admin")) {
+            for (Admin admin : admins) {
+                if (accountUsername.equals(admin.getUsername())) {
+                    id.setText(Integer.toString(admin.getId()));
+                    lastname.setText(admin.getLastName());
+                    firstname.setText(admin.getFirstName());
+                    middlename.setText(admin.getMiddleName());
+                    address.setText(admin.getAddress());
+                    phonenumber.setText(admin.getPhonNumber());
+                    username.setText(admin.getUsername());
+                    password.setText(admin.getPassword());
+                    status.setSelectedItem(admin.getStatus());
+                }
+            }
+        } else if (suffix.equals("staff")) {
+            for (Staff staff: staffs) {
+                if (accountUsername.equals(staff.getUsername())) {
+                    id.setText(Integer.toString(staff.getId()));
+                    lastname.setText(staff.getLastName());
+                    firstname.setText(staff.getFirstName());
+                    middlename.setText(staff.getMiddleName());
+                    address.setText(staff.getAddress());
+                    phonenumber.setText(staff.getPhonNumber());
+                    username.setText(staff.getUsername());
+                    password.setText(staff.getPassword());
+                    status.setSelectedItem(staff.getStatus());
+                }
+            }
+        }else if (suffix.equals("cashier")) {
+            for (Cashier cashier : cashiers) {
+                if (accountUsername.equals(cashier.getUsername())) {
+                    id.setText(Integer.toString(cashier.getId()));
+                    lastname.setText(cashier.getLastName());
+                    firstname.setText(cashier.getFirstName());
+                    middlename.setText(cashier.getMiddleName());
+                    address.setText(cashier.getAddress());
+                    phonenumber.setText(cashier.getPhonNumber());
+                    username.setText(cashier.getUsername());
+                    password.setText(cashier.getPassword());
+                    status.setSelectedItem(cashier.getStatus());
+                }
+            }
         }
     }
 
@@ -372,22 +427,22 @@ public class MyAccount extends javax.swing.JPanel {
                         selectStaff.getString("staff_status"), selectStaff.getInt("admin_id")
                 ));
             }
+
+            ResultSet selectCashier = statement.executeQuery("SELECT * FROM Cashier WHERE cashier_username = '" + accountUsername + "'");
+
+            cashiers.clear();
+            while (selectCashier.next()) {
+                cashiers.add(new Cashier(selectCashier.getInt("cashier_id"), selectCashier.getString("cashier_lastname"),
+                        selectCashier.getString("cashier_firstname"), selectCashier.getString("cashier_middlename"), selectCashier.getString("cashier_address"),
+                        selectCashier.getString("cashier_phonenumber"), selectCashier.getString("cashier_username"), selectCashier.getString("cashier_password"),
+                        selectCashier.getString("cashier_status"), selectCashier.getInt("admin_id")
+                ));
+            }
         } catch (SQLException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
-    public void clearTextFields() {
-        id.setText(Integer.toString(admins.get(admins.size() - 1).getId() + 1));
-        lastname.setText("");
-        firstname.setText("");
-        middlename.setText("");
-        address.setText("");
-        phonenumber.setText("");
-        username.setText("");
-        password.setText("");
-        status.setSelectedItem("Active");
-    }
+   
 
     public boolean checkUsernamePassword() {
         if (username.getText().equals("") && password.getText().equals("")) {

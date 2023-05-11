@@ -1,6 +1,5 @@
 package waterbilling;
 
-
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,23 +18,25 @@ import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+import static waterbilling.AdminPanel.admins;
 
-class Admin {
+class Cashier {
 
     private int id;
     private String lastName, firstName, middleName, address, phonNumber;
     private String username, password;
     private String status;
+    private int adminId;
 
-    public Admin(int id, String username, String password, String status) {
+    public Cashier(int id, String username, String password, String status) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.status = status;
     }
 
-    public Admin(int id, String lastName, String firstName, String middleName, String address,
-            String phonNumber, String username, String password, String status) {
+    public Cashier(int id, String lastName, String firstName, String middleName, String address,
+            String phonNumber, String username, String password, String status, int adminId) {
         this.id = id;
         this.lastName = lastName;
         this.firstName = firstName;
@@ -45,6 +46,7 @@ class Admin {
         this.username = username;
         this.password = password;
         this.status = status;
+        this.adminId = adminId;
     }
 
     public int getId() {
@@ -118,24 +120,39 @@ class Admin {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public int getAdminId() {
+        return adminId;
+    }
+
+    public void setAdminId(int adminId) {
+        this.adminId = adminId;
+    }
 }
+public class CashierPanel extends javax.swing.JPanel {
 
-public class AdminPanel extends javax.swing.JPanel {
-
-    static ArrayList<Admin> admins = new ArrayList<>();
+    static ArrayList<Cashier> cashiers = new ArrayList<>();
     Connection connect = null;
 
     String accountUsername, accountPassword;
+    
+    int accountId;
 
     TableRowSorter<TableModel> sorter;
-
-    public AdminPanel(String username, String password) {
-        initComponents();
+    
+    public CashierPanel(String username, String password) {
+         initComponents();
 
         connect = DatabaseConnection.connectDatabase();
 
         this.accountUsername = username;
         this.accountPassword = password;
+        
+        for (Admin admin : admins){
+            if(accountUsername.equals(admin.getUsername())){
+                accountId = admin.getId();
+            }
+        }
 
         delete.setEnabled(false);
 
@@ -162,13 +179,14 @@ public class AdminPanel extends javax.swing.JPanel {
 
         showDataInTable();
 
-        if(!admins.isEmpty()){
-            id.setText(Integer.toString(admins.get(admins.size() - 1).getId() + 1));
+        
+        if(!cashiers.isEmpty()){
+            id.setText(Integer.toString(cashiers.get(cashiers.size() - 1).getId() + 1));
         }else{
             this.id.setText("1001");
-        }        
+        } 
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -200,7 +218,6 @@ public class AdminPanel extends javax.swing.JPanel {
         delete = new javax.swing.JButton();
         search = new javax.swing.JTextField();
 
-        setPreferredSize(new java.awt.Dimension(820, 540));
         addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 formMouseClicked(evt);
@@ -208,7 +225,7 @@ public class AdminPanel extends javax.swing.JPanel {
         });
 
         listOfAcccountLabel.setFont(new java.awt.Font("sansserif", 1, 28)); // NOI18N
-        listOfAcccountLabel.setText("List of Admin Accounts");
+        listOfAcccountLabel.setText("List of Cashier Accounts");
 
         table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -234,7 +251,7 @@ public class AdminPanel extends javax.swing.JPanel {
         scrollpane.setViewportView(table);
 
         createAccountLabel.setFont(new java.awt.Font("sansserif", 1, 28)); // NOI18N
-        createAccountLabel.setText("Create / Update Admin Account");
+        createAccountLabel.setText("Create / Update Cashier Account");
 
         idLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         idLabel.setText("Account Id:");
@@ -302,9 +319,8 @@ public class AdminPanel extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(40, 40, 40)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(scrollpane, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(statusLabel)
                             .addComponent(idLabel)
@@ -320,7 +336,7 @@ public class AdminPanel extends javax.swing.JPanel {
                             .addComponent(username)
                             .addComponent(address, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(id))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 81, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 84, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(cancel, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -340,21 +356,19 @@ public class AdminPanel extends javax.swing.JPanel {
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                             .addComponent(password)
                                             .addComponent(phonenumber, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(delete, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(49, 49, 49)
-                        .addComponent(listOfAcccountLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(search, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(scrollpane, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(createAccountLabel)
-                        .addGap(149, 149, 149)))
+                        .addComponent(delete, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(listOfAcccountLabel)
+                        .addGap(39, 39, 39)
+                        .addComponent(search, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(32, 32, 32))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(createAccountLabel)
+                .addGap(189, 189, 189))
         );
-
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {address, firstname, lastname, middlename, password, phonenumber, status, username});
-
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
@@ -415,21 +429,21 @@ public class AdminPanel extends javax.swing.JPanel {
     private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
         row = table.getSelectedRow();
 
-        if (admins.get(row).getStatus().equals("Deleted")) {
+        if (cashiers.get(row).getStatus().equals("Deleted")) {
             delete.setEnabled(false);
         } else {
             delete.setEnabled(true);
         }
 
-        id.setText(Integer.toString(admins.get(row).getId()));
-        lastname.setText(admins.get(row).getLastName());
-        firstname.setText(admins.get(row).getFirstName());
-        middlename.setText(admins.get(row).getMiddleName());
-        address.setText(admins.get(row).getAddress());
-        phonenumber.setText(admins.get(row).getPhonNumber());
-        username.setText(admins.get(row).getUsername());
-        password.setText(admins.get(row).getPassword());
-        status.setSelectedItem(admins.get(row).getStatus());
+        id.setText(Integer.toString(cashiers.get(row).getId()));
+        lastname.setText(cashiers.get(row).getLastName());
+        firstname.setText(cashiers.get(row).getFirstName());
+        middlename.setText(cashiers.get(row).getMiddleName());
+        address.setText(cashiers.get(row).getAddress());
+        phonenumber.setText(cashiers.get(row).getPhonNumber());
+        username.setText(cashiers.get(row).getUsername());
+        password.setText(cashiers.get(row).getPassword());
+        status.setSelectedItem(cashiers.get(row).getStatus());
     }//GEN-LAST:event_tableMouseClicked
 
     private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
@@ -443,16 +457,16 @@ public class AdminPanel extends javax.swing.JPanel {
             return;
         }
 
-        String suffix = username.getText().toString().substring( username.getText().toString().indexOf("_") + 1);        
-        if (!suffix.equals("admin")) {
-            JOptionPane.showMessageDialog(null, "Username should have a admin suffix!", "Invalid Username", JOptionPane.ERROR_MESSAGE);
+        String suffix = username.getText().toString().substring(username.getText().toString().indexOf("_") + 1);
+        if (!suffix.equals("cashier")) {
+            JOptionPane.showMessageDialog(null, "Username should have a cashier suffix!", "Invalid Username", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         boolean isUsernameDuplicate = false;
 
-        for (Admin admin : admins) {
-            if (username.getText().equals(admin.getUsername())) {
+        for (Cashier cashier : cashiers) {
+            if (username.getText().equals(cashier.getUsername())) {
                 isUsernameDuplicate = true;
             }
         }
@@ -462,7 +476,7 @@ public class AdminPanel extends javax.swing.JPanel {
         }
 
         JPasswordField passwordField = new JPasswordField();
-        String password = null;
+        String password = "";
         int option = JOptionPane.showConfirmDialog(null, passwordField, "Enter your password", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
 
         if (option == JOptionPane.OK_OPTION) {
@@ -470,9 +484,9 @@ public class AdminPanel extends javax.swing.JPanel {
             if (password != null) {
                 if (password.equals(accountPassword)) {
                     try {
-                        if (Integer.parseInt(id.getText()) > admins.get(admins.size() - 1).getId()) {
+                        if (Integer.parseInt(id.getText()) > cashiers.get(cashiers.size() - 1).getId()) {
                             PreparedStatement insertStatement;
-                            insertStatement = connect.prepareStatement("INSERT IGNORE INTO Admin VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                            insertStatement = connect.prepareStatement("INSERT IGNORE INTO Staff VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
                             insertStatement.setInt(1, Integer.parseInt(id.getText()));
                             insertStatement.setString(2, lastname.getText());
                             insertStatement.setString(3, firstname.getText());
@@ -482,18 +496,20 @@ public class AdminPanel extends javax.swing.JPanel {
                             insertStatement.setString(7, username.getText());
                             insertStatement.setString(8, this.password.getText());
                             insertStatement.setString(9, status.getSelectedItem().toString());
+                            insertStatement.setInt(10, accountId);
 
                             insertStatement.executeUpdate();
 
                             showDataInTable();
 
-                            id.setText(Integer.toString(admins.get(admins.size() - 1).getId() + 1));
+                            id.setText(Integer.toString(cashiers.get(cashiers.size() - 1).getId() + 1));
                             clearTextFields();
 
                             JOptionPane.showMessageDialog(null, "Account Created!", "Create", JOptionPane.INFORMATION_MESSAGE);
                         } else {
-                            PreparedStatement updateStatement = connect.prepareStatement("UPDATE Admin SET admin_id = ?, admin_lastname = ?, admin_firstname = ?,"
-                                    + " admin_middlename = ?, admin_address =  ?, admin_phonenumber = ?, admin_username =  ?, admin_password = ?, admin_status = ? WHERE admin_id = ?");
+                            PreparedStatement updateStatement = connect.prepareStatement("UPDATE Staff SET staff_id = ?, staff_lastname = ?, staff_firstname = ?,"
+                                + " staff_middlename = ?, staff_address =  ?, staff_phonenumber = ?, staff_username =  ?, staff_password = ?, staff_status = ? "
+                                + "admin_id = ? WHERE staff_id = ?");
                             updateStatement.setInt(1, Integer.parseInt(id.getText()));
                             updateStatement.setString(2, lastname.getText());
                             updateStatement.setString(3, firstname.getText());
@@ -503,13 +519,14 @@ public class AdminPanel extends javax.swing.JPanel {
                             updateStatement.setString(7, username.getText());
                             updateStatement.setString(8, this.password.getText());
                             updateStatement.setString(9, status.getSelectedItem().toString());
-                            updateStatement.setInt(10, Integer.parseInt(id.getText()));
+                            updateStatement.setInt(9, accountId);
+                            updateStatement.setInt(11, Integer.parseInt(id.getText()));
 
                             updateStatement.executeUpdate();
 
                             showDataInTable();
 
-                            id.setText(Integer.toString(admins.get(admins.size() - 1).getId() + 1));
+                            id.setText(Integer.toString(cashiers.get(cashiers.size() - 1).getId() + 1));
 
                             clearTextFields();
                             table.clearSelection();
@@ -528,24 +545,7 @@ public class AdminPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_saveActionPerformed
 
-    private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
-        if (table.getSelectedRowCount() > 0) {
-            clearTextFields();
-            table.clearSelection();
-            delete.setEnabled(false);
-        }
-        this.requestFocus();
-    }//GEN-LAST:event_formMouseClicked
-
     private void deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteActionPerformed
-        if (admins.get(table.getSelectedRow()).getUsername().equals("main_admin")) {
-            JOptionPane.showMessageDialog(null, "Main Admin Account can't be deleted!", "Delete", JOptionPane.ERROR_MESSAGE);
-            table.clearSelection();
-            clearTextFields();
-            delete.setEnabled(false);
-            return;
-        }
-
         JPasswordField passwordField = new JPasswordField();
         String password = null;
         int option = JOptionPane.showConfirmDialog(null, passwordField, "Enter your password", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
@@ -562,7 +562,7 @@ public class AdminPanel extends javax.swing.JPanel {
                         for (int row : selectedRows) {
                             int id = Integer.parseInt(table.getValueAt(row, 0).toString());
                             try {
-                                PreparedStatement deleteStatement = connect.prepareStatement("UPDATE Admin SET admin_status = ? WHERE admin_id = ?");
+                                PreparedStatement deleteStatement = connect.prepareStatement("UPDATE Staff SET staff_status = ? WHERE staff_id = ?");
                                 deleteStatement.setString(1, "Deleted");
                                 deleteStatement.setInt(2, id);
 
@@ -591,21 +591,14 @@ public class AdminPanel extends javax.swing.JPanel {
         delete.setEnabled(false);
     }//GEN-LAST:event_searchFocusGained
 
-    public void clearTextFields() {
-        if(!admins.isEmpty()){
-            id.setText(Integer.toString(admins.get(admins.size() - 1).getId() + 1));
-        }else{
-            this.id.setText("1001");
-        } 
-        lastname.setText("");
-        firstname.setText("");
-        middlename.setText("");
-        address.setText("");
-        phonenumber.setText("");
-        username.setText("");
-        password.setText("");
-        status.setSelectedItem("Active");
-    }
+    private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
+        if (table.getSelectedRowCount() > 0) {
+            clearTextFields();
+            table.clearSelection();
+            delete.setEnabled(false);
+        }
+        this.requestFocus();
+    }//GEN-LAST:event_formMouseClicked
 
     public void updateFilter() {
         String text = search.getText();
@@ -623,14 +616,14 @@ public class AdminPanel extends javax.swing.JPanel {
         try {
             Statement statement = connect.createStatement();
 
-            ResultSet selectStatement = statement.executeQuery("SELECT * FROM Admin");
+            ResultSet selectStatement = statement.executeQuery("SELECT * FROM Cashier");
 
-            admins.clear();
+            cashiers.clear();
             while (selectStatement.next()) {
-                admins.add(new Admin(selectStatement.getInt("admin_id"), selectStatement.getString("admin_lastname"),
-                        selectStatement.getString("admin_firstname"), selectStatement.getString("admin_middlename"), selectStatement.getString("admin_address"),
-                        selectStatement.getString("admin_phonenumber"), selectStatement.getString("admin_username"), selectStatement.getString("admin_password"),
-                        selectStatement.getString("admin_status")
+                cashiers.add(new Cashier(selectStatement.getInt("cashier_id"), selectStatement.getString("cashier_lastname"),
+                        selectStatement.getString("cashier_firstname"), selectStatement.getString("cashier_middlename"), selectStatement.getString("cashier_address"),
+                        selectStatement.getString("cashier_phonenumber"), selectStatement.getString("cashier_username"), selectStatement.getString("cashier_password"),
+                        selectStatement.getString("cashier_status"), selectStatement.getInt("admin_id")
                 ));
             }
         } catch (SQLException ex) {
@@ -648,17 +641,17 @@ public class AdminPanel extends javax.swing.JPanel {
 
         model.setRowCount(0);
 
-        for (int i = 0; i < admins.size(); i++) {
-            row[0] = admins.get(i).getId();
-            row[1] = admins.get(i).getFirstName() + " " + admins.get(i).getMiddleName() + " " + admins.get(i).getLastName();
-            row[2] = admins.get(i).getAddress();
-            row[3] = admins.get(i).getPhonNumber();
-            row[4] = admins.get(i).getUsername();
-            row[5] = admins.get(i).getStatus();
+        for (int i = 0; i < cashiers.size(); i++) {
+            row[0] = cashiers.get(i).getId();
+            row[1] = cashiers.get(i).getFirstName() + " " + cashiers.get(i).getMiddleName() + " " + cashiers.get(i).getLastName();
+            row[2] = cashiers.get(i).getAddress();
+            row[3] = cashiers.get(i).getPhonNumber();
+            row[4] = cashiers.get(i).getUsername();
+            row[5] = cashiers.get(i).getStatus();
             model.addRow(row);
         }
-    }
-
+    }  
+    
     public boolean checkUsernamePassword() {
         if (username.getText().equals("") && password.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Username and Password is required!", "Username and Password", JOptionPane.ERROR_MESSAGE);
@@ -671,6 +664,22 @@ public class AdminPanel extends javax.swing.JPanel {
             return false;
         }
         return true;
+    }
+    
+    public void clearTextFields() {
+        if(!cashiers.isEmpty()){
+            id.setText(Integer.toString(cashiers.get(cashiers.size() - 1).getId() + 1));
+        }else{
+            this.id.setText("1001");
+        } 
+        lastname.setText("");
+        firstname.setText("");
+        middlename.setText("");
+        address.setText("");
+        phonenumber.setText("");
+        username.setText("");
+        password.setText("");
+        status.setSelectedItem("Active");
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -702,3 +711,4 @@ public class AdminPanel extends javax.swing.JPanel {
     private javax.swing.JLabel usernameLabel;
     // End of variables declaration//GEN-END:variables
 }
+

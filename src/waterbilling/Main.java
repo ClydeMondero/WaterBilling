@@ -15,13 +15,17 @@ public class Main extends javax.swing.JFrame {
 
         usernameLabel.setText(accountUsername);
         
-        mainTabbedPane.add("Clients", new ClientPanel(accountUsername, accountPassword));
+        String suffix = accountUsername.substring(accountUsername.indexOf("_") + 1);
+        
+        if(!suffix.equals("cashier")){
+             mainTabbedPane.add("Clients", new ClientPanel(accountUsername, accountPassword));
+        }               
         
         mainTabbedPane.add("Invoices", new InvoicePanel(accountUsername, accountPassword));
-
-        int index = accountUsername.indexOf("_");
-        if (!accountUsername.substring(index + 1).equals("staff")) {
-            mainTabbedPane.add("Staffs", new StaffPanel(accountUsername, accountPassword));
+        
+        if (suffix.equals("admin")) {
+            mainTabbedPane.add("Cashier", new CashierPanel(accountUsername, accountPassword));
+            mainTabbedPane.add("Staffs", new StaffPanel(accountUsername, accountPassword));            
         }       
 
         if (accountUsername.equals("main_admin")) {

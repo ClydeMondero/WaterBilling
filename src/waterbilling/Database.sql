@@ -31,7 +31,22 @@ CREATE TABLE IF NOT EXISTS Staff(
 )AUTO_INCREMENT = 1001;
 
 INSERT IGNORE INTO Staff VALUES (1001, 'Madrideo', 'Joseph', 'Manelese', 'Baliuag, Bulacan', '09453268912', 'joseph_staff', '1234joseph', 'Active', 1001);
-INSERT IGNORE INTO Staff VALUES (1002, 'Poma', 'Andrei', 'Vergel De Dios', 'Baliuag, Bulacan', '09487628412', 'poma_staff', '1234poma', 'Active', 1001);
+
+CREATE TABLE IF NOT EXISTS Cashier(
+	cashier_id INT PRIMARY KEY AUTO_INCREMENT, 
+        cashier_lastname VARCHAR(25),
+        cashier_firstname VARCHAR(25),
+        cashier_middlename VARCHAR(25),
+        cashier_address VARCHAR(50),
+        cashier_phonenumber VARCHAR(25),
+	cashier_username VARCHAR(25) UNIQUE, 
+        cashier_password VARCHAR(25),
+        cashier_status SET('Active', 'Deactivated'),
+        admin_id INT,
+        FOREIGN KEY (admin_id) REFERENCES Admin(admin_id)
+)AUTO_INCREMENT = 1001;
+
+INSERT IGNORE INTO Cashier VALUES (1001, 'Poma', 'Andrei', 'Vergel De Dios', 'Baliuag, Bulacan', '09487628412', 'poma_cashier', '1234poma', 'Active', 1001);
 
 CREATE TABLE IF NOT EXISTS Meter(
 	meter_id VARCHAR(6) PRIMARY KEY, 
@@ -63,7 +78,7 @@ CREATE TABLE IF NOT EXISTS Client(
 
 INSERT IGNORE INTO Client (client_id, client_lastname, client_firstname, client_middlename, client_address, client_phonenumber, 
 client_rateclass, meter_id, client_status, staff_id) 
-VALUES (1001, 'Ragos', 'Ryan', 'M', 'Bustos, Bulacan', '09', 'Residential', 123456, 'Connected', 1002);
+VALUES (1001, 'Ragos', 'Ryan', 'M', 'Bustos, Bulacan', '0923358201', 'Residential', 123456, 'Connected', 1001);
 
 CREATE TABLE IF NOT EXISTS Invoice(
 		invoice_id INT PRIMARY KEY AUTO_INCREMENT,                 	
@@ -91,18 +106,12 @@ SELECT * FROM Admin;
 
 SELECT * FROM Staff;
 
+SELECT * FROM Cashier;
+
 SELECT * FROM Client;
 
 SELECT * FROM Meter;
 
 SELECT * FROM Invoice;
-
-SELECT * FROM Invoice
-JOIN Client ON Invoice.client_id = Client.client_id
-JOIN Staff ON Invoice.staff_id = Staff.staff_id;
-
-SELECT * FROM Invoice
-JOIN Client ON Invoice.client_id = Client.client_id
-JOIN Admin ON Invoice.admin_id = Admin.admin_id;
 
 -- DROP DATABASE WaterBilling;

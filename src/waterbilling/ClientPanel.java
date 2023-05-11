@@ -235,7 +235,11 @@ public class ClientPanel extends javax.swing.JPanel {
 
         showDataInTable();
 
-        id.setText(Integer.toString(clients.get(clients.size() - 1).getId() + 1));
+        if(!clients.isEmpty()){
+            id.setText(Integer.toString(clients.get(clients.size() - 1).getId() + 1));
+        }else{
+            this.id.setText("1001");
+        } 
     }
 
     @SuppressWarnings("unchecked")
@@ -867,7 +871,11 @@ public class ClientPanel extends javax.swing.JPanel {
     }
 
     public void clearTextFields() {
-        id.setText(Integer.toString(clients.get(clients.size() - 1).getId() + 1));
+        if(!clients.isEmpty()){
+            id.setText(Integer.toString(clients.get(clients.size() - 1).getId() + 1));
+        }else{
+            this.id.setText("1001");
+        } 
         lastname.setText("");
         firstname.setText("");
         middlename.setText("");
