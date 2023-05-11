@@ -626,8 +626,22 @@ public class CreateInvoice extends javax.swing.JFrame {
         consumption.setText("");
         this.dispose();
     }//GEN-LAST:event_cancelActionPerformed
-
+    
     private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        
+        boolean isInvoicePeriodDuplicate = false;
+
+        for (Invoice invoice : invoices) {
+            if (clientId.getText().equals(Integer.toString(invoice.getClientId())) && dateFormat.format(period.getDate()).equals(invoice.getPeriod())) {
+                isInvoicePeriodDuplicate = true;
+            }
+        }
+        if (isInvoicePeriodDuplicate == true) {
+            JOptionPane.showMessageDialog(null, "Invoice already exist!", "Duplicate Invoice", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+                
         JPasswordField passwordField = new JPasswordField();
         String password = null;
         int option = JOptionPane.showConfirmDialog(null, passwordField, "Enter your password", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
@@ -646,8 +660,7 @@ public class CreateInvoice extends javax.swing.JFrame {
                                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
                         insertStatement.setInt(1, Integer.parseInt(id.getText()));
-                        
-                        dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                                             
                         insertStatement.setString(2, dateFormat.format(period.getDate()));
                         insertStatement.setDouble(3, Double.parseDouble(removeCurrency(basic.getText())));                       
                         insertStatement.setDouble(4, Double.parseDouble(removeCurrency(transitory.getText())));
