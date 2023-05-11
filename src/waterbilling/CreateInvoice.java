@@ -171,9 +171,9 @@ public class CreateInvoice extends javax.swing.JFrame {
         previousreading = new javax.swing.JLabel();
         presentreadingLabel = new javax.swing.JLabel();
         serviceInformationLabel1 = new javax.swing.JLabel();
-        presentreading = new javax.swing.JPasswordField();
+        presentreading = new javax.swing.JTextField();
         consumptionLabel = new javax.swing.JLabel();
-        consumption = new javax.swing.JPasswordField();
+        consumption = new javax.swing.JTextField();
         serviceInformationLabel2 = new javax.swing.JLabel();
         invoicePeriod2 = new javax.swing.JLabel();
         period2 = new javax.swing.JLabel();
@@ -199,6 +199,7 @@ public class CreateInvoice extends javax.swing.JFrame {
         invoicesummarySeparator = new javax.swing.JSeparator();
         sewerageLabel = new javax.swing.JLabel();
         sewerage = new javax.swing.JLabel();
+        consumption1 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -450,7 +451,9 @@ public class CreateInvoice extends javax.swing.JFrame {
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(clientNameLabel)
                                         .addGap(18, 18, 18)
-                                        .addComponent(clientName, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                        .addComponent(clientName, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(consumption1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(beforetaxLabel)
                                 .addGap(18, 18, 18)
@@ -502,12 +505,18 @@ public class CreateInvoice extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(invoicesummarySeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(22, 22, 22)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(clientIdLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(clientId, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(clientNameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(clientName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(28, 28, 28)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(clientIdLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(clientId, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(clientNameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(clientName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(28, 28, 28))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(9, 9, 9)
+                        .addComponent(consumption1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addressLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(address)
@@ -1081,7 +1090,8 @@ public class CreateInvoice extends javax.swing.JFrame {
     private javax.swing.JLabel clientName;
     private javax.swing.JLabel clientNameLabel;
     private javax.swing.JSeparator clientinformationseparator;
-    private javax.swing.JPasswordField consumption;
+    private javax.swing.JTextField consumption;
+    private javax.swing.JTextField consumption1;
     private javax.swing.JLabel consumptionLabel;
     private javax.swing.JLabel environmental;
     private javax.swing.JLabel environmentalLabel;
@@ -1101,7 +1111,7 @@ public class CreateInvoice extends javax.swing.JFrame {
     private javax.swing.JLabel meterreadingDateLabel;
     private com.toedter.calendar.JDateChooser period;
     private javax.swing.JLabel period2;
-    private javax.swing.JPasswordField presentreading;
+    private javax.swing.JTextField presentreading;
     private javax.swing.JLabel presentreadingLabel;
     private javax.swing.JLabel previousreading;
     private javax.swing.JLabel previousreadingLabel;

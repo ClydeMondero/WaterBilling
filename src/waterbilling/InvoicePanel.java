@@ -14,7 +14,8 @@ import static waterbilling.ClientPanel.meters;
 import static waterbilling.AdminPanel.admins;
 import static waterbilling.StaffPanel.staffs;
 
-class Invoice{
+class Invoice {
+
     private int id;
     private double amount;
     private String period;
@@ -96,29 +97,29 @@ class Invoice{
 
     public void setOfficerId(int officerId) {
         this.officerId = officerId;
-    }          
-    
+    }
+
 }
+
 public class InvoicePanel extends javax.swing.JPanel {
 
     Connection connect = null;
-    
+
     static ArrayList<Invoice> invoices = new ArrayList<>();
-    
+
     String accountUsername, accountPassword;
-    
+
     public InvoicePanel(String username, String password) {
         initComponents();
-        
+
         accountUsername = username;
         accountPassword = password;
-        
+
         connect = DatabaseConnection.connectDatabase();
-        
+
         showDataInTable();
     }
 
-    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -234,12 +235,12 @@ public class InvoicePanel extends javax.swing.JPanel {
             Logger.getLogger(AdminPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     DefaultTableModel model;
 
-    public void showDataInTable() { 
+    public void showDataInTable() {
         updateDatas();
-        
+
         model = (DefaultTableModel) table.getModel();
         Object[] row = new Object[6];
 
@@ -247,8 +248,8 @@ public class InvoicePanel extends javax.swing.JPanel {
 
         String clientName = "";
         for (int i = 0; i < invoices.size(); i++) {
-            for (Client client : clients){
-                if(invoices.get(i).getClientId() == client.getId()){
+            for (Client client : clients) {
+                if (invoices.get(i).getClientId() == client.getId()) {
                     clientName = client.getFirstname() + " " + client.getMiddlename() + " " + client.getLastname();
                 }
             }
@@ -261,30 +262,32 @@ public class InvoicePanel extends javax.swing.JPanel {
             model.addRow(row);
         }
     }
-    
+
     private void createInvoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createInvoiceActionPerformed
         String clientName = JOptionPane.showInputDialog(null, "Enter client name: ", "Create Invoice", JOptionPane.QUESTION_MESSAGE);
-        
+
         int id = 0;
         boolean isExisting = false;
-        for(Client c : clients){
-            if(clientName.equals(c.getFirstname() + " " + c.getMiddlename() + " " + c.getLastname())){
-                isExisting = true;
-                id = c.getId();
+        if (!clientName.isEmpty()) {
+            for (Client c : clients) {
+                if (clientName.equals(c.getFirstname() + " " + c.getMiddlename() + " " + c.getLastname())) {
+                    isExisting = true;
+                    id = c.getId();
+                }
+            }
+
+            if (isExisting == false) {
+                JOptionPane.showMessageDialog(null, "Client name not found!", "Create Invoice", JOptionPane.WARNING_MESSAGE);
+            } else {
+                new CreateInvoice(id, accountUsername, accountPassword).setVisible(true);
+                showDataInTable();
             }
         }
-        
-        if(isExisting == false){
-            JOptionPane.showMessageDialog(null, "Client name not found!", "Create Invoice", JOptionPane.WARNING_MESSAGE);
-        }else{
-             new CreateInvoice(id, accountUsername, accountPassword).setVisible(true);
-             showDataInTable();
-        }               
     }//GEN-LAST:event_createInvoiceActionPerformed
 
     private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
-        if (table.getSelectedRowCount() > 0) {            
-            table.clearSelection();            
+        if (table.getSelectedRowCount() > 0) {
+            table.clearSelection();
         }
         this.requestFocus();
     }//GEN-LAST:event_formMouseClicked

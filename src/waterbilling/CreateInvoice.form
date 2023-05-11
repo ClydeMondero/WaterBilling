@@ -152,6 +152,8 @@
                                       <Component id="clientNameLabel" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
                                       <Component id="clientName" min="-2" pref="240" max="-2" attributes="0"/>
+                                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                                      <Component id="consumption1" min="-2" pref="100" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
@@ -224,13 +226,22 @@
                       <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="clientIdLabel" alignment="3" max="32767" attributes="0"/>
-                  <Component id="clientId" alignment="3" max="32767" attributes="0"/>
-                  <Component id="clientNameLabel" alignment="3" max="32767" attributes="0"/>
-                  <Component id="clientName" alignment="3" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="clientIdLabel" alignment="3" max="32767" attributes="0"/>
+                          <Component id="clientId" alignment="3" max="32767" attributes="0"/>
+                          <Component id="clientNameLabel" alignment="3" max="32767" attributes="0"/>
+                          <Component id="clientName" alignment="3" max="32767" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
+                      <Component id="consumption1" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
+                  </Group>
               </Group>
-              <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="addressLabel" alignment="3" max="32767" attributes="0"/>
                   <Component id="address" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -708,6 +719,8 @@
         </Property>
         <Property name="text" type="java.lang.String" value="&#x20b1;0.0"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="consumption1">
     </Component>
   </SubComponents>
 </Form>
