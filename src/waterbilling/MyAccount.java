@@ -424,7 +424,7 @@ public class MyAccount extends javax.swing.JPanel {
                 staffs.add(new Staff(selectStaff.getInt("staff_id"), selectStaff.getString("staff_lastname"),
                         selectStaff.getString("staff_firstname"), selectStaff.getString("staff_middlename"), selectStaff.getString("staff_address"),
                         selectStaff.getString("staff_phonenumber"), selectStaff.getString("staff_username"), selectStaff.getString("staff_password"),
-                        selectStaff.getString("staff_status"), selectStaff.getInt("admin_id")
+                        selectStaff.getString("staff_status")
                 ));
             }
 
@@ -435,7 +435,7 @@ public class MyAccount extends javax.swing.JPanel {
                 cashiers.add(new Cashier(selectCashier.getInt("cashier_id"), selectCashier.getString("cashier_lastname"),
                         selectCashier.getString("cashier_firstname"), selectCashier.getString("cashier_middlename"), selectCashier.getString("cashier_address"),
                         selectCashier.getString("cashier_phonenumber"), selectCashier.getString("cashier_username"), selectCashier.getString("cashier_password"),
-                        selectCashier.getString("cashier_status"), selectCashier.getInt("admin_id")
+                        selectCashier.getString("cashier_status")
                 ));
             }
         } catch (SQLException ex) {

@@ -472,7 +472,7 @@ public class AdminPanel extends javax.swing.JPanel {
                     try {
                         if (Integer.parseInt(id.getText()) > admins.get(admins.size() - 1).getId()) {
                             PreparedStatement insertStatement;
-                            insertStatement = connect.prepareStatement("INSERT IGNORE INTO Admin VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                            insertStatement = connect.prepareStatement("INSERT IGNORE INTO Admin VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1001, 'Created')");
                             insertStatement.setInt(1, Integer.parseInt(id.getText()));
                             insertStatement.setString(2, lastname.getText());
                             insertStatement.setString(3, firstname.getText());
@@ -481,7 +481,7 @@ public class AdminPanel extends javax.swing.JPanel {
                             insertStatement.setString(6, phonenumber.getText());
                             insertStatement.setString(7, username.getText());
                             insertStatement.setString(8, this.password.getText());
-                            insertStatement.setString(9, status.getSelectedItem().toString());
+                            insertStatement.setString(9, status.getSelectedItem().toString());                            
 
                             insertStatement.executeUpdate();
 
@@ -493,7 +493,7 @@ public class AdminPanel extends javax.swing.JPanel {
                             JOptionPane.showMessageDialog(null, "Account Created!", "Create", JOptionPane.INFORMATION_MESSAGE);
                         } else {
                             PreparedStatement updateStatement = connect.prepareStatement("UPDATE Admin SET admin_id = ?, admin_lastname = ?, admin_firstname = ?,"
-                                    + " admin_middlename = ?, admin_address =  ?, admin_phonenumber = ?, admin_username =  ?, admin_password = ?, admin_status = ? WHERE admin_id = ?");
+                                    + " admin_middlename = ?, admin_address =  ?, admin_phonenumber = ?, admin_username =  ?, admin_password = ?, admin_status = ?, main_admin_action = 'Updated' WHERE admin_id = ?");
                             updateStatement.setInt(1, Integer.parseInt(id.getText()));
                             updateStatement.setString(2, lastname.getText());
                             updateStatement.setString(3, firstname.getText());
@@ -562,7 +562,7 @@ public class AdminPanel extends javax.swing.JPanel {
                         for (int row : selectedRows) {
                             int id = Integer.parseInt(table.getValueAt(row, 0).toString());
                             try {
-                                PreparedStatement deleteStatement = connect.prepareStatement("UPDATE Admin SET admin_status = ? WHERE admin_id = ?");
+                                PreparedStatement deleteStatement = connect.prepareStatement("UPDATE Admin SET admin_status = ? main_admin_action = 'Deleted' WHERE admin_id = ?");
                                 deleteStatement.setString(1, "Deleted");
                                 deleteStatement.setInt(2, id);
 

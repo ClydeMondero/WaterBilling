@@ -11,10 +11,14 @@ CREATE TABLE IF NOT EXISTS Admin(
         admin_phonenumber VARCHAR(25),
 	admin_username VARCHAR(25) UNIQUE, 
         admin_password VARCHAR(25),
-        admin_status SET('Active', 'Deactivated', 'Deleted')        
+        admin_status SET('Active', 'Deactivated', 'Deleted'),
+        main_admin_id INT,
+        main_admin_action SET('Created', 'Updated', 'Deleted'),
+        FOREIGN KEY (main_admin_id) REFERENCES Admin(admin_id)
+        
 )AUTO_INCREMENT = 1001;
 
-INSERT IGNORE INTO Admin VALUES (1001, 'Mondero', 'Clyde', 'Cruz', 'Baliuag, Bulacan', '09565317151', 'main_admin', '1234main', 'Active');
+INSERT IGNORE INTO Admin VALUES (1001, 'Mondero', 'Clyde', 'Cruz', 'Baliuag, Bulacan', '09565317151', 'main_admin', '1234main', 'Active', 1001, 'Created');
 
 CREATE TABLE IF NOT EXISTS Staff(
 	staff_id INT PRIMARY KEY AUTO_INCREMENT, 
