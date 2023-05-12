@@ -151,6 +151,8 @@ SELECT * FROM Meter;
 
 SELECT * FROM Invoice;
 
+SELECT admin_id, main_admin_action FROM Admin;
+
 SELECT * FROM AdminsStaffs;
 
 SELECT * FROM AdminsCashiers;

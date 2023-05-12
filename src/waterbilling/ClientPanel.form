@@ -23,79 +23,79 @@
               <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <Component id="createInvoice" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="135" max="-2" attributes="0"/>
-                      <Component id="createAccountLabel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                  </Group>
-                  <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="1" attributes="0">
                           <Component id="scrollpane" alignment="0" max="32767" attributes="0"/>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="statusLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="idLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lastnameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="addressLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="middlenameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="metersizeLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="lastname" linkSize="1" alignment="0" pref="220" max="32767" attributes="0"/>
-                                  <Component id="middlename" linkSize="1" alignment="0" pref="220" max="32767" attributes="0"/>
-                                  <Component id="metersize" linkSize="1" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="address" linkSize="1" alignment="0" pref="220" max="32767" attributes="0"/>
-                                  <Component id="id" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="status" alignment="0" max="32767" attributes="0"/>
-                              </Group>
-                              <EmptySpace pref="86" max="32767" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" alignment="1" attributes="0">
-                                      <Component id="meterreadingLabel" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="meterreading" linkSize="1" min="-2" pref="215" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" alignment="1" attributes="0">
-                                      <Component id="cancel" min="-2" pref="160" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" max="-2" attributes="0"/>
-                                      <Component id="save" min="-2" pref="160" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" alignment="1" attributes="0">
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="meterIdLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Component id="firstnameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Component id="phonenumberLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Component id="rateclassLabel" min="-2" max="-2" attributes="0"/>
-                                      </Group>
-                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="0" attributes="0">
-                                                  <Component id="meterId" linkSize="1" alignment="1" max="32767" attributes="0"/>
-                                                  <Component id="phonenumber" linkSize="1" max="32767" attributes="0"/>
-                                              </Group>
-                                          </Group>
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                                  <Component id="rateclass" linkSize="1" pref="214" max="32767" attributes="0"/>
-                                                  <Component id="firstname" linkSize="1" max="32767" attributes="0"/>
-                                              </Group>
-                                          </Group>
-                                      </Group>
-                                  </Group>
-                              </Group>
-                          </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="delete" min="-2" pref="160" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="111" max="-2" attributes="0"/>
                               <Component id="listOfAcccountLabel" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="32767" attributes="0"/>
+                              <EmptySpace pref="115" max="32767" attributes="0"/>
                               <Component id="search" min="-2" pref="170" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="1" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" alignment="1" attributes="0">
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="statusLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="idLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="lastnameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="middlenameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="metersizeLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="phonenumberLabel" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                                  <Component id="phonenumber" max="32767" attributes="0"/>
+                                  <Component id="lastname" alignment="0" pref="220" max="32767" attributes="0"/>
+                                  <Component id="middlename" alignment="0" pref="220" max="32767" attributes="0"/>
+                                  <Component id="metersize" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="id" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="status" alignment="0" max="32767" attributes="0"/>
+                              </Group>
+                              <EmptySpace max="32767" attributes="0"/>
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Component id="meterIdLabel" min="-2" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Group type="102" alignment="1" attributes="0">
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Component id="firstnameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                              <Component id="rateclassLabel" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                          <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                              <Component id="rateclass" linkSize="1" pref="214" max="32767" attributes="0"/>
+                                              <Component id="firstname" linkSize="1" max="32767" attributes="0"/>
+                                              <Component id="address" linkSize="1" alignment="0" pref="220" max="32767" attributes="0"/>
+                                              <Component id="meterId" linkSize="1" alignment="0" max="32767" attributes="0"/>
+                                          </Group>
+                                      </Group>
+                                      <Component id="addressLabel" min="-2" max="-2" attributes="0"/>
+                                      <Group type="102" alignment="1" attributes="0">
+                                          <Component id="cancel" min="-2" pref="160" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" max="-2" attributes="0"/>
+                                          <Component id="save" min="-2" pref="160" max="-2" attributes="0"/>
+                                      </Group>
+                                  </Group>
+                                  <Group type="102" attributes="0">
+                                      <Component id="meterreadingLabel" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                                      <Component id="meterreading" max="32767" attributes="0"/>
+                                  </Group>
+                              </Group>
                           </Group>
                       </Group>
                       <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <Component id="createInvoice" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="135" max="-2" attributes="0"/>
+                      <Component id="createAccountLabel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
           </Group>
@@ -136,37 +136,33 @@
                           <Component id="middlename" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="middlenameLabel" alignment="3" pref="29" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="address" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="addressLabel" alignment="3" pref="29" max="32767" attributes="0"/>
+                          <Component id="phonenumberLabel" alignment="3" pref="30" max="32767" attributes="0"/>
+                          <Component id="phonenumber" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="meterIdLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="metersize" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="metersizeLabel" alignment="3" pref="32" max="32767" attributes="0"/>
+                          <Component id="meterreadingLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="meterreading" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="firstname" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="firstnameLabel" alignment="3" pref="29" max="32767" attributes="0"/>
+                          <Component id="firstnameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="meterreadingLabel" alignment="3" pref="31" max="32767" attributes="0"/>
-                          <Component id="meterreading" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="phonenumber" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="phonenumberLabel" alignment="3" pref="29" max="32767" attributes="0"/>
+                          <Component id="addressLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="address" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="meterIdLabel" alignment="3" pref="31" max="32767" attributes="0"/>
-                          <Component id="meterId" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
+                      <Component id="meterId" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="49" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
@@ -176,7 +172,7 @@
                   <Component id="cancel" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
                   <Component id="save" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -200,17 +196,23 @@
         <Component class="javax.swing.JTable" name="table">
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-              <Table columnCount="6" rowCount="0">
+              <Table columnCount="7" rowCount="0">
                 <Column editable="false" title="Id" type="java.lang.Object"/>
                 <Column editable="false" title="Name" type="java.lang.Object"/>
                 <Column editable="false" title="Address" type="java.lang.Object"/>
                 <Column editable="false" title="Meter Number" type="java.lang.Object"/>
+                <Column editable="false" title="Consumption" type="java.lang.Object"/>
                 <Column editable="false" title="Rate Class" type="java.lang.Object"/>
                 <Column editable="false" title="Status" type="java.lang.Object"/>
               </Table>
             </Property>
             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
               <TableColumnModel selectionModel="0">
+                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                  <Title/>
+                  <Editor/>
+                  <Renderer/>
+                </Column>
                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                   <Title/>
                   <Editor/>
