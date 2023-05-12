@@ -609,8 +609,7 @@ public class ClientPanel extends javax.swing.JPanel {
                             String suffix = accountUsername.substring(accountUsername.indexOf("_") + 1);
                             if (suffix.equals("admin")) {
                                 insertStatement = connect.prepareStatement("INSERT IGNORE INTO Client (client_id, client_lastname, client_firstname, client_middlename, "
-                                        + "client_address, client_phonenumber, client_rateclass, meter_id, client_status) VALUES (?, '?', '?', '?', "
-                                        + "'?, ?', '?', '?', ?, '?')");
+                                        + "client_address, client_phonenumber, client_rateclass, meter_id, client_status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
                                 insertStatement.setInt(1, Integer.parseInt(id.getText()));
                                 insertStatement.setString(2, lastname.getText());
                                 insertStatement.setString(3, firstname.getText());

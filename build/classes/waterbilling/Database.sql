@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS AdminsStaffs(
         FOREIGN KEY (admin_id) REFERENCES Admin(admin_id)		
 );
 
-INSERT IGNORE INTO AdminsStaffs VALUES(1001, 1001, 'Created');
+INSERT INTO AdminsStaffs VALUES(1001, 1001, 'Created');
 
 CREATE TABLE IF NOT EXISTS Cashier(
 	cashier_id INT PRIMARY KEY AUTO_INCREMENT, 
@@ -76,7 +76,7 @@ CREATE TABLE IF NOT EXISTS Meter(
         meter_consumption INT     
 );
 
-INSERT IGNORE INTO Meter VALUES (123456, 0.5, '2023-06-06', 224, 0);
+INSERT INTO Meter VALUES (123456, 0.5, '2023-06-06', 224, 0);
 
 CREATE TABLE IF NOT EXISTS Client(
 	client_id INT PRIMARY KEY AUTO_INCREMENT, 
@@ -112,8 +112,7 @@ CREATE TABLE IF NOT EXISTS StaffsClients(
         FOREIGN KEY (staff_id) REFERENCES Staff(staff_id)		
 );
 
-INSERT IGNORE INTO StaffsClients VALUES(1001, 1001, 'Created');
-
+INSERT INTO StaffsClients VALUES(1001, 1001, 'Created');
 
 CREATE TABLE IF NOT EXISTS Invoice(
 		invoice_id INT PRIMARY KEY AUTO_INCREMENT,                 	
