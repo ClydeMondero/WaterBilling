@@ -25,12 +25,20 @@ CREATE TABLE IF NOT EXISTS Staff(
         staff_phonenumber VARCHAR(25),
 	staff_username VARCHAR(25) UNIQUE, 
         staff_password VARCHAR(25),
-        staff_status SET('Active', 'Deactivated', 'Deleted'),
-        admin_id INT,
-        FOREIGN KEY (admin_id) REFERENCES Admin(admin_id)
+        staff_status SET('Active', 'Deactivated', 'Deleted')        
 )AUTO_INCREMENT = 1001;
 
-INSERT IGNORE INTO Staff VALUES (1001, 'Madrideo', 'Joseph', 'Manelese', 'Baliuag, Bulacan', '09453268912', 'joseph_staff', '1234joseph', 'Active', 1001);
+INSERT IGNORE INTO Staff VALUES (1001, 'Madrideo', 'Joseph', 'Manelese', 'Baliuag, Bulacan', '09453268912', 'joseph_staff', '1234joseph', 'Active');
+
+CREATE TABLE IF NOT EXISTS AdminsStaffs(		
+        staff_id INT,        
+        admin_id INT,   
+        action SET ('Created', 'Updated', 'Deleted'),
+        FOREIGN KEY (staff_id) REFERENCES Staff(staff_id),        
+        FOREIGN KEY (admin_id) REFERENCES Admin(admin_id)		
+);
+
+INSERT IGNORE INTO AdminsStaffs VALUES(1001, 1001, 'Created');
 
 CREATE TABLE IF NOT EXISTS Cashier(
 	cashier_id INT PRIMARY KEY AUTO_INCREMENT, 
@@ -41,12 +49,20 @@ CREATE TABLE IF NOT EXISTS Cashier(
         cashier_phonenumber VARCHAR(25),
 	cashier_username VARCHAR(25) UNIQUE, 
         cashier_password VARCHAR(25),
-        cashier_status SET('Active', 'Deactivated', 'Deleted'),
-        admin_id INT,
-        FOREIGN KEY (admin_id) REFERENCES Admin(admin_id)
+        cashier_status SET('Active', 'Deactivated', 'Deleted')      
 )AUTO_INCREMENT = 1001;
 
-INSERT IGNORE INTO Cashier VALUES (1001, 'Poma', 'Andrei', 'Vergel De Dios', 'Baliuag, Bulacan', '09487628412', 'poma_cashier', '1234poma', 'Active', 1001);
+INSERT IGNORE INTO Cashier VALUES (1001, 'Poma', 'Andrei', 'Vergel De Dios', 'Baliuag, Bulacan', '09487628412', 'poma_cashier', '1234poma', 'Active');
+
+CREATE TABLE IF NOT EXISTS AdminsCashiers(		
+        cashier_id INT,        
+        admin_id INT,   
+        action SET ('Created', 'Updated', 'Deleted'),
+        FOREIGN KEY (cashier_id) REFERENCES Cashier(cashier_id),        
+        FOREIGN KEY (admin_id) REFERENCES Admin(admin_id)		
+);
+
+INSERT IGNORE INTO AdminsCashiers VALUES(1001, 1001, 'Created');
 
 CREATE TABLE IF NOT EXISTS Meter(
 	meter_id VARCHAR(6) PRIMARY KEY, 
@@ -69,15 +85,20 @@ CREATE TABLE IF NOT EXISTS Client(
         meter_id VARCHAR(6),
         client_status SET('Connected', 'Disconnected', 'Deleted'),
         client_balance DOUBLE,
-        FOREIGN KEY (meter_id) REFERENCES Meter(meter_id),
-        admin_id INT,
-        staff_id INT,
-        FOREIGN KEY (admin_id) REFERENCES Admin(admin_id)     
+        FOREIGN KEY (meter_id) REFERENCES Meter(meter_id)        	
 )AUTO_INCREMENT = 1001;
 
 INSERT IGNORE INTO Client (client_id, client_lastname, client_firstname, client_middlename, client_address, client_phonenumber, 
 client_rateclass, meter_id, client_status) 
 VALUES (1001, 'Ragos', 'Ryan', 'M', 'Bustos, Bulacan', '0923358201', 'Residential', 123456, 'Connected');
+
+CREATE TABLE IF NOT EXISTS AdminsClients(		
+        client_id INT,        
+        admin_id INT,   
+        action SET ('Created', 'Updated', 'Deleted'),
+        FOREIGN KEY (client_id) REFERENCES Client(client_id),        
+        FOREIGN KEY (admin_id) REFERENCES Admin(admin_id)		
+);
 
 CREATE TABLE IF NOT EXISTS StaffsClients(		
         client_id INT,        
@@ -88,6 +109,7 @@ CREATE TABLE IF NOT EXISTS StaffsClients(
 );
 
 INSERT IGNORE INTO StaffsClients VALUES(1001, 1001, 'Created');
+
 
 CREATE TABLE IF NOT EXISTS Invoice(
 		invoice_id INT PRIMARY KEY AUTO_INCREMENT,                 	
@@ -124,6 +146,12 @@ SELECT * FROM Client;
 SELECT * FROM Meter;
 
 SELECT * FROM Invoice;
+
+SELECT * FROM AdminsStaffs;
+
+SELECT * FROM AdminsCashiers;
+
+SELECT * FROM AdminsClients;
 
 SELECT * FROM StaffsClients;
 

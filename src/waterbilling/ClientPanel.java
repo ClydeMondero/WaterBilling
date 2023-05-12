@@ -31,10 +31,9 @@ class Client {
     private String rateclass;
     private String meterId;
     private String status;
-    private double balance;
-    private int officerId;    
+    private double balance;    
 
-    public Client(int id, String lastname, String firstname, String middlename, String address, String phonenumber, String rateclass, String meterId, double balance, String status, int officerId) {
+    public Client(int id, String lastname, String firstname, String middlename, String address, String phonenumber, String rateclass, String meterId, double balance, String status) {
         this.id = id;
         this.lastname = lastname;
         this.firstname = firstname;
@@ -44,8 +43,7 @@ class Client {
         this.rateclass = rateclass;
         this.meterId = meterId;
         this.status = status;
-        this.balance = balance;
-        this.officerId = officerId;
+        this.balance = balance;        
     }
 
     public int getId() {
@@ -120,13 +118,15 @@ class Client {
         this.status = status;
     }
 
-    public int getOfficerId() {
-        return officerId;
+    public double getBalance() {
+        return balance;
     }
 
-    public void setOfficerId(int officerId) {
-        this.officerId = officerId;
+    public void setBalance(double balance) {
+        this.balance = balance;
     }
+
+    
 
 }
 
@@ -235,11 +235,11 @@ public class ClientPanel extends javax.swing.JPanel {
 
         showDataInTable();
 
-        if(!clients.isEmpty()){
+        if (!clients.isEmpty()) {
             id.setText(Integer.toString(clients.get(clients.size() - 1).getId() + 1));
-        }else{
+        } else {
             this.id.setText("1001");
-        } 
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -599,7 +599,7 @@ public class ClientPanel extends javax.swing.JPanel {
                             String suffix = accountUsername.substring(accountUsername.indexOf("_") + 1);
                             if (suffix.equals("admin")) {
                                 insertStatement = connect.prepareStatement("INSERT IGNORE INTO Client (client_id, client_lastname, client_firstname, client_middlename, "
-                                        + "client_address, client_phonenumber, client_rateclass, meter_id, client_status, admin_id) VALUES (?, '?', '?', '?', "
+                                        + "client_address, client_phonenumber, client_rateclass, meter_id, client_status) VALUES (?, '?', '?', '?', "
                                         + "'?, ?', '?', '?', ?, '?')");
                                 insertStatement.setInt(1, Integer.parseInt(id.getText()));
                                 insertStatement.setString(2, lastname.getText());
@@ -610,7 +610,14 @@ public class ClientPanel extends javax.swing.JPanel {
                                 insertStatement.setString(7, rateclass.getSelectedItem().toString());
                                 insertStatement.setString(8, meterId.getText());
                                 insertStatement.setString(9, status.getSelectedItem().toString());
-                                insertStatement.setInt(10, accountId);
+
+                                insertStatement.executeUpdate();
+
+                                insertStatement = connect.prepareStatement("INSERT IGNORE INTO AdminsClients VALUES (?, ?, ?)");
+
+                                insertStatement.setInt(1, Integer.parseInt(id.getText()));
+                                insertStatement.setInt(2, accountId);
+                                insertStatement.setString(3, "Created");
 
                                 insertStatement.executeUpdate();
 
@@ -631,16 +638,16 @@ public class ClientPanel extends javax.swing.JPanel {
                                 insertStatement.setString(6, phonenumber.getText());
                                 insertStatement.setString(7, rateclass.getSelectedItem().toString());
                                 insertStatement.setString(8, meterId.getText());
-                                insertStatement.setString(9, status.getSelectedItem().toString());                                
+                                insertStatement.setString(9, status.getSelectedItem().toString());
 
                                 insertStatement.executeUpdate();
-                                
+
                                 insertStatement = connect.prepareStatement("INSERT IGNORE INTO StaffsClients VALUES (?, ?, ?)");
-                                
+
                                 insertStatement.setInt(1, Integer.parseInt(id.getText()));
                                 insertStatement.setInt(2, accountId);
                                 insertStatement.setString(3, "Created");
-                                
+
                                 insertStatement.executeUpdate();
 
                                 showDataInTable();
@@ -656,7 +663,7 @@ public class ClientPanel extends javax.swing.JPanel {
                                 PreparedStatement updateStatement = connect.prepareStatement("UPDATE Client JOIN Meter ON Client.meter_id = Meter.meter_id "
                                         + "SET  client_id = ?, client_lastname = ?, client_firstname = ?, client_middlename = ?, client_address =  ?, "
                                         + "client_phonenumber = ?, client_rateclass = ?, "
-                                        + "client_status = ?, meter_size = ?, meter_reading = ?, meter_reading_date = ?, admin_id = ?  WHERE client_id = ?");
+                                        + "client_status = ?, meter_size = ?, meter_reading = ?, meter_reading_date = ? WHERE client_id = ?");
                                 updateStatement.setInt(1, Integer.parseInt(id.getText()));
                                 updateStatement.setString(2, lastname.getText());
                                 updateStatement.setString(3, firstname.getText());
@@ -666,20 +673,25 @@ public class ClientPanel extends javax.swing.JPanel {
                                 updateStatement.setString(7, rateclass.getSelectedItem().toString());
                                 updateStatement.setString(8, status.getSelectedItem().toString());
                                 updateStatement.setDouble(9, Double.parseDouble(metersize.getText()));
-                                 updateStatement.setInt(10, Integer.parseInt(meterreading.getText()));                                                            
+                                updateStatement.setInt(10, Integer.parseInt(meterreading.getText()));
 
                                 Date currentDate = new Date();
                                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
                                 java.sql.Date sqlDate = java.sql.Date.valueOf(formatter.format(currentDate));
 
                                 updateStatement.setDate(11, sqlDate);
-                                
-                                updateStatement.setInt(12, accountId);   
 
-                                updateStatement.setInt(13, Integer.parseInt(id.getText()));
+                                updateStatement.setInt(12, Integer.parseInt(id.getText()));
 
                                 updateStatement.executeUpdate();
-                                                                
+
+                                updateStatement = connect.prepareStatement("INSERT IGNORE INTO AdminsClients VALUES (?, ?, ?)");
+
+                                updateStatement.setInt(1, Integer.parseInt(id.getText()));
+                                updateStatement.setInt(2, accountId);
+                                updateStatement.setString(3, "Updated");
+
+                                updateStatement.executeUpdate();
 
                                 showDataInTable();
 
@@ -703,7 +715,7 @@ public class ClientPanel extends javax.swing.JPanel {
                                 updateStatement.setString(6, phonenumber.getText());
                                 updateStatement.setString(7, rateclass.getSelectedItem().toString());
                                 updateStatement.setString(8, status.getSelectedItem().toString());
-                                updateStatement.setDouble(9, Double.parseDouble(metersize.getText()));                                
+                                updateStatement.setDouble(9, Double.parseDouble(metersize.getText()));
                                 updateStatement.setInt(10, Integer.parseInt(meterreading.getText()));
 
                                 Date currentDate = new Date();
@@ -715,13 +727,13 @@ public class ClientPanel extends javax.swing.JPanel {
                                 updateStatement.setInt(12, Integer.parseInt(id.getText()));
 
                                 updateStatement.executeUpdate();
-                                
+
                                 updateStatement = connect.prepareStatement("INSERT IGNORE INTO StaffsClients VALUES (?, ?, ?)");
-                                
+
                                 updateStatement.setInt(1, Integer.parseInt(id.getText()));
                                 updateStatement.setInt(2, accountId);
                                 updateStatement.setString(3, "Updated");
-                                
+
                                 updateStatement.executeUpdate();
 
                                 showDataInTable();
@@ -768,14 +780,22 @@ public class ClientPanel extends javax.swing.JPanel {
                                 deleteStatement.setInt(2, id);
 
                                 deleteStatement.executeUpdate();
-                                
-                                deleteStatement = connect.prepareStatement("INSERT IGNORE INTO StaffsClients VALUES (?, ?, ?)");
-                                
-                                deleteStatement.setInt(1, Integer.parseInt(this.id.getText()));
-                                deleteStatement.setInt(2, accountId);
-                                deleteStatement.setString(3, "Deleted");
-                                
-                                deleteStatement.executeUpdate();
+                                String suffix = accountUsername.substring(accountUsername.indexOf("_") + 1);
+                                if (suffix.equals("staff")) {
+                                    deleteStatement = connect.prepareStatement("INSERT IGNORE INTO StaffsClients VALUES (?, ?, ?)");
+
+                                    deleteStatement.setInt(1, Integer.parseInt(this.id.getText()));
+                                    deleteStatement.setInt(2, accountId);
+                                    deleteStatement.setString(3, "Deleted");
+
+                                    deleteStatement.executeUpdate();
+                                }else if (suffix.equals("admin")){
+                                    deleteStatement = connect.prepareStatement("INSERT IGNORE INTO AdminsClients VALUES (?, ?, ?)");
+
+                                    deleteStatement.setInt(1, Integer.parseInt(this.id.getText()));
+                                    deleteStatement.setInt(2, accountId);
+                                    deleteStatement.setString(3, "Deleted");
+                                }
 
                                 showDataInTable();
                                 clearTextFields();
@@ -812,7 +832,7 @@ public class ClientPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_formMouseClicked
 
     private void createInvoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createInvoiceActionPerformed
-        Object client = table.getValueAt(row, 0);        
+        Object client = table.getValueAt(row, 0);
         new CreateInvoice(Integer.parseInt(client.toString()), accountUsername, accountPassword).setVisible(true);
     }//GEN-LAST:event_createInvoiceActionPerformed
 
@@ -856,14 +876,14 @@ public class ClientPanel extends javax.swing.JPanel {
                 if (suffix.equals("admin")) {
                     clients.add(new Client(selectStatement.getInt("client_id"), selectStatement.getString("client_lastname"),
                             selectStatement.getString("client_firstname"), selectStatement.getString("client_middlename"), selectStatement.getString("client_address"),
-                            selectStatement.getString("client_phonenumber"), selectStatement.getString("client_rateclass"), selectStatement.getString("meter_id"), 
-                            selectStatement.getDouble("client_balance"), selectStatement.getString("client_status"), selectStatement.getInt("admin_id")
+                            selectStatement.getString("client_phonenumber"), selectStatement.getString("client_rateclass"), selectStatement.getString("meter_id"),
+                            selectStatement.getDouble("client_balance"), selectStatement.getString("client_status")
                     ));
-                }else if (suffix.equals("staff")){
+                } else if (suffix.equals("staff")) {
                     clients.add(new Client(selectStatement.getInt("client_id"), selectStatement.getString("client_lastname"),
                             selectStatement.getString("client_firstname"), selectStatement.getString("client_middlename"), selectStatement.getString("client_address"),
-                            selectStatement.getString("client_phonenumber"), selectStatement.getString("client_rateclass"), selectStatement.getString("meter_id"), 
-                            selectStatement.getDouble("client_balance"), selectStatement.getString("client_status"), selectStatement.getInt("staff_id")
+                            selectStatement.getString("client_phonenumber"), selectStatement.getString("client_rateclass"), selectStatement.getString("meter_id"),
+                            selectStatement.getDouble("client_balance"), selectStatement.getString("client_status")
                     ));
                 }
             }
@@ -894,11 +914,11 @@ public class ClientPanel extends javax.swing.JPanel {
     }
 
     public void clearTextFields() {
-        if(!clients.isEmpty()){
+        if (!clients.isEmpty()) {
             id.setText(Integer.toString(clients.get(clients.size() - 1).getId() + 1));
-        }else{
+        } else {
             this.id.setText("1001");
-        } 
+        }
         lastname.setText("");
         firstname.setText("");
         middlename.setText("");

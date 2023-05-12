@@ -26,7 +26,6 @@ class Cashier {
     private String lastName, firstName, middleName, address, phonNumber;
     private String username, password;
     private String status;
-    private int adminId;
 
     public Cashier(int id, String username, String password, String status) {
         this.id = id;
@@ -36,7 +35,7 @@ class Cashier {
     }
 
     public Cashier(int id, String lastName, String firstName, String middleName, String address,
-            String phonNumber, String username, String password, String status, int adminId) {
+            String phonNumber, String username, String password, String status) {
         this.id = id;
         this.lastName = lastName;
         this.firstName = firstName;
@@ -46,7 +45,6 @@ class Cashier {
         this.username = username;
         this.password = password;
         this.status = status;
-        this.adminId = adminId;
     }
 
     public int getId() {
@@ -120,36 +118,29 @@ class Cashier {
     public void setStatus(String status) {
         this.status = status;
     }
-
-    public int getAdminId() {
-        return adminId;
-    }
-
-    public void setAdminId(int adminId) {
-        this.adminId = adminId;
-    }
 }
+
 public class CashierPanel extends javax.swing.JPanel {
 
     static ArrayList<Cashier> cashiers = new ArrayList<>();
     Connection connect = null;
 
     String accountUsername, accountPassword;
-    
+
     int accountId;
 
     TableRowSorter<TableModel> sorter;
-    
+
     public CashierPanel(String username, String password) {
-         initComponents();
+        initComponents();
 
         connect = DatabaseConnection.connectDatabase();
 
         this.accountUsername = username;
         this.accountPassword = password;
-        
-        for (Admin admin : admins){
-            if(accountUsername.equals(admin.getUsername())){
+
+        for (Admin admin : admins) {
+            if (accountUsername.equals(admin.getUsername())) {
                 accountId = admin.getId();
             }
         }
@@ -179,14 +170,13 @@ public class CashierPanel extends javax.swing.JPanel {
 
         showDataInTable();
 
-        
-        if(!cashiers.isEmpty()){
+        if (!cashiers.isEmpty()) {
             id.setText(Integer.toString(cashiers.get(cashiers.size() - 1).getId() + 1));
-        }else{
+        } else {
             this.id.setText("1001");
-        } 
+        }
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -486,7 +476,7 @@ public class CashierPanel extends javax.swing.JPanel {
                     try {
                         if (Integer.parseInt(id.getText()) > cashiers.get(cashiers.size() - 1).getId()) {
                             PreparedStatement insertStatement;
-                            insertStatement = connect.prepareStatement("INSERT IGNORE INTO Staff VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                            insertStatement = connect.prepareStatement("INSERT IGNORE INTO Cashier VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
                             insertStatement.setInt(1, Integer.parseInt(id.getText()));
                             insertStatement.setString(2, lastname.getText());
                             insertStatement.setString(3, firstname.getText());
@@ -500,6 +490,14 @@ public class CashierPanel extends javax.swing.JPanel {
 
                             insertStatement.executeUpdate();
 
+                            insertStatement = connect.prepareStatement("INSERT IGNORE INTO AdminsCashiers VALUES (?, ?, ?)");
+
+                            insertStatement.setInt(1, Integer.parseInt(id.getText()));
+                            insertStatement.setInt(2, accountId);
+                            insertStatement.setString(3, "Created");
+
+                            insertStatement.executeUpdate();
+
                             showDataInTable();
 
                             id.setText(Integer.toString(cashiers.get(cashiers.size() - 1).getId() + 1));
@@ -507,9 +505,9 @@ public class CashierPanel extends javax.swing.JPanel {
 
                             JOptionPane.showMessageDialog(null, "Account Created!", "Create", JOptionPane.INFORMATION_MESSAGE);
                         } else {
-                            PreparedStatement updateStatement = connect.prepareStatement("UPDATE Staff SET staff_id = ?, staff_lastname = ?, staff_firstname = ?,"
-                                + " staff_middlename = ?, staff_address =  ?, staff_phonenumber = ?, staff_username =  ?, staff_password = ?, staff_status = ? "
-                                + "admin_id = ? WHERE staff_id = ?");
+                            PreparedStatement updateStatement = connect.prepareStatement("UPDATE Cashier SET cashier_id = ?, cashier_lastname = ?, cashier_firstname = ?,"
+                                    + " cashier_middlename = ?, cashierf_address =  ?, cashier_phonenumber = ?, cashier_username =  ?, cashier_password = ?, cashier_status = ? "
+                                    + "WHERE cashier_id = ?");
                             updateStatement.setInt(1, Integer.parseInt(id.getText()));
                             updateStatement.setString(2, lastname.getText());
                             updateStatement.setString(3, firstname.getText());
@@ -519,8 +517,15 @@ public class CashierPanel extends javax.swing.JPanel {
                             updateStatement.setString(7, username.getText());
                             updateStatement.setString(8, this.password.getText());
                             updateStatement.setString(9, status.getSelectedItem().toString());
-                            updateStatement.setInt(9, accountId);
-                            updateStatement.setInt(11, Integer.parseInt(id.getText()));
+                            updateStatement.setInt(10, Integer.parseInt(id.getText()));
+
+                            updateStatement.executeUpdate();
+
+                            updateStatement = connect.prepareStatement("INSERT IGNORE INTO AdminsCashiers VALUES (?, ?, ?)");
+
+                            updateStatement.setInt(1, Integer.parseInt(id.getText()));
+                            updateStatement.setInt(2, accountId);
+                            updateStatement.setString(3, "Updated");
 
                             updateStatement.executeUpdate();
 
@@ -562,9 +567,17 @@ public class CashierPanel extends javax.swing.JPanel {
                         for (int row : selectedRows) {
                             int id = Integer.parseInt(table.getValueAt(row, 0).toString());
                             try {
-                                PreparedStatement deleteStatement = connect.prepareStatement("UPDATE Staff SET staff_status = ? WHERE staff_id = ?");
+                                PreparedStatement deleteStatement = connect.prepareStatement("UPDATE Cashier SET cashier_status = ? WHERE cashier_id = ?");
                                 deleteStatement.setString(1, "Deleted");
                                 deleteStatement.setInt(2, id);
+
+                                deleteStatement.executeUpdate();
+
+                                deleteStatement = connect.prepareStatement("INSERT IGNORE INTO AdminsCashiers VALUES (?, ?, ?)");
+
+                                deleteStatement.setInt(1, Integer.parseInt(this.id.getText()));
+                                deleteStatement.setInt(2, accountId);
+                                deleteStatement.setString(3, "Deleted");
 
                                 deleteStatement.executeUpdate();
 
@@ -623,7 +636,7 @@ public class CashierPanel extends javax.swing.JPanel {
                 cashiers.add(new Cashier(selectStatement.getInt("cashier_id"), selectStatement.getString("cashier_lastname"),
                         selectStatement.getString("cashier_firstname"), selectStatement.getString("cashier_middlename"), selectStatement.getString("cashier_address"),
                         selectStatement.getString("cashier_phonenumber"), selectStatement.getString("cashier_username"), selectStatement.getString("cashier_password"),
-                        selectStatement.getString("cashier_status"), selectStatement.getInt("admin_id")
+                        selectStatement.getString("cashier_status")
                 ));
             }
         } catch (SQLException ex) {
@@ -650,8 +663,8 @@ public class CashierPanel extends javax.swing.JPanel {
             row[5] = cashiers.get(i).getStatus();
             model.addRow(row);
         }
-    }  
-    
+    }
+
     public boolean checkUsernamePassword() {
         if (username.getText().equals("") && password.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Username and Password is required!", "Username and Password", JOptionPane.ERROR_MESSAGE);
@@ -665,13 +678,13 @@ public class CashierPanel extends javax.swing.JPanel {
         }
         return true;
     }
-    
+
     public void clearTextFields() {
-        if(!cashiers.isEmpty()){
+        if (!cashiers.isEmpty()) {
             id.setText(Integer.toString(cashiers.get(cashiers.size() - 1).getId() + 1));
-        }else{
+        } else {
             this.id.setText("1001");
-        } 
+        }
         lastname.setText("");
         firstname.setText("");
         middlename.setText("");
@@ -711,4 +724,3 @@ public class CashierPanel extends javax.swing.JPanel {
     private javax.swing.JLabel usernameLabel;
     // End of variables declaration//GEN-END:variables
 }
-
