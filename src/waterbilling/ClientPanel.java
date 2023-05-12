@@ -600,7 +600,7 @@ public class ClientPanel extends javax.swing.JPanel {
                             if (suffix.equals("admin")) {
                                 insertStatement = connect.prepareStatement("INSERT IGNORE INTO Client (client_id, client_lastname, client_firstname, client_middlename, "
                                         + "client_address, client_phonenumber, client_rateclass, meter_id, client_status, admin_id) VALUES (?, '?', '?', '?', "
-                                        + "'?, ?', '?', '?', ?, '?', ?)");
+                                        + "'?, ?', '?', '?', ?, '?')");
                                 insertStatement.setInt(1, Integer.parseInt(id.getText()));
                                 insertStatement.setString(2, lastname.getText());
                                 insertStatement.setString(3, firstname.getText());
@@ -622,8 +622,7 @@ public class ClientPanel extends javax.swing.JPanel {
                                 JOptionPane.showMessageDialog(null, "Client Created!", "Create", JOptionPane.INFORMATION_MESSAGE);
                             } else if (suffix.equals("staff")) {
                                 insertStatement = connect.prepareStatement("INSERT IGNORE INTO Client (client_id, client_lastname, client_firstname, client_middlename, "
-                                        + "client_address, client_phonenumber, client_rateclass, meter_id, client_status, staff_id) VALUES (?, '?', '?', '?', "
-                                        + "'?, ?', '?', '?', ?, '?', ?)");
+                                        + "client_address, client_phonenumber, client_rateclass, meter_id, client_status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
                                 insertStatement.setInt(1, Integer.parseInt(id.getText()));
                                 insertStatement.setString(2, lastname.getText());
                                 insertStatement.setString(3, firstname.getText());
@@ -632,9 +631,16 @@ public class ClientPanel extends javax.swing.JPanel {
                                 insertStatement.setString(6, phonenumber.getText());
                                 insertStatement.setString(7, rateclass.getSelectedItem().toString());
                                 insertStatement.setString(8, meterId.getText());
-                                insertStatement.setString(9, status.getSelectedItem().toString());
-                                insertStatement.setInt(10, accountId);
+                                insertStatement.setString(9, status.getSelectedItem().toString());                                
 
+                                insertStatement.executeUpdate();
+                                
+                                insertStatement = connect.prepareStatement("INSERT IGNORE INTO StaffsClients VALUES (?, ?, ?)");
+                                
+                                insertStatement.setInt(1, Integer.parseInt(id.getText()));
+                                insertStatement.setInt(2, accountId);
+                                insertStatement.setString(3, "Created");
+                                
                                 insertStatement.executeUpdate();
 
                                 showDataInTable();
@@ -660,18 +666,20 @@ public class ClientPanel extends javax.swing.JPanel {
                                 updateStatement.setString(7, rateclass.getSelectedItem().toString());
                                 updateStatement.setString(8, status.getSelectedItem().toString());
                                 updateStatement.setDouble(9, Double.parseDouble(metersize.getText()));
-                                updateStatement.setInt(10, accountId);
-                                updateStatement.setInt(11, Integer.parseInt(meterreading.getText()));
+                                 updateStatement.setInt(10, Integer.parseInt(meterreading.getText()));                                                            
 
                                 Date currentDate = new Date();
                                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
                                 java.sql.Date sqlDate = java.sql.Date.valueOf(formatter.format(currentDate));
 
                                 updateStatement.setDate(11, sqlDate);
+                                
+                                updateStatement.setInt(12, accountId);   
 
-                                updateStatement.setInt(12, Integer.parseInt(id.getText()));
+                                updateStatement.setInt(13, Integer.parseInt(id.getText()));
 
                                 updateStatement.executeUpdate();
+                                                                
 
                                 showDataInTable();
 
@@ -685,8 +693,8 @@ public class ClientPanel extends javax.swing.JPanel {
                             } else if (suffix.equals("staff")) {
                                 PreparedStatement updateStatement = connect.prepareStatement("UPDATE Client JOIN Meter ON Client.meter_id = Meter.meter_id "
                                         + "SET  client_id = ?, client_lastname = ?, client_firstname = ?, client_middlename = ?, client_address =  ?, "
-                                        + "client_phonenumber = ?, client_rateclass = ?, "
-                                        + "client_status = ?, meter_size = ?, meter_reading = ?, meter_reading_date = ?, staff_id = ?  WHERE client_id = ?");
+                                        + "client_phonenumber = ?, client_rateclass = ?, client_status = ?, meter_size = ?, meter_reading = ?, "
+                                        + "meter_reading_date = ? WHERE client_id = ?");
                                 updateStatement.setInt(1, Integer.parseInt(id.getText()));
                                 updateStatement.setString(2, lastname.getText());
                                 updateStatement.setString(3, firstname.getText());
@@ -695,9 +703,8 @@ public class ClientPanel extends javax.swing.JPanel {
                                 updateStatement.setString(6, phonenumber.getText());
                                 updateStatement.setString(7, rateclass.getSelectedItem().toString());
                                 updateStatement.setString(8, status.getSelectedItem().toString());
-                                updateStatement.setDouble(9, Double.parseDouble(metersize.getText()));
-                                updateStatement.setInt(10, accountId);
-                                updateStatement.setInt(11, Integer.parseInt(meterreading.getText()));
+                                updateStatement.setDouble(9, Double.parseDouble(metersize.getText()));                                
+                                updateStatement.setInt(10, Integer.parseInt(meterreading.getText()));
 
                                 Date currentDate = new Date();
                                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -707,6 +714,14 @@ public class ClientPanel extends javax.swing.JPanel {
 
                                 updateStatement.setInt(12, Integer.parseInt(id.getText()));
 
+                                updateStatement.executeUpdate();
+                                
+                                updateStatement = connect.prepareStatement("INSERT IGNORE INTO StaffsClients VALUES (?, ?, ?)");
+                                
+                                updateStatement.setInt(1, Integer.parseInt(id.getText()));
+                                updateStatement.setInt(2, accountId);
+                                updateStatement.setString(3, "Updated");
+                                
                                 updateStatement.executeUpdate();
 
                                 showDataInTable();
@@ -752,6 +767,14 @@ public class ClientPanel extends javax.swing.JPanel {
                                 deleteStatement.setString(1, "Deleted");
                                 deleteStatement.setInt(2, id);
 
+                                deleteStatement.executeUpdate();
+                                
+                                deleteStatement = connect.prepareStatement("INSERT IGNORE INTO StaffsClients VALUES (?, ?, ?)");
+                                
+                                deleteStatement.setInt(1, Integer.parseInt(this.id.getText()));
+                                deleteStatement.setInt(2, accountId);
+                                deleteStatement.setString(3, "Deleted");
+                                
                                 deleteStatement.executeUpdate();
 
                                 showDataInTable();

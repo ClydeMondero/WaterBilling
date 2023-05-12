@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS Admin(
         admin_phonenumber VARCHAR(25),
 	admin_username VARCHAR(25) UNIQUE, 
         admin_password VARCHAR(25),
-        admin_status SET('Active', 'Deactivated')        
+        admin_status SET('Active', 'Deactivated', 'Deleted')        
 )AUTO_INCREMENT = 1001;
 
 INSERT IGNORE INTO Admin VALUES (1001, 'Mondero', 'Clyde', 'Cruz', 'Baliuag, Bulacan', '09565317151', 'main_admin', '1234main', 'Active');
@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS Staff(
         staff_phonenumber VARCHAR(25),
 	staff_username VARCHAR(25) UNIQUE, 
         staff_password VARCHAR(25),
-        staff_status SET('Active', 'Deactivated'),
+        staff_status SET('Active', 'Deactivated', 'Deleted'),
         admin_id INT,
         FOREIGN KEY (admin_id) REFERENCES Admin(admin_id)
 )AUTO_INCREMENT = 1001;
@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS Cashier(
         cashier_phonenumber VARCHAR(25),
 	cashier_username VARCHAR(25) UNIQUE, 
         cashier_password VARCHAR(25),
-        cashier_status SET('Active', 'Deactivated'),
+        cashier_status SET('Active', 'Deactivated', 'Deleted'),
         admin_id INT,
         FOREIGN KEY (admin_id) REFERENCES Admin(admin_id)
 )AUTO_INCREMENT = 1001;
@@ -67,25 +67,34 @@ CREATE TABLE IF NOT EXISTS Client(
         client_phonenumber VARCHAR(25),
 	client_rateclass SET('Residential', 'Semi-Business', 'Business'),  
         meter_id VARCHAR(6),
-        client_status SET('Connected', 'Disconnected'),
+        client_status SET('Connected', 'Disconnected', 'Deleted'),
         client_balance DOUBLE,
         FOREIGN KEY (meter_id) REFERENCES Meter(meter_id),
         admin_id INT,
         staff_id INT,
-        FOREIGN KEY (admin_id) REFERENCES Admin(admin_id),
-        FOREIGN KEY (staff_id) REFERENCES Staff(staff_id)
+        FOREIGN KEY (admin_id) REFERENCES Admin(admin_id)     
 )AUTO_INCREMENT = 1001;
 
 INSERT IGNORE INTO Client (client_id, client_lastname, client_firstname, client_middlename, client_address, client_phonenumber, 
-client_rateclass, meter_id, client_status, staff_id) 
-VALUES (1001, 'Ragos', 'Ryan', 'M', 'Bustos, Bulacan', '0923358201', 'Residential', 123456, 'Connected', 1001);
+client_rateclass, meter_id, client_status) 
+VALUES (1001, 'Ragos', 'Ryan', 'M', 'Bustos, Bulacan', '0923358201', 'Residential', 123456, 'Connected');
+
+CREATE TABLE IF NOT EXISTS StaffsClients(		
+        client_id INT,        
+        staff_id INT,   
+        action SET ('Created', 'Updated', 'Deleted'),
+        FOREIGN KEY (client_id) REFERENCES Client(client_id),        
+        FOREIGN KEY (staff_id) REFERENCES Staff(staff_id)		
+);
+
+INSERT IGNORE INTO StaffsClients VALUES(1001, 1001, 'Created');
 
 CREATE TABLE IF NOT EXISTS Invoice(
 		invoice_id INT PRIMARY KEY AUTO_INCREMENT,                 	
         invoice_period_date DATE,
         invoice_payment DOUBLE,
         invoice_payment_date DATE,
-        invoice_status SET ('Paid', 'UnPaid'),
+        invoice_status SET ('Paid', 'UnPaid', 'Deleted'),
         invoice_basic_charge DOUBLE,
         invoice_transitory_charge DOUBLE,
         invoice_environmental_charge DOUBLE,
@@ -96,9 +105,11 @@ CREATE TABLE IF NOT EXISTS Invoice(
         invoice_amount DOUBLE,
         client_id INT,        
         staff_id INT,
+        cashier_id INT,
         admin_id INT,
         FOREIGN KEY (client_id) REFERENCES Client(client_id),        
         FOREIGN KEY (staff_id) REFERENCES Staff(staff_id),
+        FOREIGN KEY (cashier_id) REFERENCES Cashier (cashier_id),
         FOREIGN KEY (admin_id) REFERENCES Admin(admin_id)        
 )AUTO_INCREMENT = 1001;
 
@@ -113,5 +124,7 @@ SELECT * FROM Client;
 SELECT * FROM Meter;
 
 SELECT * FROM Invoice;
+
+SELECT * FROM StaffsClients;
 
 -- DROP DATABASE WaterBilling;
