@@ -85,10 +85,10 @@ CREATE TABLE IF NOT EXISTS Client(
         client_middlename VARCHAR(25),
         client_address VARCHAR(50) NOT NULL,
         client_phonenumber VARCHAR(25) NOT NULL,
-	client_rateclass SET('Residential', 'Semi-Business', 'Business'),  
-        meter_id VARCHAR(6) NOT NULL,
+	client_rateclass SET('Residential', 'Semi-Business', 'Business'),          
         client_status SET('Connected', 'Disconnected', 'Deleted'),
         client_balance DOUBLE,
+        meter_id VARCHAR(6) NOT NULL,
         FOREIGN KEY (meter_id) REFERENCES Meter(meter_id)        	
 )AUTO_INCREMENT = 1001;
 
