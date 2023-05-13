@@ -129,9 +129,9 @@ CREATE TABLE IF NOT EXISTS Invoice(
         invoice_discount DOUBLE,
         invoice_amount DOUBLE,
         client_id INT NOT NULL,        
-        staff_id INT NOT NULL,
-        cashier_id INT NOT NULL,
-        admin_id INT NOT NULL,
+        staff_id INT, 
+        cashier_id INT,
+        admin_id INT ,
         FOREIGN KEY (client_id) REFERENCES Client(client_id),        
         FOREIGN KEY (staff_id) REFERENCES Staff(staff_id),
         FOREIGN KEY (cashier_id) REFERENCES Cashier (cashier_id),
@@ -159,7 +159,5 @@ SELECT * FROM AdminsCashiers;
 SELECT * FROM AdminsClients;
 
 SELECT * FROM StaffsClients;
-
-SELECT * FROM Invoice JOIN Client ON Invoice.client_id = Client.client_id JOIN Staff ON Invoice.staff_id = Staff.staff_id ;
 
 -- DROP DATABASE WaterBilling;
