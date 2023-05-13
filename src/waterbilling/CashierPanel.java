@@ -505,7 +505,7 @@ public class CashierPanel extends javax.swing.JPanel {
                             JOptionPane.showMessageDialog(null, "Account Created!", "Create", JOptionPane.INFORMATION_MESSAGE);
                         } else {
                             PreparedStatement updateStatement = connect.prepareStatement("UPDATE Cashier SET cashier_id = ?, cashier_lastname = ?, cashier_firstname = ?,"
-                                    + " cashier_middlename = ?, cashierf_address =  ?, cashier_phonenumber = ?, cashier_username =  ?, cashier_password = ?, cashier_status = ? "
+                                    + " cashier_middlename = ?, cashier_address =  ?, cashier_phonenumber = ?, cashier_username =  ?, cashier_password = ?, cashier_status = ? "
                                     + "WHERE cashier_id = ?");
                             updateStatement.setInt(1, Integer.parseInt(id.getText()));
                             updateStatement.setString(2, lastname.getText());
