@@ -802,6 +802,7 @@ public class ClientPanel extends javax.swing.JPanel {
                                     deleteStatement.setInt(1, Integer.parseInt(this.id.getText()));
                                     deleteStatement.setInt(2, accountId);
                                     deleteStatement.setString(3, "Deleted");
+                                    
                                     deleteStatement.executeUpdate();
                                 }                                
                                 

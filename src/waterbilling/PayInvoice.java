@@ -5,8 +5,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.NumberFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import static waterbilling.ClientPanel.clients;
@@ -18,38 +20,45 @@ import static waterbilling.InvoicePanel.invoices;
 public class PayInvoice extends javax.swing.JFrame {
 
     int invoiceId;
-    String accountUsername, accountPassword;        
+    String accountUsername, accountPassword;
 
     Connection connect = null;
 
     SimpleDateFormat dateFormat;
 
     NumberFormat chargeFormat = NumberFormat.getCurrencyInstance();
-    
+
     public PayInvoice(int id, String username, String password) {
         initComponents();
 
         invoiceId = id;
         accountUsername = username;
         accountPassword = password;
-        
+
         connect = DatabaseConnection.connectDatabase();
-        
+
         updateDatas();
-        
+
         this.id.setText(Integer.toString(invoiceId));
-        
-        
-        for(Invoice invoice : invoices){
-            if(invoiceId == invoice.getId()){
+
+        for (Invoice invoice : invoices) {
+            if (invoiceId == invoice.getId()) {
                 invoiceId = invoices.indexOf(invoice);
             }
         }
-        
-        invoicePeriod.setText(invoices.get(invoiceId).getPeriod());                
-        
-        for(Client client : clients){
-            if(invoices.get(invoiceId).getClientId() == client.getId()){
+
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date p = dateFormat.parse((invoices.get(invoiceId).getPeriod()));
+
+            dateFormat = new SimpleDateFormat("MMMM dd yyyy");
+            invoicePeriod.setText(dateFormat.format(p));
+        } catch (ParseException ex) {
+            Logger.getLogger(PayInvoice.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        for (Client client : clients) {
+            if (invoices.get(invoiceId).getClientId() == client.getId()) {
                 clientId.setText(Integer.toString(client.getId()));
                 clientName.setText(client.getFirstname() + " " + client.getMiddlename() + " " + client.getLastname());
                 address.setText(client.getAddress());
@@ -59,15 +68,14 @@ public class PayInvoice extends javax.swing.JFrame {
                         meterId.setText(meter.getId());
                         meterreadingDate.setText(invoicePeriod.getText());
                         meterreading.setText(Integer.toString(meter.getReading()));
-                        consumption.setText(Integer.toString(meter.getConsumption()));                       
+                        consumption.setText(Integer.toString(meter.getConsumption()));
                     }
                 }
             }
         }
-               
+
     }
 
-    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -279,102 +287,92 @@ public class PayInvoice extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(cancel, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(payButton, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(paymentLabel)
-                        .addGap(18, 18, 18)
-                        .addComponent(payment, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(12, 12, 12))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(28, 28, 28)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(serviceInformationLabel)
-                                .addGap(5, 5, 5)
-                                .addComponent(meterinformationSeparator))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(serviceInformationLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(invoicesummarySeparator))
-                            .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(transitorylabel)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(transitory, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(transitorylabel)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(transitory, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addGroup(layout.createSequentialGroup()
+                                                        .addComponent(meterIdLabel)
+                                                        .addGap(18, 18, 18)
+                                                        .addComponent(meterId))
+                                                    .addGroup(layout.createSequentialGroup()
+                                                        .addComponent(meterreadingLabel)
+                                                        .addGap(18, 18, 18)
+                                                        .addComponent(meterreading)))
+                                                .addGap(65, 65, 65)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addGroup(layout.createSequentialGroup()
+                                                        .addComponent(meterreadingDateLabel)
+                                                        .addGap(18, 18, 18)
+                                                        .addComponent(meterreadingDate, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                    .addGroup(layout.createSequentialGroup()
+                                                        .addComponent(consumptionLabel)
+                                                        .addGap(18, 18, 18)
+                                                        .addComponent(consumption))))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(idLabel)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(id)
+                                                .addGap(124, 124, 124)
+                                                .addComponent(invoiceperiodLabel)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(invoicePeriod))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(invoicePeriod2)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(period2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(basiclabel)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(basic, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                     .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addGroup(layout.createSequentialGroup()
+                                                .addComponent(clientIdLabel)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(clientId))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(addressLabel)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(address, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addGap(34, 34, 34)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(rateclassLabel)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(rateclass, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(clientNameLabel)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(clientName, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(serviceInformationLabel)
+                                                .addGap(5, 5, 5)
+                                                .addComponent(meterinformationSeparator))
+                                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                                 .addComponent(serviceInformationLabel2)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(clientinformationseparator))
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addGroup(layout.createSequentialGroup()
-                                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                            .addGroup(layout.createSequentialGroup()
-                                                                .addComponent(meterIdLabel)
-                                                                .addGap(18, 18, 18)
-                                                                .addComponent(meterId))
-                                                            .addGroup(layout.createSequentialGroup()
-                                                                .addComponent(meterreadingLabel)
-                                                                .addGap(18, 18, 18)
-                                                                .addComponent(meterreading)))
-                                                        .addGap(65, 65, 65)
-                                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                            .addGroup(layout.createSequentialGroup()
-                                                                .addComponent(meterreadingDateLabel)
-                                                                .addGap(18, 18, 18)
-                                                                .addComponent(meterreadingDate, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                            .addGroup(layout.createSequentialGroup()
-                                                                .addComponent(consumptionLabel)
-                                                                .addGap(18, 18, 18)
-                                                                .addComponent(consumption))))
-                                                    .addGroup(layout.createSequentialGroup()
-                                                        .addComponent(idLabel)
-                                                        .addGap(18, 18, 18)
-                                                        .addComponent(id)
-                                                        .addGap(124, 124, 124)
-                                                        .addComponent(invoiceperiodLabel)
-                                                        .addGap(18, 18, 18)
-                                                        .addComponent(invoicePeriod))
-                                                    .addGroup(layout.createSequentialGroup()
-                                                        .addComponent(invoicePeriod2)
-                                                        .addGap(18, 18, 18)
-                                                        .addComponent(period2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                        .addComponent(basiclabel)
-                                                        .addGap(18, 18, 18)
-                                                        .addComponent(basic, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                                .addGap(0, 0, Short.MAX_VALUE)))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                                .addComponent(serviceInformationLabel1)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(invoicesummarySeparator)))
+                                        .addGap(17, 17, 17)))
                                 .addComponent(invoicePeriod7))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(clientIdLabel)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(clientId))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(addressLabel)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(address, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(34, 34, 34)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(rateclassLabel)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(rateclass, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(clientNameLabel)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(clientName, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(beforetaxLabel)
                                 .addGap(18, 18, 18)
@@ -407,7 +405,17 @@ public class PayInvoice extends javax.swing.JFrame {
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(sewerageLabel)
                                         .addGap(22, 22, 22)
-                                        .addComponent(sewerage, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
+                                        .addComponent(sewerage, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(22, 22, 22)
+                        .addComponent(cancel, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(payButton, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(paymentLabel)
+                        .addGap(18, 18, 18)
+                        .addComponent(payment, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(12, 12, 12)))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
@@ -545,29 +553,28 @@ public class PayInvoice extends javax.swing.JFrame {
 
             invoices.clear();
             while (selectStatementStaff.next()) {
-                invoices.add(new Invoice(selectStatementStaff.getInt("invoice_id"), selectStatementStaff.getString("invoice_period_date"), 
-                        selectStatementStaff.getDouble("invoice_basic_charge"), selectStatementStaff.getDouble("invoice_transitory_charge"), 
-                        selectStatementStaff.getDouble("invoice_environmental_charge"),selectStatementStaff.getDouble("invoice_maitenance_charge"), 
+                invoices.add(new Invoice(selectStatementStaff.getInt("invoice_id"), selectStatementStaff.getString("invoice_period_date"),
+                        selectStatementStaff.getDouble("invoice_basic_charge"), selectStatementStaff.getDouble("invoice_transitory_charge"),
+                        selectStatementStaff.getDouble("invoice_environmental_charge"), selectStatementStaff.getDouble("invoice_maintenance_charge"),
                         selectStatementStaff.getDouble("invoice_before_tax"), selectStatementStaff.getDouble("invoice_tax"),
                         selectStatementStaff.getDouble("invoice_discount"), selectStatementStaff.getDouble("invoice_amount"),
-                        selectStatementStaff.getDouble("invoice_payment"), selectStatementStaff.getString("invoice_payment_date"), selectStatementStaff.getString("invoice_status"), 
+                        selectStatementStaff.getDouble("invoice_payment"), selectStatementStaff.getString("invoice_payment_date"), selectStatementStaff.getString("invoice_status"),
                         selectStatementStaff.getInt("client_id"), selectStatementStaff.getInt("staff_id")));
             }
             while (selectStatementAdmin.next()) {
-                invoices.add(new Invoice(selectStatementAdmin.getInt("invoice_id"), selectStatementAdmin.getString("invoice_period_date"), 
-                        selectStatementAdmin.getDouble("invoice_basic_charge"), selectStatementAdmin.getDouble("invoice_transitory_charge"), 
-                        selectStatementAdmin.getDouble("invoice_environmental_charge"),selectStatementAdmin.getDouble("invoice_maitenance_charge"), 
+                invoices.add(new Invoice(selectStatementAdmin.getInt("invoice_id"), selectStatementAdmin.getString("invoice_period_date"),
+                        selectStatementAdmin.getDouble("invoice_basic_charge"), selectStatementAdmin.getDouble("invoice_transitory_charge"),
+                        selectStatementAdmin.getDouble("invoice_environmental_charge"), selectStatementAdmin.getDouble("invoice_maintenance_charge"),
                         selectStatementAdmin.getDouble("invoice_before_tax"), selectStatementAdmin.getDouble("invoice_tax"),
                         selectStatementAdmin.getDouble("invoice_discount"), selectStatementAdmin.getDouble("invoice_amount"),
-                        selectStatementAdmin.getDouble("invoice_payment"), selectStatementAdmin.getString("invoice_payment_date"), selectStatementAdmin.getString("invoice_status"), 
+                        selectStatementAdmin.getDouble("invoice_payment"), selectStatementAdmin.getString("invoice_payment_date"), selectStatementAdmin.getString("invoice_status"),
                         selectStatementAdmin.getInt("client_id"), selectStatementAdmin.getInt("admin_id")));
             }
         } catch (SQLException ex) {
             Logger.getLogger(AdminPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }  
-    
-    
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel address;
