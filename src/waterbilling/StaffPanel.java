@@ -642,7 +642,7 @@ public class StaffPanel extends javax.swing.JPanel {
             sorter.setRowFilter(null);
         } else {
             try {
-                sorter.setRowFilter(RowFilter.regexFilter(text));
+                sorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
             } catch (PatternSyntaxException pse) {
             }
         }

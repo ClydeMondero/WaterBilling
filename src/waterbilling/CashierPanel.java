@@ -612,13 +612,13 @@ public class CashierPanel extends javax.swing.JPanel {
         this.requestFocus();
     }//GEN-LAST:event_formMouseClicked
 
-    public void updateFilter() {
+     public void updateFilter() {
         String text = search.getText();
         if (text.length() == 0) {
             sorter.setRowFilter(null);
         } else {
             try {
-                sorter.setRowFilter(RowFilter.regexFilter(text));
+                sorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
             } catch (PatternSyntaxException pse) {
             }
         }
