@@ -29,7 +29,7 @@
                       <EmptySpace min="-2" pref="304" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
-                      <Component id="createInvoice" min="-2" pref="360" max="-2" attributes="0"/>
+                      <Component id="cancel" min="-2" pref="360" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
                       <Component id="payInvoice" min="-2" pref="360" max="-2" attributes="0"/>
                       <EmptySpace pref="36" max="32767" attributes="0"/>
@@ -63,7 +63,7 @@
               </Group>
               <EmptySpace pref="410" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="createInvoice" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
+                  <Component id="cancel" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
                   <Component id="payInvoice" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
@@ -157,12 +157,12 @@
         <Property name="toolTipText" type="java.lang.String" value="Search"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="createInvoice">
+    <Component class="javax.swing.JButton" name="cancel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Create Invoice"/>
+        <Property name="text" type="java.lang.String" value="Cancel"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="createInvoiceActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cancelActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="payInvoice">

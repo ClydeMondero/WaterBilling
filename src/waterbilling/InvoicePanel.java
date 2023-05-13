@@ -178,9 +178,7 @@ public class InvoicePanel extends javax.swing.JPanel {
 
     static ArrayList<Invoice> invoices = new ArrayList<>();
 
-    String accountUsername, accountPassword;
-
-    GroupLayout layout = new javax.swing.GroupLayout(this);
+    String accountUsername, accountPassword;   
 
     TableRowSorter<TableModel> sorter;
 
@@ -211,13 +209,7 @@ public class InvoicePanel extends javax.swing.JPanel {
                 updateFilter();
             }
 
-        });
-
-        String suffix = accountUsername.substring(accountUsername.indexOf("_") + 1);
-        if (suffix.equals("cashier")) {
-            createInvoice.setEnabled(false);
-            createInvoice.setText("Cancel");
-        }
+        });       
 
         showDataInTable();
     }
@@ -230,7 +222,7 @@ public class InvoicePanel extends javax.swing.JPanel {
         table = new javax.swing.JTable();
         listOfAcccountLabel = new javax.swing.JLabel();
         search = new javax.swing.JTextField();
-        createInvoice = new javax.swing.JButton();
+        cancel = new javax.swing.JButton();
         payInvoice = new javax.swing.JButton();
         refresh = new javax.swing.JButton();
 
@@ -268,10 +260,10 @@ public class InvoicePanel extends javax.swing.JPanel {
 
         search.setToolTipText("Search");
 
-        createInvoice.setText("Create Invoice");
-        createInvoice.addActionListener(new java.awt.event.ActionListener() {
+        cancel.setText("Cancel");
+        cancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                createInvoiceActionPerformed(evt);
+                cancelActionPerformed(evt);
             }
         });
 
@@ -289,7 +281,8 @@ public class InvoicePanel extends javax.swing.JPanel {
                 refreshActionPerformed(evt);
             }
         });
-    
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -302,7 +295,7 @@ public class InvoicePanel extends javax.swing.JPanel {
                         .addComponent(listOfAcccountLabel)
                         .addGap(304, 304, 304))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(createInvoice, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cancel, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(27, 27, 27)
                         .addComponent(payInvoice, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(36, Short.MAX_VALUE))))
@@ -326,7 +319,7 @@ public class InvoicePanel extends javax.swing.JPanel {
                     .addComponent(refresh))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 410, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(createInvoice, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cancel, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(payInvoice, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(26, 26, 26))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -415,61 +408,28 @@ public class InvoicePanel extends javax.swing.JPanel {
         }
     }
 
-    private void createInvoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createInvoiceActionPerformed
-        String suffix = accountUsername.substring(accountUsername.indexOf("_") + 1);
-        if (suffix.equals("cashier")) {
-            if (table.getSelectedRowCount() > 0) {
-                table.clearSelection();
-                createInvoice.setEnabled(false);
-                payInvoice.setEnabled(false);
-            }
-            this.requestFocus();
-        } else {
-            String clientName = JOptionPane.showInputDialog(null, "Enter client name: ", "Create Invoice");
-            
-            int id = 0;
-            boolean isExisting = false;
-            if (clientName != null ) {
-                for (Client c : clients) {
-                    if (clientName.equals(c.getFirstname() + " " + c.getMiddlename() + " " + c.getLastname())) {
-                        isExisting = true;
-                        id = c.getId();
-                    }
-                }
-
-                if (isExisting == false) {
-                    JOptionPane.showMessageDialog(null, "Client name not found!", "Create Invoice", JOptionPane.WARNING_MESSAGE);
-                } else {
-                    new CreateInvoice(id, accountUsername, accountPassword).setVisible(true);
-                }
-            } else {
-                JOptionPane.showMessageDialog(null, "Client name is required", "Create Invoice", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
+    private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
+        if (table.getSelectedRowCount() > 0) {
+            table.clearSelection();
+            cancel.setEnabled(false);
+            payInvoice.setEnabled(false);
         }
-    }//GEN-LAST:event_createInvoiceActionPerformed
+        this.requestFocus();
+
+    }//GEN-LAST:event_cancelActionPerformed
 
     private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
         if (table.getSelectedRowCount() > 0) {
             table.clearSelection();
-            String suffix = accountUsername.substring(accountUsername.indexOf("_") + 1);
-            if (suffix.equals("cashier")) {
-                createInvoice.setEnabled(false);
-            } else {
-                createInvoice.setEnabled(true);
-            }
+            cancel.setEnabled(false);
+
             payInvoice.setEnabled(false);
         }
         this.requestFocus();
     }//GEN-LAST:event_formMouseClicked
 
     private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
-        String suffix = accountUsername.substring(accountUsername.indexOf("_") + 1);
-        if (suffix.equals("cashier")) {
-            createInvoice.setEnabled(true);
-        } else {
-            createInvoice.setEnabled(false);
-        }
+        cancel.setEnabled(true);
         payInvoice.setEnabled(true);
     }//GEN-LAST:event_tableMouseClicked
 
@@ -479,7 +439,7 @@ public class InvoicePanel extends javax.swing.JPanel {
 
         new PayInvoice(Integer.parseInt(id.toString()), accountUsername, accountPassword).setVisible(true);
 
-        createInvoice.setEnabled(true);
+        cancel.setEnabled(true);
         payInvoice.setEnabled(false);
 
         showDataInTable();
@@ -491,7 +451,7 @@ public class InvoicePanel extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton createInvoice;
+    private javax.swing.JButton cancel;
     private javax.swing.JLabel listOfAcccountLabel;
     private javax.swing.JButton payInvoice;
     private javax.swing.JButton refresh;

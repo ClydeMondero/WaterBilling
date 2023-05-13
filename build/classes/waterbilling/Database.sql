@@ -160,4 +160,6 @@ SELECT * FROM AdminsClients;
 
 SELECT * FROM StaffsClients;
 
+SELECT * FROM Invoice JOIN Client ON Invoice.client_id = Client.client_id JOIN Staff ON Invoice.staff_id = Staff.staff_id ;
+
 -- DROP DATABASE WaterBilling;
