@@ -476,7 +476,7 @@ public class CashierPanel extends javax.swing.JPanel {
                     try {
                         if (Integer.parseInt(id.getText()) > cashiers.get(cashiers.size() - 1).getId()) {
                             PreparedStatement insertStatement;
-                            insertStatement = connect.prepareStatement("INSERT IGNORE INTO Cashier VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                            insertStatement = connect.prepareStatement("INSERT IGNORE INTO Cashier VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
                             insertStatement.setInt(1, Integer.parseInt(id.getText()));
                             insertStatement.setString(2, lastname.getText());
                             insertStatement.setString(3, firstname.getText());
@@ -485,8 +485,7 @@ public class CashierPanel extends javax.swing.JPanel {
                             insertStatement.setString(6, phonenumber.getText());
                             insertStatement.setString(7, username.getText());
                             insertStatement.setString(8, this.password.getText());
-                            insertStatement.setString(9, status.getSelectedItem().toString());
-                            insertStatement.setInt(10, accountId);
+                            insertStatement.setString(9, status.getSelectedItem().toString());                            
 
                             insertStatement.executeUpdate();
 
