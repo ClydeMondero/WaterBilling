@@ -1,6 +1,5 @@
 package waterbilling;
 
-
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -139,7 +138,7 @@ public class AdminPanel extends javax.swing.JPanel {
 
         delete.setEnabled(false);
 
-        sorter = new TableRowSorter<>(table.getModel());        
+        sorter = new TableRowSorter<>(table.getModel());
         table.setRowSorter(sorter);
 
         search.getDocument().addDocumentListener(new DocumentListener() {
@@ -162,11 +161,11 @@ public class AdminPanel extends javax.swing.JPanel {
 
         showDataInTable();
 
-        if(!admins.isEmpty()){
+        if (!admins.isEmpty()) {
             id.setText(Integer.toString(admins.get(admins.size() - 1).getId() + 1));
-        }else{
+        } else {
             this.id.setText("1001");
-        }        
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -443,7 +442,7 @@ public class AdminPanel extends javax.swing.JPanel {
             return;
         }
 
-        String suffix = username.getText().toString().substring( username.getText().toString().indexOf("_") + 1);        
+        String suffix = username.getText().toString().substring(username.getText().toString().indexOf("_") + 1);
         if (!suffix.equals("admin")) {
             JOptionPane.showMessageDialog(null, "Username should have a admin suffix!", "Invalid Username", JOptionPane.ERROR_MESSAGE);
             return;
@@ -481,7 +480,7 @@ public class AdminPanel extends javax.swing.JPanel {
                             insertStatement.setString(6, phonenumber.getText());
                             insertStatement.setString(7, username.getText());
                             insertStatement.setString(8, this.password.getText());
-                            insertStatement.setString(9, status.getSelectedItem().toString());                            
+                            insertStatement.setString(9, status.getSelectedItem().toString());
 
                             insertStatement.executeUpdate();
 
@@ -592,11 +591,11 @@ public class AdminPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_searchFocusGained
 
     public void clearTextFields() {
-        if(!admins.isEmpty()){
+        if (!admins.isEmpty()) {
             id.setText(Integer.toString(admins.get(admins.size() - 1).getId() + 1));
-        }else{
+        } else {
             this.id.setText("1001");
-        } 
+        }
         lastname.setText("");
         firstname.setText("");
         middlename.setText("");
@@ -613,7 +612,7 @@ public class AdminPanel extends javax.swing.JPanel {
             sorter.setRowFilter(null);
         } else {
             try {
-                sorter.setRowFilter(RowFilter.regexFilter(text));
+                sorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
             } catch (PatternSyntaxException pse) {
             }
         }
