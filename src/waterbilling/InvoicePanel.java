@@ -425,11 +425,11 @@ public class InvoicePanel extends javax.swing.JPanel {
             }
             this.requestFocus();
         } else {
-            String clientName = JOptionPane.showInputDialog(null, "Enter client name: ", "Create Invoice", JOptionPane.QUESTION_MESSAGE);
-
+            String clientName = JOptionPane.showInputDialog(null, "Enter client name: ", "Create Invoice");
+            
             int id = 0;
             boolean isExisting = false;
-            if (!clientName.isEmpty()) {
+            if (clientName != null ) {
                 for (Client c : clients) {
                     if (clientName.equals(c.getFirstname() + " " + c.getMiddlename() + " " + c.getLastname())) {
                         isExisting = true;

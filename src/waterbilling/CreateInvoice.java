@@ -699,7 +699,8 @@ public class CreateInvoice extends javax.swing.JFrame {
                     }
 
                     updateDatas();
-
+                    
+                    System.out.println(invoices.size());
                     id.setText(Integer.toString(invoices.get(invoices.size() - 1).getId() + 1));
                     this.dispose();                                                          
 
