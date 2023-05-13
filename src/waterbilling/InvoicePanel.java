@@ -231,6 +231,11 @@ public class InvoicePanel extends javax.swing.JPanel {
                 formMouseClicked(evt);
             }
         });
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                formComponentShown(evt);
+            }
+        });
 
         table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -444,6 +449,10 @@ public class InvoicePanel extends javax.swing.JPanel {
 
         showDataInTable();
     }//GEN-LAST:event_payInvoiceActionPerformed
+
+    private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
+         showDataInTable();
+    }//GEN-LAST:event_formComponentShown
 
     private void refreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshActionPerformed
         showDataInTable();

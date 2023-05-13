@@ -39,10 +39,11 @@ CREATE TABLE IF NOT EXISTS AdminsStaffs(
         admin_id INT NOT NULL,   
         action SET ('Created', 'Updated', 'Deleted'),
         FOREIGN KEY (staff_id) REFERENCES Staff(staff_id),        
-        FOREIGN KEY (admin_id) REFERENCES Admin(admin_id)		
+        FOREIGN KEY (admin_id) REFERENCES Admin(admin_id),
+        UNIQUE (staff_id, admin_id, action)
 );
 
-INSERT INTO AdminsStaffs VALUES(1001, 1001, 'Created');
+INSERT IGNORE INTO AdminsStaffs VALUES(1001, 1001, 'Created');
 
 CREATE TABLE IF NOT EXISTS Cashier(
 	cashier_id INT PRIMARY KEY AUTO_INCREMENT, 
@@ -63,7 +64,8 @@ CREATE TABLE IF NOT EXISTS AdminsCashiers(
         admin_id INT NOT NULL,   
         action SET ('Created', 'Updated', 'Deleted'),
         FOREIGN KEY (cashier_id) REFERENCES Cashier(cashier_id),        
-        FOREIGN KEY (admin_id) REFERENCES Admin(admin_id)		
+        FOREIGN KEY (admin_id) REFERENCES Admin(admin_id),
+        UNIQUE (cashier_id, admin_id, action)
 );
 
 INSERT IGNORE INTO AdminsCashiers VALUES(1001, 1001, 'Created');
@@ -76,7 +78,7 @@ CREATE TABLE IF NOT EXISTS Meter(
         meter_consumption INT     
 );
 
-INSERT INTO Meter VALUES (123456, 0.5, '2023-06-06', 224, 0);
+INSERT IGNORE INTO Meter VALUES (123456, 0.5, '2023-06-06', 224, 0);
 
 CREATE TABLE IF NOT EXISTS Client(
 	client_id INT PRIMARY KEY AUTO_INCREMENT, 
@@ -85,7 +87,7 @@ CREATE TABLE IF NOT EXISTS Client(
         client_middlename VARCHAR(25),
         client_address VARCHAR(50) NOT NULL,
         client_phonenumber VARCHAR(25) NOT NULL,
-	client_rateclass SET('Residential', 'Semi-Business', 'Business'),          
+	client_rateclass SET('Residential', 'Semi-Business', 'Business Group'),          
         client_status SET('Connected', 'Disconnected', 'Deleted'),
         client_balance DOUBLE,
         meter_id VARCHAR(6) NOT NULL,
@@ -101,7 +103,8 @@ CREATE TABLE IF NOT EXISTS AdminsClients(
         admin_id INT NOT NULL,   
         action SET ('Created', 'Updated', 'Deleted'),
         FOREIGN KEY (client_id) REFERENCES Client(client_id),        
-        FOREIGN KEY (admin_id) REFERENCES Admin(admin_id)		
+        FOREIGN KEY (admin_id) REFERENCES Admin(admin_id),
+		UNIQUE (client_id, admin_id, action)
 );
 
 CREATE TABLE IF NOT EXISTS StaffsClients(		
@@ -109,10 +112,11 @@ CREATE TABLE IF NOT EXISTS StaffsClients(
         staff_id INT NOT NULL,   
         action SET ('Created', 'Updated', 'Deleted'),
         FOREIGN KEY (client_id) REFERENCES Client(client_id),        
-        FOREIGN KEY (staff_id) REFERENCES Staff(staff_id)		
+        FOREIGN KEY (staff_id) REFERENCES Staff(staff_id),
+        UNIQUE (client_id, staff_id, action)
 );
 
-INSERT INTO StaffsClients VALUES(1001, 1001, 'Created');
+INSERT IGNORE INTO StaffsClients VALUES(1001, 1001, 'Created');
 
 CREATE TABLE IF NOT EXISTS Invoice(
 		invoice_id INT PRIMARY KEY AUTO_INCREMENT,                 	

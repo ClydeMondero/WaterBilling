@@ -311,6 +311,11 @@ public class ClientPanel extends javax.swing.JPanel {
 
         createAccountLabel.setFont(new java.awt.Font("sansserif", 1, 28)); // NOI18N
         createAccountLabel.setText("Create / Update a Client ");
+        createAccountLabel.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                createAccountLabelComponentShown(evt);
+            }
+        });
 
         idLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         idLabel.setText("Account Id:");
@@ -454,14 +459,10 @@ public class ClientPanel extends javax.swing.JPanel {
                                 .addGap(18, 18, 18)
                                 .addComponent(meterreading))))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(createAccountLabel)
-                                .addGap(163, 163, 163))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(createInvoice)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(createInvoice)
+                        .addGap(104, 104, 104)
+                        .addComponent(createAccountLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(refresh)))
                 .addGap(32, 32, 32))
         );
@@ -848,6 +849,10 @@ public class ClientPanel extends javax.swing.JPanel {
     private void refreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshActionPerformed
         showDataInTable();
     }//GEN-LAST:event_refreshActionPerformed
+
+    private void createAccountLabelComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_createAccountLabelComponentShown
+        showDataInTable();
+    }//GEN-LAST:event_createAccountLabelComponentShown
 
     public boolean checkTextFields() {
         if (lastname.getText().equals("") && firstname.getText().equals("") && address.getText().equals("") && phonenumber.getText().equals("")
