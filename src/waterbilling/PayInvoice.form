@@ -71,7 +71,7 @@
                                               <EmptySpace min="-2" pref="124" max="-2" attributes="0"/>
                                               <Component id="invoiceperiodLabel" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace type="separate" max="-2" attributes="0"/>
-                                              <Component id="invoicePeriod" min="-2" max="-2" attributes="0"/>
+                                              <Component id="period" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                           <Group type="102" alignment="0" attributes="0">
                                               <Component id="invoicePeriod2" min="-2" max="-2" attributes="0"/>
@@ -163,7 +163,7 @@
                                   <Group type="102" alignment="0" attributes="0">
                                       <Component id="totalamountLabel" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="totalamount" min="-2" pref="100" max="-2" attributes="0"/>
+                                      <Component id="amount" min="-2" pref="100" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
                                       <Component id="maintenanceLabel" min="-2" max="-2" attributes="0"/>
@@ -210,7 +210,7 @@
                   <Component id="idLabel" alignment="3" max="32767" attributes="0"/>
                   <Component id="id" alignment="3" max="32767" attributes="0"/>
                   <Component id="invoiceperiodLabel" alignment="3" max="32767" attributes="0"/>
-                  <Component id="invoicePeriod" alignment="3" max="32767" attributes="0"/>
+                  <Component id="period" alignment="3" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
@@ -322,7 +322,7 @@
                       <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="totalamountLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="totalamount" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="amount" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
@@ -644,7 +644,7 @@
         <Property name="text" type="java.lang.String" value="Total Amount:"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="totalamount">
+    <Component class="javax.swing.JLabel" name="amount">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Segoe UI" size="14" style="0"/>
@@ -692,12 +692,12 @@
         <Property name="text" type="java.lang.String" value="&#x20b1;0.0"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="invoicePeriod">
+    <Component class="javax.swing.JLabel" name="period">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Segoe UI" size="14" style="0"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Period"/>
+        <Property name="text" type="java.lang.String" value="Invoice Period"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="consumption">

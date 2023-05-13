@@ -282,6 +282,11 @@ public class ClientPanel extends javax.swing.JPanel {
                 formMouseClicked(evt);
             }
         });
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                formComponentShown(evt);
+            }
+        });
 
         listOfAcccountLabel.setFont(new java.awt.Font("sansserif", 1, 28)); // NOI18N
         listOfAcccountLabel.setText("List of Clients ");
@@ -311,11 +316,6 @@ public class ClientPanel extends javax.swing.JPanel {
 
         createAccountLabel.setFont(new java.awt.Font("sansserif", 1, 28)); // NOI18N
         createAccountLabel.setText("Create / Update a Client ");
-        createAccountLabel.addComponentListener(new java.awt.event.ComponentAdapter() {
-            public void componentShown(java.awt.event.ComponentEvent evt) {
-                createAccountLabelComponentShown(evt);
-            }
-        });
 
         idLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         idLabel.setText("Account Id:");
@@ -850,9 +850,9 @@ public class ClientPanel extends javax.swing.JPanel {
         showDataInTable();
     }//GEN-LAST:event_refreshActionPerformed
 
-    private void createAccountLabelComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_createAccountLabelComponentShown
+    private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
         showDataInTable();
-    }//GEN-LAST:event_createAccountLabelComponentShown
+    }//GEN-LAST:event_formComponentShown
 
     public boolean checkTextFields() {
         if (lastname.getText().equals("") && firstname.getText().equals("") && address.getText().equals("") && phonenumber.getText().equals("")

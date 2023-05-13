@@ -26,18 +26,22 @@ class Invoice {
 
     private int id;
     private String period;
-    private double basic, transitory, environmental, maintenance, before, tax, discount, amount;
+    private int reading, consumption;
+    private double basic, transitory, environmental, sewerage, maintenance, before, tax, discount, amount;
     private double payment;
     private String paymentDate;
     private String status;
     private int clientId, officerId;
 
-    public Invoice(int id, String period, double basic, double transitory, double environmental, double maintenance, double before, double tax, double discount, double amount, double payment, String paymentDate, String status, int clientId, int officerId) {
+    public Invoice(int id, String period, int reading, int consumption, double basic, double transitory, double environmental, double sewerage, double maintenance, double before, double tax, double discount, double amount, double payment, String paymentDate, String status, int clientId, int officerId) {
         this.id = id;
         this.period = period;
+        this.reading = reading;
+        this.consumption = consumption;
         this.basic = basic;
         this.transitory = transitory;
         this.environmental = environmental;
+        this.sewerage = sewerage;
         this.maintenance = maintenance;
         this.before = before;
         this.tax = tax;
@@ -66,6 +70,22 @@ class Invoice {
         this.period = period;
     }
 
+    public int getReading() {
+        return reading;
+    }
+
+    public void setReading(int reading) {
+        this.reading = reading;
+    }
+
+    public int getConsumption() {
+        return consumption;
+    }
+
+    public void setConsumption(int consumption) {
+        this.consumption = consumption;
+    }
+
     public double getBasic() {
         return basic;
     }
@@ -89,6 +109,14 @@ class Invoice {
     public void setEnvironmental(double environmental) {
         this.environmental = environmental;
     }
+
+    public double getSewerage() {
+        return sewerage;
+    }
+
+    public void setSewerage(double sewerage) {
+        this.sewerage = sewerage;
+    }        
 
     public double getMaintenance() {
         return maintenance;
@@ -178,7 +206,7 @@ public class InvoicePanel extends javax.swing.JPanel {
 
     static ArrayList<Invoice> invoices = new ArrayList<>();
 
-    String accountUsername, accountPassword;   
+    String accountUsername, accountPassword;
 
     TableRowSorter<TableModel> sorter;
 
@@ -209,7 +237,7 @@ public class InvoicePanel extends javax.swing.JPanel {
                 updateFilter();
             }
 
-        });       
+        });
 
         showDataInTable();
     }
@@ -352,19 +380,21 @@ public class InvoicePanel extends javax.swing.JPanel {
 
             invoices.clear();
             while (selectStatementStaff.next()) {
-                invoices.add(new Invoice(selectStatementStaff.getInt("invoice_id"), selectStatementStaff.getString("invoice_period_date"),
+                invoices.add(new Invoice(selectStatementStaff.getInt("invoice_id"), selectStatementStaff.getString("invoice_period_date"), 
+                        selectStatementStaff.getInt("invoice_reading"), selectStatementStaff.getInt("invoice_consumption"),
                         selectStatementStaff.getDouble("invoice_basic_charge"), selectStatementStaff.getDouble("invoice_transitory_charge"),
-                        selectStatementStaff.getDouble("invoice_environmental_charge"), selectStatementStaff.getDouble("invoice_maintenance_charge"),
-                        selectStatementStaff.getDouble("invoice_before_tax"), selectStatementStaff.getDouble("invoice_tax"),
+                        selectStatementStaff.getDouble("invoice_environmental_charge"), selectStatementStaff.getDouble("invoice_sewerage_charge"),
+                        selectStatementStaff.getDouble("invoice_maintenance_charge"), selectStatementStaff.getDouble("invoice_before_tax"), selectStatementStaff.getDouble("invoice_tax"),
                         selectStatementStaff.getDouble("invoice_discount"), selectStatementStaff.getDouble("invoice_amount"),
                         selectStatementStaff.getDouble("invoice_payment"), selectStatementStaff.getString("invoice_payment_date"), selectStatementStaff.getString("invoice_status"),
                         selectStatementStaff.getInt("client_id"), selectStatementStaff.getInt("staff_id")));
             }
             while (selectStatementAdmin.next()) {
                 invoices.add(new Invoice(selectStatementAdmin.getInt("invoice_id"), selectStatementAdmin.getString("invoice_period_date"),
+                        selectStatementAdmin.getInt("invoice_reading"), selectStatementAdmin.getInt("invoice_consumption"),
                         selectStatementAdmin.getDouble("invoice_basic_charge"), selectStatementAdmin.getDouble("invoice_transitory_charge"),
-                        selectStatementAdmin.getDouble("invoice_environmental_charge"), selectStatementAdmin.getDouble("invoice_maintenance_charge"),
-                        selectStatementAdmin.getDouble("invoice_before_tax"), selectStatementAdmin.getDouble("invoice_tax"),
+                        selectStatementAdmin.getDouble("invoice_environmental_charge"), selectStatementAdmin.getDouble("invoice_sewerage_charge")
+                        , selectStatementAdmin.getDouble("invoice_maintenance_charge"), selectStatementAdmin.getDouble("invoice_before_tax"), selectStatementAdmin.getDouble("invoice_tax"),
                         selectStatementAdmin.getDouble("invoice_discount"), selectStatementAdmin.getDouble("invoice_amount"),
                         selectStatementAdmin.getDouble("invoice_payment"), selectStatementAdmin.getString("invoice_payment_date"), selectStatementAdmin.getString("invoice_status"),
                         selectStatementAdmin.getInt("client_id"), selectStatementAdmin.getInt("admin_id")));
@@ -451,7 +481,7 @@ public class InvoicePanel extends javax.swing.JPanel {
     }//GEN-LAST:event_payInvoiceActionPerformed
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
-         showDataInTable();
+        showDataInTable();
     }//GEN-LAST:event_formComponentShown
 
     private void refreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshActionPerformed

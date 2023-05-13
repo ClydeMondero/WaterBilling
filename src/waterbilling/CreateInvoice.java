@@ -655,23 +655,27 @@ public class CreateInvoice extends javax.swing.JFrame {
                     PreparedStatement updateStatement;
                     try {
                         insertStatement = connect.prepareStatement("INSERT IGNORE INTO Invoice (invoice_id, "
-                                + "invoice_period_date, invoice_basic_charge, invoice_transitory_charge, invoice_environmental_charge, invoice_maintenance_charge, "
+                                + "invoice_period_date, invoice_reading, invoice_consumption, invoice_basic_charge, invoice_transitory_charge, invoice_environmental_charge, "
+                                + "invoice_sewerage_charge, invoice_maintenance_charge, "
                                 + "invoice_before_tax, invoice_tax, invoice_discount, invoice_amount, invoice_status, client_id, admin_id)"
-                                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
                         insertStatement.setInt(1, Integer.parseInt(id.getText()));
 
                         insertStatement.setString(2, dateFormat.format(period.getDate()));
-                        insertStatement.setDouble(3, Double.parseDouble(removeCurrency(basic.getText())));
-                        insertStatement.setDouble(4, Double.parseDouble(removeCurrency(transitory.getText())));
-                        insertStatement.setDouble(5, Double.parseDouble(removeCurrency(environmental.getText())));
-                        insertStatement.setDouble(6, Double.parseDouble(removeCurrency(maintenance.getText())));
-                        insertStatement.setDouble(7, Double.parseDouble(removeCurrency(beforeTax.getText())));
-                        insertStatement.setDouble(8, Double.parseDouble(removeCurrency(tax.getText())));
-                        insertStatement.setDouble(9, Double.parseDouble(removeCurrency(discount.getText())));
-                        insertStatement.setDouble(10, Double.parseDouble(removeCurrency(amount.getText())));
-                        insertStatement.setString(11, "UnPaid");
-                        insertStatement.setInt(12, client);
+                        insertStatement.setInt(3, Integer.parseInt(presentreading.getText()));
+                        insertStatement.setInt(4, Integer.parseInt(consumption.getText()));
+                        insertStatement.setDouble(5, Double.parseDouble(removeCurrency(basic.getText())));
+                        insertStatement.setDouble(6, Double.parseDouble(removeCurrency(transitory.getText())));
+                        insertStatement.setDouble(7, Double.parseDouble(removeCurrency(environmental.getText())));
+                        insertStatement.setDouble(8, Double.parseDouble(removeCurrency(sewerage.getText())));
+                        insertStatement.setDouble(9, Double.parseDouble(removeCurrency(maintenance.getText())));
+                        insertStatement.setDouble(10, Double.parseDouble(removeCurrency(beforeTax.getText())));
+                        insertStatement.setDouble(11, Double.parseDouble(removeCurrency(tax.getText())));
+                        insertStatement.setDouble(12, Double.parseDouble(removeCurrency(discount.getText())));
+                        insertStatement.setDouble(13, Double.parseDouble(removeCurrency(amount.getText())));
+                        insertStatement.setString(14, "UnPaid");
+                        insertStatement.setInt(15, client);
 
                         int adminId = 0;
                         for (Admin admin : admins) {
@@ -680,7 +684,7 @@ public class CreateInvoice extends javax.swing.JFrame {
                             }
                         }
                                                 
-                        insertStatement.setInt(13, adminId);
+                        insertStatement.setInt(16, adminId);
 
                         insertStatement.executeUpdate();
 
@@ -717,24 +721,27 @@ public class CreateInvoice extends javax.swing.JFrame {
                     PreparedStatement updateStatement;
                     try {
                         insertStatement = connect.prepareStatement("INSERT IGNORE INTO Invoice (invoice_id, "
-                                + "invoice_period_date, invoice_basic_charge, invoice_transitory_charge, invoice_environmental_charge, invoice_maintenance_charge, "
+                                + "invoice_period_date, invoice_reading, invoice_consumption, invoice_basic_charge, invoice_transitory_charge, invoice_environmental_charge, "
+                                + "invoice_sewerage_charge, invoice_maintenance_charge, "
                                 + "invoice_before_tax, invoice_tax, invoice_discount, invoice_amount, invoice_status, client_id, staff_id)"
-                                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
                         insertStatement.setInt(1, Integer.parseInt(id.getText()));
 
-                        dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                         insertStatement.setString(2, dateFormat.format(period.getDate()));
-                        insertStatement.setDouble(3, Double.parseDouble(removeCurrency(basic.getText())));
-                        insertStatement.setDouble(4, Double.parseDouble(removeCurrency(transitory.getText())));
-                        insertStatement.setDouble(5, Double.parseDouble(removeCurrency(environmental.getText())));
-                        insertStatement.setDouble(6, Double.parseDouble(removeCurrency(maintenance.getText())));
-                        insertStatement.setDouble(7, Double.parseDouble(removeCurrency(beforeTax.getText())));
-                        insertStatement.setDouble(8, Double.parseDouble(removeCurrency(tax.getText())));
-                        insertStatement.setDouble(9, Double.parseDouble(removeCurrency(discount.getText())));
-                        insertStatement.setDouble(10, Double.parseDouble(removeCurrency(amount.getText())));
-                        insertStatement.setString(11, "UnPaid");
-                        insertStatement.setInt(12, client);
+                        insertStatement.setInt(3, Integer.parseInt(presentreading.getText()));
+                        insertStatement.setInt(4, Integer.parseInt(consumption.getText()));
+                        insertStatement.setDouble(5, Double.parseDouble(removeCurrency(basic.getText())));
+                        insertStatement.setDouble(6, Double.parseDouble(removeCurrency(transitory.getText())));
+                        insertStatement.setDouble(7, Double.parseDouble(removeCurrency(environmental.getText())));
+                        insertStatement.setDouble(8, Double.parseDouble(removeCurrency(sewerage.getText())));
+                        insertStatement.setDouble(9, Double.parseDouble(removeCurrency(maintenance.getText())));
+                        insertStatement.setDouble(10, Double.parseDouble(removeCurrency(beforeTax.getText())));
+                        insertStatement.setDouble(11, Double.parseDouble(removeCurrency(tax.getText())));
+                        insertStatement.setDouble(12, Double.parseDouble(removeCurrency(discount.getText())));
+                        insertStatement.setDouble(13, Double.parseDouble(removeCurrency(amount.getText())));
+                        insertStatement.setString(14, "UnPaid");
+                        insertStatement.setInt(15, client);
 
                         int staffId = 0;
                         for (Staff staff : staffs) {
@@ -742,7 +749,7 @@ public class CreateInvoice extends javax.swing.JFrame {
                                 staffId = staff.getId();
                             }
                         }
-                        insertStatement.setInt(13, staffId);
+                        insertStatement.setInt(15, staffId);
 
                         insertStatement.executeUpdate();
 
@@ -794,34 +801,36 @@ public class CreateInvoice extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_discountCheckBoxActionPerformed
 
-    public void updateDatas() {
+   public void updateDatas() {
         try {
             Statement statement = connect.createStatement();
             Statement statement2 = connect.createStatement();
 
-            ResultSet selectStatementStaff = statement.executeQuery("SELECT * FROM Invoice"
-                    + " JOIN Client ON Invoice.client_id = Client.client_id"
-                    + " JOIN Staff ON Invoice.staff_id = Staff.staff_id ");
+            ResultSet selectStatementStaff = statement.executeQuery("SELECT * FROM Invoice\n"
+                    + "JOIN Client ON Invoice.client_id = Client.client_id\n"
+                    + "JOIN Staff ON Invoice.staff_id = Staff.staff_id ");
 
-            ResultSet selectStatementAdmin = statement2.executeQuery("SELECT * FROM Invoice"
-                    + " JOIN Client ON Invoice.client_id = Client.client_id"
-                    + " JOIN Admin ON Invoice.admin_id = Admin.admin_id ");
+            ResultSet selectStatementAdmin = statement2.executeQuery("SELECT * FROM Invoice\n"
+                    + "JOIN Client ON Invoice.client_id = Client.client_id\n"
+                    + "JOIN Admin ON Invoice.admin_id = Admin.admin_id ");
 
             invoices.clear();
             while (selectStatementStaff.next()) {
-                invoices.add(new Invoice(selectStatementStaff.getInt("invoice_id"), selectStatementStaff.getString("invoice_period_date"),
+                invoices.add(new Invoice(selectStatementStaff.getInt("invoice_id"), selectStatementStaff.getString("invoice_period_date"), 
+                        selectStatementStaff.getInt("invoice_reading"), selectStatementStaff.getInt("invoice_consumption"),
                         selectStatementStaff.getDouble("invoice_basic_charge"), selectStatementStaff.getDouble("invoice_transitory_charge"),
-                        selectStatementStaff.getDouble("invoice_environmental_charge"), selectStatementStaff.getDouble("invoice_maintenance_charge"),
-                        selectStatementStaff.getDouble("invoice_before_tax"), selectStatementStaff.getDouble("invoice_tax"),
+                        selectStatementStaff.getDouble("invoice_environmental_charge"), selectStatementStaff.getDouble("invoice_sewerage_charge"),
+                        selectStatementStaff.getDouble("invoice_maintenance_charge"), selectStatementStaff.getDouble("invoice_before_tax"), selectStatementStaff.getDouble("invoice_tax"),
                         selectStatementStaff.getDouble("invoice_discount"), selectStatementStaff.getDouble("invoice_amount"),
                         selectStatementStaff.getDouble("invoice_payment"), selectStatementStaff.getString("invoice_payment_date"), selectStatementStaff.getString("invoice_status"),
                         selectStatementStaff.getInt("client_id"), selectStatementStaff.getInt("staff_id")));
             }
             while (selectStatementAdmin.next()) {
                 invoices.add(new Invoice(selectStatementAdmin.getInt("invoice_id"), selectStatementAdmin.getString("invoice_period_date"),
+                        selectStatementAdmin.getInt("invoice_reading"), selectStatementAdmin.getInt("invoice_consumption"),
                         selectStatementAdmin.getDouble("invoice_basic_charge"), selectStatementAdmin.getDouble("invoice_transitory_charge"),
-                        selectStatementAdmin.getDouble("invoice_environmental_charge"), selectStatementAdmin.getDouble("invoice_maintenance_charge"),
-                        selectStatementAdmin.getDouble("invoice_before_tax"), selectStatementAdmin.getDouble("invoice_tax"),
+                        selectStatementAdmin.getDouble("invoice_environmental_charge"), selectStatementAdmin.getDouble("invoice_sewerage_charge")
+                        , selectStatementAdmin.getDouble("invoice_maintenance_charge"), selectStatementAdmin.getDouble("invoice_before_tax"), selectStatementAdmin.getDouble("invoice_tax"),
                         selectStatementAdmin.getDouble("invoice_discount"), selectStatementAdmin.getDouble("invoice_amount"),
                         selectStatementAdmin.getDouble("invoice_payment"), selectStatementAdmin.getString("invoice_payment_date"), selectStatementAdmin.getString("invoice_status"),
                         selectStatementAdmin.getInt("client_id"), selectStatementAdmin.getInt("admin_id")));

@@ -8,6 +8,7 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -48,14 +49,15 @@ public class PayInvoice extends javax.swing.JFrame {
         }
 
         dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date p = null;
         try {
-            Date p = dateFormat.parse((invoices.get(invoiceId).getPeriod()));
-
-            dateFormat = new SimpleDateFormat("MMMM dd yyyy");
-            invoicePeriod.setText(dateFormat.format(p));
+            p = dateFormat.parse((invoices.get(invoiceId).getPeriod()));
         } catch (ParseException ex) {
             Logger.getLogger(PayInvoice.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+        dateFormat = new SimpleDateFormat("MMMM dd yyyy");
+        period.setText(dateFormat.format(p));
 
         for (Client client : clients) {
             if (invoices.get(invoiceId).getClientId() == client.getId()) {
@@ -66,13 +68,35 @@ public class PayInvoice extends javax.swing.JFrame {
                 for (Meter meter : meters) {
                     if (client.getMeterId().equals(meter.getId())) {
                         meterId.setText(meter.getId());
-                        meterreadingDate.setText(invoicePeriod.getText());
-                        meterreading.setText(Integer.toString(meter.getReading()));
-                        consumption.setText(Integer.toString(meter.getConsumption()));
+                        meterreadingDate.setText(period.getText());
                     }
                 }
             }
         }
+        meterreading.setText(Integer.toString(invoices.get(invoiceId).getReading()));
+        consumption.setText(Integer.toString(invoices.get(invoiceId).getConsumption()));
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(p);
+        calendar.add(Calendar.MONTH, -1);
+
+        period2.setText(dateFormat.format(calendar.getTime()) + " TO " + dateFormat.format(p));
+
+        basic.setText(chargeFormat.format(invoices.get(invoiceId).getBasic()));
+
+        transitory.setText(chargeFormat.format(invoices.get(invoiceId).getTransitory()));
+
+        environmental.setText(chargeFormat.format(invoices.get(invoiceId).getEnvironmental()));
+
+        sewerage.setText(chargeFormat.format(invoices.get(invoiceId).getSewerage()));
+
+        maintenance.setText(chargeFormat.format(invoices.get(invoiceId).getMaintenance()));
+
+        beforeTax.setText(chargeFormat.format(invoices.get(invoiceId).getBefore()));
+
+        tax.setText(chargeFormat.format(invoices.get(invoiceId).getTax()));
+
+        amount.setText(chargeFormat.format(invoices.get(invoiceId).getAmount()));
 
     }
 
@@ -118,7 +142,7 @@ public class PayInvoice extends javax.swing.JFrame {
         tax = new javax.swing.JLabel();
         beforeTax = new javax.swing.JLabel();
         totalamountLabel = new javax.swing.JLabel();
-        totalamount = new javax.swing.JLabel();
+        amount = new javax.swing.JLabel();
         cancel = new javax.swing.JButton();
         payButton = new javax.swing.JButton();
         clientinformationseparator = new javax.swing.JSeparator();
@@ -127,7 +151,7 @@ public class PayInvoice extends javax.swing.JFrame {
         sewerageLabel = new javax.swing.JLabel();
         sewerage = new javax.swing.JLabel();
         discount = new javax.swing.JLabel();
-        invoicePeriod = new javax.swing.JLabel();
+        period = new javax.swing.JLabel();
         consumption = new javax.swing.JLabel();
         taxLabel1 = new javax.swing.JLabel();
         payment = new javax.swing.JTextField();
@@ -248,8 +272,8 @@ public class PayInvoice extends javax.swing.JFrame {
         totalamountLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         totalamountLabel.setText("Total Amount:");
 
-        totalamount.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        totalamount.setText("₱0.0");
+        amount.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        amount.setText("₱0.0");
 
         cancel.setText("Cancel");
         cancel.addActionListener(new java.awt.event.ActionListener() {
@@ -268,8 +292,8 @@ public class PayInvoice extends javax.swing.JFrame {
 
         discount.setText("₱0.0");
 
-        invoicePeriod.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        invoicePeriod.setText("Period");
+        period.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        period.setText("Invoice Period");
 
         consumption.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         consumption.setText("Consumption");
@@ -326,7 +350,7 @@ public class PayInvoice extends javax.swing.JFrame {
                                                 .addGap(124, 124, 124)
                                                 .addComponent(invoiceperiodLabel)
                                                 .addGap(18, 18, 18)
-                                                .addComponent(invoicePeriod))
+                                                .addComponent(period))
                                             .addGroup(layout.createSequentialGroup()
                                                 .addComponent(invoicePeriod2)
                                                 .addGap(18, 18, 18)
@@ -397,7 +421,7 @@ public class PayInvoice extends javax.swing.JFrame {
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(totalamountLabel)
                                         .addGap(18, 18, 18)
-                                        .addComponent(totalamount, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(amount, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(maintenanceLabel)
                                         .addGap(18, 18, 18)
@@ -432,7 +456,7 @@ public class PayInvoice extends javax.swing.JFrame {
                     .addComponent(idLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(id, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(invoiceperiodLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(invoicePeriod, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(period, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -518,7 +542,7 @@ public class PayInvoice extends javax.swing.JFrame {
                         .addGap(27, 27, 27)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(totalamountLabel)
-                            .addComponent(totalamount))))
+                            .addComponent(amount))))
                 .addGap(11, 11, 11)
                 .addComponent(invoicePeriod7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
@@ -553,19 +577,21 @@ public class PayInvoice extends javax.swing.JFrame {
 
             invoices.clear();
             while (selectStatementStaff.next()) {
-                invoices.add(new Invoice(selectStatementStaff.getInt("invoice_id"), selectStatementStaff.getString("invoice_period_date"),
+                invoices.add(new Invoice(selectStatementStaff.getInt("invoice_id"), selectStatementStaff.getString("invoice_period_date"), 
+                        selectStatementStaff.getInt("invoice_reading"), selectStatementStaff.getInt("invoice_consumption"),
                         selectStatementStaff.getDouble("invoice_basic_charge"), selectStatementStaff.getDouble("invoice_transitory_charge"),
-                        selectStatementStaff.getDouble("invoice_environmental_charge"), selectStatementStaff.getDouble("invoice_maintenance_charge"),
-                        selectStatementStaff.getDouble("invoice_before_tax"), selectStatementStaff.getDouble("invoice_tax"),
+                        selectStatementStaff.getDouble("invoice_environmental_charge"), selectStatementStaff.getDouble("invoice_sewerage_charge"),
+                        selectStatementStaff.getDouble("invoice_maintenance_charge"), selectStatementStaff.getDouble("invoice_before_tax"), selectStatementStaff.getDouble("invoice_tax"),
                         selectStatementStaff.getDouble("invoice_discount"), selectStatementStaff.getDouble("invoice_amount"),
                         selectStatementStaff.getDouble("invoice_payment"), selectStatementStaff.getString("invoice_payment_date"), selectStatementStaff.getString("invoice_status"),
                         selectStatementStaff.getInt("client_id"), selectStatementStaff.getInt("staff_id")));
             }
             while (selectStatementAdmin.next()) {
                 invoices.add(new Invoice(selectStatementAdmin.getInt("invoice_id"), selectStatementAdmin.getString("invoice_period_date"),
+                        selectStatementAdmin.getInt("invoice_reading"), selectStatementAdmin.getInt("invoice_consumption"),
                         selectStatementAdmin.getDouble("invoice_basic_charge"), selectStatementAdmin.getDouble("invoice_transitory_charge"),
-                        selectStatementAdmin.getDouble("invoice_environmental_charge"), selectStatementAdmin.getDouble("invoice_maintenance_charge"),
-                        selectStatementAdmin.getDouble("invoice_before_tax"), selectStatementAdmin.getDouble("invoice_tax"),
+                        selectStatementAdmin.getDouble("invoice_environmental_charge"), selectStatementAdmin.getDouble("invoice_sewerage_charge")
+                        , selectStatementAdmin.getDouble("invoice_maintenance_charge"), selectStatementAdmin.getDouble("invoice_before_tax"), selectStatementAdmin.getDouble("invoice_tax"),
                         selectStatementAdmin.getDouble("invoice_discount"), selectStatementAdmin.getDouble("invoice_amount"),
                         selectStatementAdmin.getDouble("invoice_payment"), selectStatementAdmin.getString("invoice_payment_date"), selectStatementAdmin.getString("invoice_status"),
                         selectStatementAdmin.getInt("client_id"), selectStatementAdmin.getInt("admin_id")));
@@ -579,6 +605,7 @@ public class PayInvoice extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel address;
     private javax.swing.JLabel addressLabel;
+    private javax.swing.JLabel amount;
     private javax.swing.JLabel basic;
     private javax.swing.JLabel basiclabel;
     private javax.swing.JLabel beforeTax;
@@ -596,7 +623,6 @@ public class PayInvoice extends javax.swing.JFrame {
     private javax.swing.JLabel environmentalLabel;
     private javax.swing.JLabel id;
     private javax.swing.JLabel idLabel;
-    private javax.swing.JLabel invoicePeriod;
     private javax.swing.JLabel invoicePeriod2;
     private javax.swing.JLabel invoicePeriod7;
     private javax.swing.JLabel invoiceperiodLabel;
@@ -613,6 +639,7 @@ public class PayInvoice extends javax.swing.JFrame {
     private javax.swing.JButton payButton;
     private javax.swing.JTextField payment;
     private javax.swing.JLabel paymentLabel;
+    private javax.swing.JLabel period;
     private javax.swing.JLabel period2;
     private javax.swing.JLabel rateclass;
     private javax.swing.JLabel rateclassLabel;
@@ -625,7 +652,6 @@ public class PayInvoice extends javax.swing.JFrame {
     private javax.swing.JLabel taxLabel;
     private javax.swing.JLabel taxLabel1;
     private javax.swing.JLabel titleLabel;
-    private javax.swing.JLabel totalamount;
     private javax.swing.JLabel totalamountLabel;
     private javax.swing.JLabel transitory;
     private javax.swing.JLabel transitorylabel;

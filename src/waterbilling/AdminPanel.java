@@ -139,7 +139,7 @@ public class AdminPanel extends javax.swing.JPanel {
 
         delete.setEnabled(false);
 
-        sorter = new TableRowSorter<>(table.getModel());
+        sorter = new TableRowSorter<>(table.getModel());        
         table.setRowSorter(sorter);
 
         search.getDocument().addDocumentListener(new DocumentListener() {
