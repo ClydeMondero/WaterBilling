@@ -31,7 +31,7 @@ class Client {
     private String rateclass;
     private String meterId;
     private String status;
-    private double balance;    
+    private double balance;
 
     public Client(int id, String lastname, String firstname, String middlename, String address, String phonenumber, String rateclass, String meterId, double balance, String status) {
         this.id = id;
@@ -43,7 +43,7 @@ class Client {
         this.rateclass = rateclass;
         this.meterId = meterId;
         this.status = status;
-        this.balance = balance;        
+        this.balance = balance;
     }
 
     public int getId() {
@@ -125,8 +125,6 @@ class Client {
     public void setBalance(double balance) {
         this.balance = balance;
     }
-
-    
 
 }
 
@@ -798,14 +796,15 @@ public class ClientPanel extends javax.swing.JPanel {
                                     deleteStatement.setString(3, "Deleted");
 
                                     deleteStatement.executeUpdate();
-                                }else if (suffix.equals("admin")){
+                                } else if (suffix.equals("admin")) {
                                     deleteStatement = connect.prepareStatement("INSERT IGNORE INTO AdminsClients VALUES (?, ?, ?)");
 
                                     deleteStatement.setInt(1, Integer.parseInt(this.id.getText()));
                                     deleteStatement.setInt(2, accountId);
                                     deleteStatement.setString(3, "Deleted");
-                                }
-
+                                    deleteStatement.executeUpdate();
+                                }                                
+                                
                                 showDataInTable();
                                 clearTextFields();
                                 table.clearSelection();

@@ -689,8 +689,17 @@ public class CreateInvoice extends javax.swing.JFrame {
 
                         updateStatement.setString(1, dateFormat.format(period.getDate()));
                         updateStatement.setInt(2, Integer.parseInt(presentreading.getText()));
-                        updateStatement.setInt(3, Integer.parseInt(consumption.getText()));
-                        updateStatement.setInt(4, Integer.parseInt(meterId.getText()));
+                        
+                        
+                        int meterIndex = 0;
+                        for (Meter meter : meters) {
+                            if(meter.getId().equals(meterId.getText())){
+                                 meterIndex = meters.indexOf(meter);
+                            }
+                        }
+                        
+                        updateStatement.setInt(3, meters.get(meterIndex).getConsumption() + Integer.parseInt(consumption.getText()));
+                        updateStatement.setString(4, meterId.getText());
 
                         updateStatement.executeUpdate();
 
@@ -743,7 +752,7 @@ public class CreateInvoice extends javax.swing.JFrame {
                         updateStatement.setString(1, dateFormat.format(period.getDate()));
                         updateStatement.setInt(2, Integer.parseInt(presentreading.getText()));
                         updateStatement.setInt(3, Integer.parseInt(consumption.getText()));
-                        updateStatement.setInt(4, Integer.parseInt(meterId.getText()));
+                        updateStatement.setString(4, meterId.getText());
 
                         updateStatement.executeUpdate();
 
