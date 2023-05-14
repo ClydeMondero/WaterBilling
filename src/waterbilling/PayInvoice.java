@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.PreparedStatement;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -12,6 +13,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import static waterbilling.ClientPanel.clients;
 import static waterbilling.ClientPanel.meters;
 import static waterbilling.AdminPanel.admins;
@@ -28,6 +30,8 @@ public class PayInvoice extends javax.swing.JFrame {
     SimpleDateFormat dateFormat;
 
     NumberFormat chargeFormat = NumberFormat.getCurrencyInstance();
+
+    int clientIndex;
 
     public PayInvoice(int id, String username, String password) {
         initComponents();
@@ -59,8 +63,10 @@ public class PayInvoice extends javax.swing.JFrame {
         dateFormat = new SimpleDateFormat("MMMM dd yyyy");
         period.setText(dateFormat.format(p));
 
+        clientIndex = 0;
         for (Client client : clients) {
             if (invoices.get(invoiceId).getClientId() == client.getId()) {
+                clientIndex = clients.indexOf(client);
                 clientId.setText(Integer.toString(client.getId()));
                 clientName.setText(client.getFirstname() + " " + client.getMiddlename() + " " + client.getLastname());
                 address.setText(client.getAddress());
@@ -98,6 +104,9 @@ public class PayInvoice extends javax.swing.JFrame {
 
         amount.setText(chargeFormat.format(invoices.get(invoiceId).getAmount()));
 
+        if (clients.get(clientIndex).getCredit() != 0) {
+            payment.setText(chargeFormat.format(clients.get(clientIndex).getCredit()));
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -283,6 +292,11 @@ public class PayInvoice extends javax.swing.JFrame {
         });
 
         payButton.setText("Pay");
+        payButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                payButtonActionPerformed(evt);
+            }
+        });
 
         sewerageLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         sewerageLabel.setText("Sewerage Charge:");
@@ -302,6 +316,14 @@ public class PayInvoice extends javax.swing.JFrame {
         taxLabel1.setText("Discount:");
 
         payment.setText("₱0.0");
+        payment.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                paymentFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                paymentFocusLost(evt);
+            }
+        });
 
         paymentLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         paymentLabel.setText("Payment:");
@@ -562,6 +584,150 @@ public class PayInvoice extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_cancelActionPerformed
 
+    private void payButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_payButtonActionPerformed
+
+        double payment = Double.parseDouble(removeCurrency(this.payment.getText()));
+        double amount = Double.parseDouble(removeCurrency(this.amount.getText()));
+        double credit = clients.get(clientIndex).getCredit();
+        if (payment != 0) {
+            if (payment >= amount) {
+                if (payment > amount) {
+                    double change = payment - amount;
+                    int option = JOptionPane.showConfirmDialog(null, "Do you want to credit the change for succeeding invoices?", "Change", JOptionPane.YES_NO_OPTION);
+                    if (option == JOptionPane.YES_OPTION) {
+                        try {
+                            PreparedStatement updateStatement = connect.prepareStatement("UPDATE Client SET client_credit = ? WHERE client_id = ?");
+
+                            updateStatement.setDouble(1, change);
+                            updateStatement.setInt(2, Integer.parseInt(clientId.getText()));
+
+                            updateStatement.executeUpdate();
+                        } catch (SQLException ex) {
+                            Logger.getLogger(PayInvoice.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    } else if (option == JOptionPane.NO_OPTION) {
+                        JOptionPane.showMessageDialog(null, "Change: " + change, "Change", JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        return;
+                    }
+                }
+                try {
+                    PreparedStatement updateStatement = connect.prepareStatement("UPDATE Invoice SET invoice_payment = ?,"
+                            + " invoice_payment_date = ?, invoice_status = 'Paid' WHERE invoice_id = ?");
+
+                    updateStatement.setDouble(1, payment);
+
+                    dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    updateStatement.setString(2, dateFormat.format(new Date()));
+
+                    updateStatement.setInt(3, Integer.parseInt(id.getText()));
+
+                    updateStatement.executeUpdate();
+                } catch (SQLException ex) {
+                    Logger.getLogger(PayInvoice.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                this.dispose();
+            } else if (payment + credit >= amount) {
+                if (payment + credit > amount) {
+                    double change = (payment + credit) - amount;
+                    int option = JOptionPane.showConfirmDialog(null, "Do you want to credit the change for succeeding invoices?", "Change", JOptionPane.YES_NO_OPTION);
+                    if (option == JOptionPane.YES_OPTION) {
+                        try {
+                            PreparedStatement updateStatement = connect.prepareStatement("UPDATE Client SET client_credit = ? WHERE client_id = ?");
+
+                            updateStatement.setDouble(1, change);
+                            updateStatement.setInt(2, Integer.parseInt(clientId.getText()));
+
+                            updateStatement.executeUpdate();
+                        } catch (SQLException ex) {
+                            Logger.getLogger(PayInvoice.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    } else if (option == JOptionPane.NO_OPTION) {
+                        JOptionPane.showMessageDialog(null, "Change: " + change, "Change", JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        return;
+                    }
+                }
+                try {
+                    PreparedStatement updateStatement = connect.prepareStatement("UPDATE Invoice SET invoice_payment = ?,"
+                            + " invoice_payment_date = ?, invoice_status = 'Paid' WHERE invoice_id = ?");
+
+                    updateStatement.setDouble(1, payment);
+
+                    dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    updateStatement.setString(2, dateFormat.format(new Date()));
+
+                    updateStatement.setInt(3, Integer.parseInt(id.getText()));
+
+                    updateStatement.executeUpdate();
+                } catch (SQLException ex) {
+                    Logger.getLogger(PayInvoice.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(null, "Insufficient Amount", "Pay Invoice", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+        } else {
+            if (credit >= amount) {
+                if (credit > amount) {
+                    double change = credit - amount;
+                    int option = JOptionPane.showConfirmDialog(null, "Do you want to credit the change for succeeding invoices?", "Change", JOptionPane.YES_NO_OPTION);
+                    if (option == JOptionPane.YES_OPTION) {
+                        try {
+                            PreparedStatement updateStatement = connect.prepareStatement("UPDATE Client SET client_credit = ? WHERE client_id = ?");
+
+                            updateStatement.setDouble(1, change);
+                            updateStatement.setInt(2, Integer.parseInt(clientId.getText()));
+
+                            updateStatement.executeUpdate();
+                        } catch (SQLException ex) {
+                            Logger.getLogger(PayInvoice.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    } else if (option == JOptionPane.NO_OPTION) {
+                        JOptionPane.showMessageDialog(null, "Change: " + change, "Change", JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        return;
+                    }
+                }
+                try {
+                    PreparedStatement updateStatement = connect.prepareStatement("UPDATE Invoice SET invoice_payment = ?,"
+                            + " invoice_payment_date = ?, invoice_status = 'Paid' WHERE invoice_id = ?");
+
+                    updateStatement.setDouble(1, payment);
+
+                    dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    updateStatement.setString(2, dateFormat.format(new Date()));
+
+                    updateStatement.setInt(3, Integer.parseInt(id.getText()));
+
+                    updateStatement.executeUpdate();
+                } catch (SQLException ex) {
+                    Logger.getLogger(PayInvoice.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                this.dispose();
+            }else {
+                JOptionPane.showMessageDialog(null, "Insufficient Amount", "Pay Invoice", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+        }
+    }//GEN-LAST:event_payButtonActionPerformed
+
+    private void paymentFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_paymentFocusGained
+        payment.setText("");
+    }//GEN-LAST:event_paymentFocusGained
+
+    private void paymentFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_paymentFocusLost
+        payment.setText(chargeFormat.format(Double.parseDouble(payment.getText())));
+    }//GEN-LAST:event_paymentFocusLost
+
+    public String removeCurrency(String s) {
+        s = s.replace("₱", "");
+
+        s = s.replace(",", "");
+        return s;
+    }
+
     public void updateDatas() {
         try {
             Statement statement = connect.createStatement();
@@ -577,7 +743,7 @@ public class PayInvoice extends javax.swing.JFrame {
 
             invoices.clear();
             while (selectStatementStaff.next()) {
-                invoices.add(new Invoice(selectStatementStaff.getInt("invoice_id"), selectStatementStaff.getString("invoice_period_date"), 
+                invoices.add(new Invoice(selectStatementStaff.getInt("invoice_id"), selectStatementStaff.getString("invoice_period_date"),
                         selectStatementStaff.getInt("invoice_reading"), selectStatementStaff.getInt("invoice_consumption"),
                         selectStatementStaff.getDouble("invoice_basic_charge"), selectStatementStaff.getDouble("invoice_transitory_charge"),
                         selectStatementStaff.getDouble("invoice_environmental_charge"), selectStatementStaff.getDouble("invoice_sewerage_charge"),
@@ -590,8 +756,8 @@ public class PayInvoice extends javax.swing.JFrame {
                 invoices.add(new Invoice(selectStatementAdmin.getInt("invoice_id"), selectStatementAdmin.getString("invoice_period_date"),
                         selectStatementAdmin.getInt("invoice_reading"), selectStatementAdmin.getInt("invoice_consumption"),
                         selectStatementAdmin.getDouble("invoice_basic_charge"), selectStatementAdmin.getDouble("invoice_transitory_charge"),
-                        selectStatementAdmin.getDouble("invoice_environmental_charge"), selectStatementAdmin.getDouble("invoice_sewerage_charge")
-                        , selectStatementAdmin.getDouble("invoice_maintenance_charge"), selectStatementAdmin.getDouble("invoice_before_tax"), selectStatementAdmin.getDouble("invoice_tax"),
+                        selectStatementAdmin.getDouble("invoice_environmental_charge"), selectStatementAdmin.getDouble("invoice_sewerage_charge"),
+                        selectStatementAdmin.getDouble("invoice_maintenance_charge"), selectStatementAdmin.getDouble("invoice_before_tax"), selectStatementAdmin.getDouble("invoice_tax"),
                         selectStatementAdmin.getDouble("invoice_discount"), selectStatementAdmin.getDouble("invoice_amount"),
                         selectStatementAdmin.getDouble("invoice_payment"), selectStatementAdmin.getString("invoice_payment_date"), selectStatementAdmin.getString("invoice_status"),
                         selectStatementAdmin.getInt("client_id"), selectStatementAdmin.getInt("admin_id")));

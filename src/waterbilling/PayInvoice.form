@@ -664,6 +664,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Pay"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="payButtonActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JSeparator" name="clientinformationseparator">
     </Component>
@@ -720,6 +723,10 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="&#x20b1;0.0"/>
       </Properties>
+      <Events>
+        <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="paymentFocusGained"/>
+        <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="paymentFocusLost"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="paymentLabel">
       <Properties>

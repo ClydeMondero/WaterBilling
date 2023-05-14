@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -116,7 +117,7 @@ class Invoice {
 
     public void setSewerage(double sewerage) {
         this.sewerage = sewerage;
-    }        
+    }
 
     public double getMaintenance() {
         return maintenance;
@@ -198,6 +199,7 @@ class Invoice {
         this.officerId = officerId;
     }
 
+    
 }
 
 public class InvoicePanel extends javax.swing.JPanel {
@@ -270,11 +272,11 @@ public class InvoicePanel extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Client Name", "Invoice Id", "Due Date", "Amount", "Payment Date", "Status"
+                "Client Name", "Invoice Id", "Due Date", "Amount", "Payment", "Payment Date", "Status"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -380,7 +382,7 @@ public class InvoicePanel extends javax.swing.JPanel {
 
             invoices.clear();
             while (selectStatementStaff.next()) {
-                invoices.add(new Invoice(selectStatementStaff.getInt("invoice_id"), selectStatementStaff.getString("invoice_period_date"), 
+                invoices.add(new Invoice(selectStatementStaff.getInt("invoice_id"), selectStatementStaff.getString("invoice_period_date"),
                         selectStatementStaff.getInt("invoice_reading"), selectStatementStaff.getInt("invoice_consumption"),
                         selectStatementStaff.getDouble("invoice_basic_charge"), selectStatementStaff.getDouble("invoice_transitory_charge"),
                         selectStatementStaff.getDouble("invoice_environmental_charge"), selectStatementStaff.getDouble("invoice_sewerage_charge"),
@@ -393,8 +395,8 @@ public class InvoicePanel extends javax.swing.JPanel {
                 invoices.add(new Invoice(selectStatementAdmin.getInt("invoice_id"), selectStatementAdmin.getString("invoice_period_date"),
                         selectStatementAdmin.getInt("invoice_reading"), selectStatementAdmin.getInt("invoice_consumption"),
                         selectStatementAdmin.getDouble("invoice_basic_charge"), selectStatementAdmin.getDouble("invoice_transitory_charge"),
-                        selectStatementAdmin.getDouble("invoice_environmental_charge"), selectStatementAdmin.getDouble("invoice_sewerage_charge")
-                        , selectStatementAdmin.getDouble("invoice_maintenance_charge"), selectStatementAdmin.getDouble("invoice_before_tax"), selectStatementAdmin.getDouble("invoice_tax"),
+                        selectStatementAdmin.getDouble("invoice_environmental_charge"), selectStatementAdmin.getDouble("invoice_sewerage_charge"),
+                        selectStatementAdmin.getDouble("invoice_maintenance_charge"), selectStatementAdmin.getDouble("invoice_before_tax"), selectStatementAdmin.getDouble("invoice_tax"),
                         selectStatementAdmin.getDouble("invoice_discount"), selectStatementAdmin.getDouble("invoice_amount"),
                         selectStatementAdmin.getDouble("invoice_payment"), selectStatementAdmin.getString("invoice_payment_date"), selectStatementAdmin.getString("invoice_status"),
                         selectStatementAdmin.getInt("client_id"), selectStatementAdmin.getInt("admin_id")));
@@ -405,12 +407,13 @@ public class InvoicePanel extends javax.swing.JPanel {
     }
 
     DefaultTableModel model;
+    NumberFormat chargeFormat = NumberFormat.getCurrencyInstance();
 
     public void showDataInTable() {
         updateDatas();
 
         model = (DefaultTableModel) table.getModel();
-        Object[] row = new Object[6];
+        Object[] row = new Object[7];
 
         model.setRowCount(0);
 
@@ -424,14 +427,15 @@ public class InvoicePanel extends javax.swing.JPanel {
             row[0] = clientName;
             row[1] = invoices.get(i).getId();
             row[2] = invoices.get(i).getPeriod();
-            row[3] = invoices.get(i).getAmount();
-            row[4] = invoices.get(i).getPaymentDate();
-            row[5] = invoices.get(i).getStatus();
+            row[3] = chargeFormat.format(invoices.get(i).getAmount());
+            row[4] = chargeFormat.format(invoices.get(i).getPayment());
+            row[5] = invoices.get(i).getPaymentDate();
+            row[6] = invoices.get(i).getStatus();
             model.addRow(row);
         }
     }
 
-     public void updateFilter() {
+    public void updateFilter() {
         String text = search.getText();
         if (text.length() == 0) {
             sorter.setRowFilter(null);
@@ -472,12 +476,24 @@ public class InvoicePanel extends javax.swing.JPanel {
         int row = table.getSelectedRow();
         Object id = table.getValueAt(row, 1);
 
-        new PayInvoice(Integer.parseInt(id.toString()), accountUsername, accountPassword).setVisible(true);
+        int invoiceIndex = 0;
+        
+        for (Invoice invoice : invoices) {
+            if (Integer.parseInt(id.toString()) == invoice.getId()) {
+                invoiceIndex = invoices.indexOf(invoice);
+            }
+        }
+        
+        if (invoices.get(invoiceIndex).getStatus().equals("UnPaid")) {
+            new PayInvoice(Integer.parseInt(id.toString()), accountUsername, accountPassword).setVisible(true);
 
-        cancel.setEnabled(true);
-        payInvoice.setEnabled(false);
+            cancel.setEnabled(true);
+            payInvoice.setEnabled(false);
 
-        showDataInTable();
+            showDataInTable();
+        } else {
+            JOptionPane.showMessageDialog(null, "Invoice is already paid!", "Pay Invoice", JOptionPane.INFORMATION_MESSAGE);
+        }
     }//GEN-LAST:event_payInvoiceActionPerformed
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
