@@ -22,6 +22,16 @@ import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.design.JRDesignQuery;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import net.sf.jasperreports.view.JasperViewer;
 import static waterbilling.AdminPanel.admins;
 import static waterbilling.StaffPanel.staffs;
 import static waterbilling.InvoicePanel.invoices;
@@ -279,6 +289,7 @@ public class ClientPanel extends javax.swing.JPanel {
         meterreading = new javax.swing.JPasswordField();
         createInvoice = new javax.swing.JButton();
         refresh = new javax.swing.JButton();
+        printReports = new javax.swing.JButton();
 
         addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -404,6 +415,13 @@ public class ClientPanel extends javax.swing.JPanel {
             }
         });
 
+        printReports.setText("Print Reports");
+        printReports.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                printReportsActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -466,6 +484,8 @@ public class ClientPanel extends javax.swing.JPanel {
                         .addGap(104, 104, 104)
                         .addComponent(createAccountLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(printReports)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(refresh)))
                 .addGap(32, 32, 32))
         );
@@ -486,7 +506,9 @@ public class ClientPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(createAccountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(createInvoice)
-                    .addComponent(refresh))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(refresh)
+                        .addComponent(printReports)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
@@ -873,6 +895,34 @@ public class ClientPanel extends javax.swing.JPanel {
 
     }//GEN-LAST:event_formComponentShown
 
+    private void printReportsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printReportsActionPerformed
+//            try {
+//            JasperDesign design = JRXmlLoader.load("src/waterbilling/ClientReport.jrxml");
+//            
+//            JRDesignQuery selectQuery = new JRDesignQuery();
+//            String query = "SELECT * FROM Client JOIN  Meter ON Client.meter_id = Meter.meter_id";
+//            selectQuery.setText(query);
+//            
+//            design.setQuery(selectQuery);
+//            
+//            JasperReport clientReport = JasperCompileManager.compileReport(design);
+//            JasperPrint reportPrint = JasperFillManager.fillReport(clientReport, null, connect);
+//            JasperViewer.viewReport(reportPrint, false);
+//        } catch (JRException ex) {
+//            Logger.getLogger(ClientPanel.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+
+        try {
+            JasperReport clientReport = (JasperReport) JRLoader.loadObject(getClass().getResourceAsStream("/waterbilling/ClientReport.jasper"));
+            
+            JasperPrint jp = JasperFillManager.fillReport(clientReport, null, connect);
+            
+            JasperViewer.viewReport(jp, true);
+        } catch (JRException ex) {
+            Logger.getLogger(ClientPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_printReportsActionPerformed
+
     public void changeStatus() {
         dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String cd = dateFormat.format(new Date());
@@ -1140,6 +1190,7 @@ public class ClientPanel extends javax.swing.JPanel {
     private javax.swing.JLabel middlenameLabel;
     private javax.swing.JTextField phonenumber;
     private javax.swing.JLabel phonenumberLabel;
+    private javax.swing.JButton printReports;
     private javax.swing.JComboBox<String> rateclass;
     private javax.swing.JLabel rateclassLabel;
     private javax.swing.JButton refresh;

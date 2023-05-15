@@ -3,8 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/PCB/Documents/Bachelor%20of%20Science%20in%20Information%20Technology/2nd%20Year/Object%20Oriented%20Programming/WaterBilling/src/waterbilling/InvoicePanel.java</file>
-            <file>file:/C:/Users/PCB/Documents/Bachelor%20of%20Science%20in%20Information%20Technology/2nd%20Year/Object%20Oriented%20Programming/WaterBilling/src/waterbilling/Loading.java</file>
+            <file>file:/C:/Users/PCB/Documents/Bachelor%20of%20Science%20in%20Information%20Technology/2nd%20Year/Object%20Oriented%20Programming/WaterBilling/src/waterbilling/DatabaseConnection.java</file>
+            <file>file:/C:/Users/PCB/Documents/Bachelor%20of%20Science%20in%20Information%20Technology/2nd%20Year/Object%20Oriented%20Programming/WaterBilling/src/waterbilling/Database.sql</file>
+            <file>file:/C:/Users/PCB/Documents/Bachelor%20of%20Science%20in%20Information%20Technology/2nd%20Year/Object%20Oriented%20Programming/WaterBilling/src/waterbilling/ClientReport.jrxml</file>
+            <file>file:/C:/Users/PCB/Documents/Bachelor%20of%20Science%20in%20Information%20Technology/2nd%20Year/Object%20Oriented%20Programming/WaterBilling/src/waterbilling/ClientPanel.java</file>
             <file>file:/C:/Users/PCB/Documents/Bachelor%20of%20Science%20in%20Information%20Technology/2nd%20Year/Object%20Oriented%20Programming/WaterBilling/src/waterbilling/CreateInvoice.java</file>
         </group>
     </open-files>

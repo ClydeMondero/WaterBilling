@@ -821,7 +821,7 @@ public class CreateInvoice extends javax.swing.JFrame {
             }
             while (selectStatementAdmin.next()) {
                 invoices.add(new Invoice(selectStatementAdmin.getInt("invoice_id"), selectStatementAdmin.getString("invoice_period_date"),
-                        selectStatementAdmin.getInt("invoice_reading"), selectStatementAdmin.getInt("invoice_consumption"), selectStatementAdmin.getDouble("invoice_recconection_charge"),
+                        selectStatementAdmin.getInt("invoice_reading"), selectStatementAdmin.getInt("invoice_consumption"), selectStatementAdmin.getDouble("invoice_reconnection_charge"),
                         selectStatementAdmin.getDouble("invoice_basic_charge"), selectStatementAdmin.getDouble("invoice_transitory_charge"),
                         selectStatementAdmin.getDouble("invoice_environmental_charge"), selectStatementAdmin.getDouble("invoice_sewerage_charge"),
                         selectStatementAdmin.getDouble("invoice_maintenance_charge"), selectStatementAdmin.getDouble("invoice_before_tax"), selectStatementAdmin.getDouble("invoice_tax"),
