@@ -1,6 +1,7 @@
 package waterbilling;
 
 
+import java.awt.Color;
 import javax.swing.JPanel;
 
 public class Main extends javax.swing.JFrame {
@@ -9,7 +10,7 @@ public class Main extends javax.swing.JFrame {
 
     public Main(String username, String password) {
         initComponents();
-
+        this.getContentPane().setBackground(Color.decode("#2EC4B6"));
         this.accountUsername = username;
         this.accountPassword = password;
 

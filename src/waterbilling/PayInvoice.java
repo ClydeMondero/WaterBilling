@@ -1,5 +1,6 @@
 package waterbilling;
 
+import java.awt.Color;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,7 +25,7 @@ public class PayInvoice extends javax.swing.JFrame {
 
     int invoiceId;
     String accountUsername, accountPassword;
-
+    
     Connection connect = null;
 
     SimpleDateFormat dateFormat;
@@ -35,7 +36,7 @@ public class PayInvoice extends javax.swing.JFrame {
 
     public PayInvoice(int id, String username, String password) {
         initComponents();
-
+ this.getContentPane().setBackground(Color.decode("#CBF3F0"));
         invoiceId = id;
         accountUsername = username;
         accountPassword = password;
@@ -167,8 +168,10 @@ public class PayInvoice extends javax.swing.JFrame {
         paymentLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(203, 243, 240));
 
         titleLabel.setFont(new java.awt.Font("sansserif", 1, 28)); // NOI18N
+        titleLabel.setForeground(new java.awt.Color(46, 196, 182));
         titleLabel.setText("Pay Invoice");
 
         idLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -205,6 +208,7 @@ public class PayInvoice extends javax.swing.JFrame {
         rateclass.setText("Rate Class");
 
         serviceInformationLabel.setFont(new java.awt.Font("sansserif", 2, 18)); // NOI18N
+        serviceInformationLabel.setForeground(new java.awt.Color(46, 196, 182));
         serviceInformationLabel.setText("Meter Information");
 
         meterIdLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -226,12 +230,14 @@ public class PayInvoice extends javax.swing.JFrame {
         meterreading.setText("Meter Reading");
 
         serviceInformationLabel1.setFont(new java.awt.Font("sansserif", 2, 18)); // NOI18N
+        serviceInformationLabel1.setForeground(new java.awt.Color(46, 196, 182));
         serviceInformationLabel1.setText("Client Information");
 
         consumptionLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         consumptionLabel.setText("Consumption (cu.m):");
 
         serviceInformationLabel2.setFont(new java.awt.Font("sansserif", 2, 18)); // NOI18N
+        serviceInformationLabel2.setForeground(new java.awt.Color(46, 196, 182));
         serviceInformationLabel2.setText("Invoice Summary");
 
         invoicePeriod2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -284,6 +290,8 @@ public class PayInvoice extends javax.swing.JFrame {
         amount.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         amount.setText("₱0.0");
 
+        cancel.setBackground(new java.awt.Color(255, 159, 28));
+        cancel.setForeground(new java.awt.Color(255, 255, 255));
         cancel.setText("Cancel");
         cancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -291,6 +299,8 @@ public class PayInvoice extends javax.swing.JFrame {
             }
         });
 
+        payButton.setBackground(new java.awt.Color(255, 159, 28));
+        payButton.setForeground(new java.awt.Color(255, 255, 255));
         payButton.setText("Pay");
         payButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -326,6 +336,7 @@ public class PayInvoice extends javax.swing.JFrame {
         });
 
         paymentLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        paymentLabel.setForeground(new java.awt.Color(46, 196, 182));
         paymentLabel.setText("Payment:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

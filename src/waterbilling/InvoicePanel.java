@@ -260,6 +260,7 @@ public class InvoicePanel extends javax.swing.JPanel {
         payInvoice = new javax.swing.JButton();
         refresh = new javax.swing.JButton();
 
+        setBackground(new java.awt.Color(203, 243, 240));
         addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 formMouseClicked(evt);
@@ -295,10 +296,13 @@ public class InvoicePanel extends javax.swing.JPanel {
         scrollpane.setViewportView(table);
 
         listOfAcccountLabel.setFont(new java.awt.Font("sansserif", 1, 28)); // NOI18N
+        listOfAcccountLabel.setForeground(new java.awt.Color(46, 196, 182));
         listOfAcccountLabel.setText("List of Invoices");
 
         search.setToolTipText("Search");
 
+        cancel.setBackground(new java.awt.Color(255, 159, 28));
+        cancel.setForeground(new java.awt.Color(255, 255, 255));
         cancel.setText("Cancel");
         cancel.setEnabled(false);
         cancel.addActionListener(new java.awt.event.ActionListener() {
@@ -307,6 +311,8 @@ public class InvoicePanel extends javax.swing.JPanel {
             }
         });
 
+        payInvoice.setBackground(new java.awt.Color(255, 159, 28));
+        payInvoice.setForeground(new java.awt.Color(255, 255, 255));
         payInvoice.setText("Pay Invoice");
         payInvoice.setEnabled(false);
         payInvoice.addActionListener(new java.awt.event.ActionListener() {
@@ -315,6 +321,8 @@ public class InvoicePanel extends javax.swing.JPanel {
             }
         });
 
+        refresh.setBackground(new java.awt.Color(255, 159, 28));
+        refresh.setForeground(new java.awt.Color(255, 255, 255));
         refresh.setText("Refresh");
         refresh.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

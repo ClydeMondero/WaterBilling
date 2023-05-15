@@ -59,7 +59,10 @@ public class MyAccount extends javax.swing.JPanel {
         cancel = new javax.swing.JButton();
         save = new javax.swing.JButton();
 
+        setBackground(new java.awt.Color(203, 243, 240));
+
         myAccountLabel.setFont(new java.awt.Font("sansserif", 1, 28)); // NOI18N
+        myAccountLabel.setForeground(new java.awt.Color(46, 196, 182));
         myAccountLabel.setText("My Account");
 
         idLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -94,6 +97,7 @@ public class MyAccount extends javax.swing.JPanel {
         status.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Active", "Deactivated"}));
         status.setMinimumSize(new java.awt.Dimension(60, 26));
 
+        cancel.setForeground(new java.awt.Color(255, 159, 28));
         cancel.setText("Cancel");
         cancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -101,6 +105,8 @@ public class MyAccount extends javax.swing.JPanel {
             }
         });
 
+        save.setBackground(new java.awt.Color(255, 159, 28));
+        save.setForeground(new java.awt.Color(255, 255, 255));
         save.setText("Save");
         save.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

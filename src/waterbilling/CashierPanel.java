@@ -209,6 +209,7 @@ public class CashierPanel extends javax.swing.JPanel {
         search = new javax.swing.JTextField();
         refresh = new javax.swing.JButton();
 
+        setBackground(new java.awt.Color(203, 243, 240));
         addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 formMouseClicked(evt);
@@ -221,6 +222,7 @@ public class CashierPanel extends javax.swing.JPanel {
         });
 
         listOfAcccountLabel.setFont(new java.awt.Font("sansserif", 1, 28)); // NOI18N
+        listOfAcccountLabel.setForeground(new java.awt.Color(46, 196, 182));
         listOfAcccountLabel.setText("List of Cashier Accounts");
 
         table.setModel(new javax.swing.table.DefaultTableModel(
@@ -247,6 +249,7 @@ public class CashierPanel extends javax.swing.JPanel {
         scrollpane.setViewportView(table);
 
         createAccountLabel.setFont(new java.awt.Font("sansserif", 1, 28)); // NOI18N
+        createAccountLabel.setForeground(new java.awt.Color(46, 196, 182));
         createAccountLabel.setText("Create / Update Cashier Account");
 
         idLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -281,6 +284,8 @@ public class CashierPanel extends javax.swing.JPanel {
         status.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Active", "Deactivated"}));
         status.setMinimumSize(new java.awt.Dimension(60, 26));
 
+        cancel.setBackground(new java.awt.Color(255, 159, 28));
+        cancel.setForeground(new java.awt.Color(255, 255, 255));
         cancel.setText("Cancel");
         cancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -288,6 +293,8 @@ public class CashierPanel extends javax.swing.JPanel {
             }
         });
 
+        save.setBackground(new java.awt.Color(255, 159, 28));
+        save.setForeground(new java.awt.Color(255, 255, 255));
         save.setText("Save");
         save.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -295,6 +302,8 @@ public class CashierPanel extends javax.swing.JPanel {
             }
         });
 
+        delete.setBackground(new java.awt.Color(255, 159, 28));
+        delete.setForeground(new java.awt.Color(255, 255, 255));
         delete.setText("Delete Selected Rows");
         delete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -309,6 +318,8 @@ public class CashierPanel extends javax.swing.JPanel {
             }
         });
 
+        refresh.setBackground(new java.awt.Color(255, 159, 28));
+        refresh.setForeground(new java.awt.Color(255, 255, 255));
         refresh.setText("Refresh");
         refresh.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
