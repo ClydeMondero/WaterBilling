@@ -529,15 +529,22 @@ public class InvoicePanel extends javax.swing.JPanel {
             payInvoice.setEnabled(false);
 
             showDataInTable();
-        } else {
+        } else if (invoices.get(invoiceIndex).getStatus().equals("Overdue")) {
+            new PayInvoice(Integer.parseInt(id.toString()), accountUsername, accountPassword).setVisible(true);
+
+            cancel.setEnabled(false);
+            payInvoice.setEnabled(false);
+
+            showDataInTable();
+        } else if (invoices.get(invoiceIndex).getStatus().equals("Paid")) {
             JOptionPane.showMessageDialog(null, "Invoice is already paid!", "Pay Invoice", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_payInvoiceActionPerformed
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
         checkDates();
-        
-        showDataInTable();       
+
+        showDataInTable();
     }//GEN-LAST:event_formComponentShown
 
     public void checkDates() {
@@ -572,35 +579,12 @@ public class InvoicePanel extends javax.swing.JPanel {
                 Logger.getLogger(InvoicePanel.class.getName()).log(Level.SEVERE, null, ex);
             }
 
-            System.out.println("Current Date: " + currentDate);
-            System.out.println("Due Date: " + dueDate);
-
-            if (invoice.getStatus().equals("Unpaid") || invoice.getStatus().equals("Overdue")) {
+            if (invoice.getStatus().equals("Unpaid")) {
                 int overdue = currentDate.compareTo(dueDate);
                 if (overdue > 0) {
                     try {
                         PreparedStatement updateStatement = connect.prepareStatement("UPDATE Invoice SET "
                                 + "invoice_status = 'Overdue' WHERE invoice_id = ?");
-                        updateStatement.setInt(1, invoice.getId());
-
-                        updateStatement.executeUpdate();
-                    } catch (SQLException ex) {
-                        Logger.getLogger(InvoicePanel.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }else if(overdue == 0){
-                    try {
-                        PreparedStatement updateStatement = connect.prepareStatement("UPDATE Invoice SET "
-                                + "invoice_status = 'Unpaid' WHERE invoice_id = ?");
-                        updateStatement.setInt(1, invoice.getId());
-
-                        updateStatement.executeUpdate();
-                    } catch (SQLException ex) {
-                        Logger.getLogger(InvoicePanel.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }else{
-                    try {
-                        PreparedStatement updateStatement = connect.prepareStatement("UPDATE Invoice SET "
-                                + "invoice_status = 'Unpaid' WHERE invoice_id = ?");
                         updateStatement.setInt(1, invoice.getId());
 
                         updateStatement.executeUpdate();
@@ -614,7 +598,7 @@ public class InvoicePanel extends javax.swing.JPanel {
 
     private void refreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshActionPerformed
         checkDates();
-        
+
         showDataInTable();
     }//GEN-LAST:event_refreshActionPerformed
 

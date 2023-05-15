@@ -5,9 +5,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,6 +24,7 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import static waterbilling.AdminPanel.admins;
 import static waterbilling.StaffPanel.staffs;
+import static waterbilling.InvoicePanel.invoices;
 
 class Client {
 
@@ -238,6 +240,7 @@ public class ClientPanel extends javax.swing.JPanel {
         } else {
             this.id.setText("1001");
         }
+
     }
 
     @SuppressWarnings("unchecked")
@@ -803,10 +806,10 @@ public class ClientPanel extends javax.swing.JPanel {
                                     deleteStatement.setInt(1, Integer.parseInt(this.id.getText()));
                                     deleteStatement.setInt(2, accountId);
                                     deleteStatement.setString(3, "Deleted");
-                                    
+
                                     deleteStatement.executeUpdate();
-                                }                                
-                                
+                                }
+
                                 showDataInTable();
                                 clearTextFields();
                                 table.clearSelection();
@@ -847,13 +850,61 @@ public class ClientPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_createInvoiceActionPerformed
 
     private void refreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshActionPerformed
+        checkDates();
+        
         showDataInTable();
     }//GEN-LAST:event_refreshActionPerformed
 
+    SimpleDateFormat dateFormat;
+
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
+        checkDates();
+        
         showDataInTable();
+        
     }//GEN-LAST:event_formComponentShown
 
+    public void checkDates(){
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String cd = dateFormat.format(new Date());
+        Date currentDate = null;
+        try {
+            currentDate = dateFormat.parse(cd);
+        } catch (ParseException ex) {
+            Logger.getLogger(InvoicePanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        Date disconnectDate = null;
+        for (Invoice invoice : invoices) {
+            try {
+                disconnectDate = dateFormat.parse(invoice.getPeriod());
+            } catch (ParseException ex) {
+                Logger.getLogger(ClientPanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(disconnectDate);
+            calendar.add(Calendar.DATE, 74);
+
+            disconnectDate = calendar.getTime();
+
+            if (invoice.getStatus().equals("Overdue")) {
+                int disconnect = currentDate.compareTo(disconnectDate);
+                if (disconnect >= 0) {
+                    try {
+                        PreparedStatement updateStatement = connect.prepareStatement("UPDATE Client SET "
+                                + "client_status = 'Disconnected' WHERE client_id = ?");
+                        updateStatement.setInt(1, invoice.getClientId());
+
+                        updateStatement.executeUpdate();
+                    } catch (SQLException ex) {
+                        Logger.getLogger(InvoicePanel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        }
+    }
+    
     public boolean checkTextFields() {
         if (lastname.getText().equals("") && firstname.getText().equals("") && address.getText().equals("") && phonenumber.getText().equals("")
                 && metersize.getText().equals("") && meterId.getText().equals("")) {
@@ -950,7 +1001,7 @@ public class ClientPanel extends javax.swing.JPanel {
         status.setSelectedItem("Active");
     }
 
-     public void updateFilter() {
+    public void updateFilter() {
         String text = search.getText();
         if (text.length() == 0) {
             sorter.setRowFilter(null);

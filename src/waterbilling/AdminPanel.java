@@ -198,11 +198,17 @@ public class AdminPanel extends javax.swing.JPanel {
         save = new javax.swing.JButton();
         delete = new javax.swing.JButton();
         search = new javax.swing.JTextField();
+        refresh = new javax.swing.JButton();
 
         setPreferredSize(new java.awt.Dimension(820, 540));
         addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 formMouseClicked(evt);
+            }
+        });
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                formComponentShown(evt);
             }
         });
 
@@ -295,6 +301,13 @@ public class AdminPanel extends javax.swing.JPanel {
             }
         });
 
+        refresh.setText("Refresh");
+        refresh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                refreshActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -348,7 +361,8 @@ public class AdminPanel extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(createAccountLabel)
-                        .addGap(149, 149, 149)))
+                        .addGap(77, 77, 77)
+                        .addComponent(refresh)))
                 .addGap(32, 32, 32))
         );
 
@@ -365,7 +379,9 @@ public class AdminPanel extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addComponent(scrollpane, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(createAccountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(createAccountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(refresh))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
@@ -590,6 +606,14 @@ public class AdminPanel extends javax.swing.JPanel {
         delete.setEnabled(false);
     }//GEN-LAST:event_searchFocusGained
 
+    private void refreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshActionPerformed
+        showDataInTable();
+    }//GEN-LAST:event_refreshActionPerformed
+
+    private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
+        showDataInTable();
+    }//GEN-LAST:event_formComponentShown
+
     public void clearTextFields() {
         if (!admins.isEmpty()) {
             id.setText(Integer.toString(admins.get(admins.size() - 1).getId() + 1));
@@ -691,6 +715,7 @@ public class AdminPanel extends javax.swing.JPanel {
     private javax.swing.JLabel passwordLabel;
     private javax.swing.JTextField phonenumber;
     private javax.swing.JLabel phonenumberLabel;
+    private javax.swing.JButton refresh;
     private javax.swing.JButton save;
     private javax.swing.JScrollPane scrollpane;
     private javax.swing.JTextField search;
