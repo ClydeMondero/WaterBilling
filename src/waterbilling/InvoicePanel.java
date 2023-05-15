@@ -6,7 +6,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.NumberFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.PatternSyntaxException;
@@ -199,7 +203,6 @@ class Invoice {
         this.officerId = officerId;
     }
 
-    
 }
 
 public class InvoicePanel extends javax.swing.JPanel {
@@ -407,6 +410,7 @@ public class InvoicePanel extends javax.swing.JPanel {
     }
 
     DefaultTableModel model;
+    SimpleDateFormat dateFormat;
     NumberFormat chargeFormat = NumberFormat.getCurrencyInstance();
 
     public void showDataInTable() {
@@ -426,10 +430,38 @@ public class InvoicePanel extends javax.swing.JPanel {
             }
             row[0] = clientName;
             row[1] = invoices.get(i).getId();
-            row[2] = invoices.get(i).getPeriod();
+
+            Date dueDate = null;
+            try {
+                dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                dueDate = dateFormat.parse(invoices.get(i).getPeriod());
+            } catch (ParseException ex) {
+                Logger.getLogger(InvoicePanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(dueDate);
+
+            calendar.add(Calendar.DAY_OF_YEAR, 7);
+            dueDate = calendar.getTime();
+
+            dateFormat = new SimpleDateFormat("MMMM dd yyyy");
+            row[2] = dateFormat.format(dueDate);
+
             row[3] = chargeFormat.format(invoices.get(i).getAmount());
             row[4] = chargeFormat.format(invoices.get(i).getPayment());
-            row[5] = invoices.get(i).getPaymentDate();
+
+            Date paymentDate = null;
+            try {
+                dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                paymentDate = dateFormat.parse(invoices.get(i).getPaymentDate());
+            } catch (ParseException ex) {
+                Logger.getLogger(InvoicePanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            dateFormat = new SimpleDateFormat("MMMM dd yyyy");
+            row[5] = dateFormat.format(paymentDate);
+
             row[6] = invoices.get(i).getStatus();
             model.addRow(row);
         }
@@ -477,13 +509,13 @@ public class InvoicePanel extends javax.swing.JPanel {
         Object id = table.getValueAt(row, 1);
 
         int invoiceIndex = 0;
-        
+
         for (Invoice invoice : invoices) {
             if (Integer.parseInt(id.toString()) == invoice.getId()) {
                 invoiceIndex = invoices.indexOf(invoice);
             }
         }
-        
+
         if (invoices.get(invoiceIndex).getStatus().equals("UnPaid")) {
             new PayInvoice(Integer.parseInt(id.toString()), accountUsername, accountPassword).setVisible(true);
 
