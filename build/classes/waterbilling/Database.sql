@@ -125,7 +125,7 @@ CREATE TABLE IF NOT EXISTS Invoice(
         invoice_consumption INT,        
         invoice_payment DOUBLE,
         invoice_payment_date DATE,
-        invoice_status SET ('Paid', 'UnPaid', 'Deleted'),
+        invoice_status SET ('Paid', 'Unpaid', 'Overdue', 'Deleted'),
         invoice_basic_charge DOUBLE,
         invoice_transitory_charge DOUBLE,
         invoice_environmental_charge DOUBLE,

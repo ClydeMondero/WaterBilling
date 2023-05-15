@@ -674,7 +674,7 @@ public class CreateInvoice extends javax.swing.JFrame {
                         insertStatement.setDouble(11, Double.parseDouble(removeCurrency(tax.getText())));
                         insertStatement.setDouble(12, Double.parseDouble(removeCurrency(discount.getText())));
                         insertStatement.setDouble(13, Double.parseDouble(removeCurrency(amount.getText())));
-                        insertStatement.setString(14, "UnPaid");
+                        insertStatement.setString(14, "Unpaid");
                         insertStatement.setInt(15, client);
 
                         int adminId = 0;
@@ -740,7 +740,7 @@ public class CreateInvoice extends javax.swing.JFrame {
                         insertStatement.setDouble(11, Double.parseDouble(removeCurrency(tax.getText())));
                         insertStatement.setDouble(12, Double.parseDouble(removeCurrency(discount.getText())));
                         insertStatement.setDouble(13, Double.parseDouble(removeCurrency(amount.getText())));
-                        insertStatement.setString(14, "UnPaid");
+                        insertStatement.setString(14, "Unpaid");
                         insertStatement.setInt(15, client);
 
                         int staffId = 0;

@@ -2,6 +2,7 @@ package waterbilling;
 
 import java.awt.Rectangle;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -299,6 +300,7 @@ public class InvoicePanel extends javax.swing.JPanel {
         search.setToolTipText("Search");
 
         cancel.setText("Cancel");
+        cancel.setEnabled(false);
         cancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cancelActionPerformed(evt);
@@ -454,15 +456,19 @@ public class InvoicePanel extends javax.swing.JPanel {
             Date paymentDate = null;
             try {
                 dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                paymentDate = dateFormat.parse(invoices.get(i).getPaymentDate());
+                if (invoices.get(i).getPaymentDate() != null) {
+                    paymentDate = dateFormat.parse(invoices.get(i).getPaymentDate());
+                    dateFormat = new SimpleDateFormat("MMMM dd yyyy");
+                    row[5] = dateFormat.format(paymentDate);
+                } else {
+                    row[5] = null;
+                }
             } catch (ParseException ex) {
                 Logger.getLogger(InvoicePanel.class.getName()).log(Level.SEVERE, null, ex);
             }
 
-            dateFormat = new SimpleDateFormat("MMMM dd yyyy");
-            row[5] = dateFormat.format(paymentDate);
-
             row[6] = invoices.get(i).getStatus();
+
             model.addRow(row);
         }
     }
@@ -516,10 +522,10 @@ public class InvoicePanel extends javax.swing.JPanel {
             }
         }
 
-        if (invoices.get(invoiceIndex).getStatus().equals("UnPaid")) {
+        if (invoices.get(invoiceIndex).getStatus().equals("Unpaid")) {
             new PayInvoice(Integer.parseInt(id.toString()), accountUsername, accountPassword).setVisible(true);
 
-            cancel.setEnabled(true);
+            cancel.setEnabled(false);
             payInvoice.setEnabled(false);
 
             showDataInTable();
@@ -529,10 +535,86 @@ public class InvoicePanel extends javax.swing.JPanel {
     }//GEN-LAST:event_payInvoiceActionPerformed
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
-        showDataInTable();
+        checkDates();
+        
+        showDataInTable();       
     }//GEN-LAST:event_formComponentShown
 
+    public void checkDates() {
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String cd = dateFormat.format(new Date());
+        Date currentDate = null;
+        try {
+            currentDate = dateFormat.parse(cd);
+        } catch (ParseException ex) {
+            Logger.getLogger(InvoicePanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        Date dueDate = null;
+
+        for (Invoice invoice : invoices) {
+            try {
+                dueDate = dateFormat.parse(invoice.getPeriod());
+            } catch (ParseException ex) {
+                Logger.getLogger(InvoicePanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(dueDate);
+
+            calendar.add(Calendar.DAY_OF_YEAR, 7);
+            dueDate = calendar.getTime();
+            String dd = dateFormat.format(dueDate);
+
+            try {
+                dueDate = dateFormat.parse(dd);
+            } catch (ParseException ex) {
+                Logger.getLogger(InvoicePanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            System.out.println("Current Date: " + currentDate);
+            System.out.println("Due Date: " + dueDate);
+
+            if (invoice.getStatus().equals("Unpaid") || invoice.getStatus().equals("Overdue")) {
+                int overdue = currentDate.compareTo(dueDate);
+                if (overdue > 0) {
+                    try {
+                        PreparedStatement updateStatement = connect.prepareStatement("UPDATE Invoice SET "
+                                + "invoice_status = 'Overdue' WHERE invoice_id = ?");
+                        updateStatement.setInt(1, invoice.getId());
+
+                        updateStatement.executeUpdate();
+                    } catch (SQLException ex) {
+                        Logger.getLogger(InvoicePanel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }else if(overdue == 0){
+                    try {
+                        PreparedStatement updateStatement = connect.prepareStatement("UPDATE Invoice SET "
+                                + "invoice_status = 'Unpaid' WHERE invoice_id = ?");
+                        updateStatement.setInt(1, invoice.getId());
+
+                        updateStatement.executeUpdate();
+                    } catch (SQLException ex) {
+                        Logger.getLogger(InvoicePanel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }else{
+                    try {
+                        PreparedStatement updateStatement = connect.prepareStatement("UPDATE Invoice SET "
+                                + "invoice_status = 'Unpaid' WHERE invoice_id = ?");
+                        updateStatement.setInt(1, invoice.getId());
+
+                        updateStatement.executeUpdate();
+                    } catch (SQLException ex) {
+                        Logger.getLogger(InvoicePanel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        }
+    }
+
     private void refreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshActionPerformed
+        checkDates();
+        
         showDataInTable();
     }//GEN-LAST:event_refreshActionPerformed
 
