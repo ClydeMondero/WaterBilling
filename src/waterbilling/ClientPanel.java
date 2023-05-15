@@ -907,17 +907,17 @@ public class ClientPanel extends javax.swing.JPanel {
                         if (suffix.equals("admin")) {
                             PreparedStatement insertStatement;                           
                             try {
-                                insertStatement = connect.prepareStatement("INSERT IGNORE INTO Invoice (invoice_id, "
-                                        + "invoice_period_date, invoice_reading, invoice_consumption, invoice_reconnection_charge, invoice_basic_charge, invoice_transitory_charge, invoice_environmental_charge, "
+                                insertStatement = connect.prepareStatement("INSERT IGNORE INTO Invoice (invoice_id, invoice_reading, "
+                                        + "invoice_consumption, invoice_reconnection_charge, invoice_basic_charge, "
+                                        + "invoice_transitory_charge, invoice_environmental_charge, "
                                         + "invoice_sewerage_charge, invoice_maintenance_charge, "
                                         + "invoice_before_tax, invoice_tax, invoice_discount, invoice_amount, invoice_status, client_id, admin_id)"
-                                        + "VALUES (?, ?, ?, ?, 257.31, 0, 0, 0, 0, 0, 0, 0, 0, 257.31, 'Unpaid', ?, ?)");
+                                        + "VALUES (?, ?, ?, 257.31, 0, 0, 0, 0, 0, 0, 0, 0, 257.31, 'Unpaid', ?, ?)");
 
-                                insertStatement.setInt(1, invoices.get(invoices.size() - 1).getId() + 1);
-                                insertStatement.setString(2, dateFormat.format(disconnectDate));
-                                insertStatement.setInt(3, invoice.getReading());
-                                insertStatement.setInt(4, invoice.getConsumption());                                
-                                insertStatement.setInt(5, invoice.getClientId());
+                                insertStatement.setInt(1, invoices.get(invoices.size() - 1).getId() + 1);                                
+                                insertStatement.setInt(2, invoice.getReading());
+                                insertStatement.setInt(3, invoice.getConsumption());                                
+                                insertStatement.setInt(4, invoice.getClientId());
 
                                 int adminId = 0;
                                 for (Admin admin : admins) {
@@ -926,7 +926,7 @@ public class ClientPanel extends javax.swing.JPanel {
                                     }
                                 }
 
-                                insertStatement.setInt(6, adminId);
+                                insertStatement.setInt(5, adminId);
 
                                 insertStatement.executeUpdate();                               
                             } catch (SQLException ex) {
@@ -937,17 +937,17 @@ public class ClientPanel extends javax.swing.JPanel {
                         } else if (suffix.equals("staff")) {
                             PreparedStatement insertStatement;                            
                             try {
-                                insertStatement = connect.prepareStatement("INSERT IGNORE INTO Invoice (invoice_id, "
-                                        + "invoice_period_date, invoice_reading, invoice_consumption, invoice_reconnection_charge, invoice_basic_charge, invoice_transitory_charge, invoice_environmental_charge, "
+                                insertStatement = connect.prepareStatement("INSERT IGNORE INTO Invoice (invoice_id,"
+                                        + " invoice_reading, invoice_consumption, invoice_reconnection_charge, invoice_basic_charge, "
+                                        + "invoice_transitory_charge, invoice_environmental_charge, "
                                         + "invoice_sewerage_charge, invoice_maintenance_charge, "
                                         + "invoice_before_tax, invoice_tax, invoice_discount, invoice_amount, invoice_status, client_id, staff_id)"
-                                        + "VALUES (?, ?, ?, ?, 257.31, 0, 0, 0, 0, 0, 0, 0, 0, 257.31, 'Unpaid', ?, ?)");
+                                        + "VALUES (?, ?, ?, 257.31, 0, 0, 0, 0, 0, 0, 0, 0, 257.31, 'Unpaid', ?, ?)");
 
-                                insertStatement.setInt(1,invoices.get(invoices.size() - 1).getId() + 1);
-                                insertStatement.setString(2, dateFormat.format(disconnectDate));
-                                insertStatement.setInt(3, invoice.getReading());
-                                insertStatement.setInt(4, invoice.getConsumption());                                
-                                insertStatement.setInt(5, invoice.getClientId());
+                                insertStatement.setInt(1,invoices.get(invoices.size() - 1).getId() + 1);                                
+                                insertStatement.setInt(2, invoice.getReading());
+                                insertStatement.setInt(3, invoice.getConsumption());                                
+                                insertStatement.setInt(4, invoice.getClientId());
 
                                 int staffId = 0;
                                 for (Staff staff : staffs) {
@@ -956,7 +956,7 @@ public class ClientPanel extends javax.swing.JPanel {
                                     }
                                 }
 
-                                insertStatement.setInt(6, staffId);
+                                insertStatement.setInt(5, staffId);
 
                                 insertStatement.executeUpdate();                                 
                             } catch (SQLException ex) {
