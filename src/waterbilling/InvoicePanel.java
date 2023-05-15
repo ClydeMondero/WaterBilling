@@ -33,17 +33,18 @@ class Invoice {
     private int id;
     private String period;
     private int reading, consumption;
-    private double basic, transitory, environmental, sewerage, maintenance, before, tax, discount, amount;
+    private double reconnection, basic, transitory, environmental, sewerage, maintenance, before, tax, discount, amount;
     private double payment;
     private String paymentDate;
     private String status;
     private int clientId, officerId;
 
-    public Invoice(int id, String period, int reading, int consumption, double basic, double transitory, double environmental, double sewerage, double maintenance, double before, double tax, double discount, double amount, double payment, String paymentDate, String status, int clientId, int officerId) {
+    public Invoice(int id, String period, int reading, int consumption, double reconnection, double basic, double transitory, double environmental, double sewerage, double maintenance, double before, double tax, double discount, double amount, double payment, String paymentDate, String status, int clientId, int officerId) {
         this.id = id;
         this.period = period;
         this.reading = reading;
         this.consumption = consumption;
+        this.reconnection = reconnection;
         this.basic = basic;
         this.transitory = transitory;
         this.environmental = environmental;
@@ -91,6 +92,14 @@ class Invoice {
     public void setConsumption(int consumption) {
         this.consumption = consumption;
     }
+
+    public double getReconnection() {
+        return reconnection;
+    }
+
+    public void setReconnection(double reconnection) {
+        this.reconnection = reconnection;
+    }        
 
     public double getBasic() {
         return basic;
@@ -388,7 +397,7 @@ public class InvoicePanel extends javax.swing.JPanel {
             invoices.clear();
             while (selectStatementStaff.next()) {
                 invoices.add(new Invoice(selectStatementStaff.getInt("invoice_id"), selectStatementStaff.getString("invoice_period_date"),
-                        selectStatementStaff.getInt("invoice_reading"), selectStatementStaff.getInt("invoice_consumption"),
+                        selectStatementStaff.getInt("invoice_reading"), selectStatementStaff.getInt("invoice_consumption"), selectStatementStaff.getDouble("invoice_reconnection_charge"),
                         selectStatementStaff.getDouble("invoice_basic_charge"), selectStatementStaff.getDouble("invoice_transitory_charge"),
                         selectStatementStaff.getDouble("invoice_environmental_charge"), selectStatementStaff.getDouble("invoice_sewerage_charge"),
                         selectStatementStaff.getDouble("invoice_maintenance_charge"), selectStatementStaff.getDouble("invoice_before_tax"), selectStatementStaff.getDouble("invoice_tax"),
@@ -398,7 +407,7 @@ public class InvoicePanel extends javax.swing.JPanel {
             }
             while (selectStatementAdmin.next()) {
                 invoices.add(new Invoice(selectStatementAdmin.getInt("invoice_id"), selectStatementAdmin.getString("invoice_period_date"),
-                        selectStatementAdmin.getInt("invoice_reading"), selectStatementAdmin.getInt("invoice_consumption"),
+                        selectStatementAdmin.getInt("invoice_reading"), selectStatementAdmin.getInt("invoice_consumption"), selectStatementAdmin.getDouble("invoice_reconnection_charge"),
                         selectStatementAdmin.getDouble("invoice_basic_charge"), selectStatementAdmin.getDouble("invoice_transitory_charge"),
                         selectStatementAdmin.getDouble("invoice_environmental_charge"), selectStatementAdmin.getDouble("invoice_sewerage_charge"),
                         selectStatementAdmin.getDouble("invoice_maintenance_charge"), selectStatementAdmin.getDouble("invoice_before_tax"), selectStatementAdmin.getDouble("invoice_tax"),

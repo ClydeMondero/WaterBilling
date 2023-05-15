@@ -850,21 +850,21 @@ public class ClientPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_createInvoiceActionPerformed
 
     private void refreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshActionPerformed
-        checkDates();
-        
+        changeStatus();
+
         showDataInTable();
     }//GEN-LAST:event_refreshActionPerformed
 
     SimpleDateFormat dateFormat;
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
-        checkDates();
-        
+        changeStatus();
+
         showDataInTable();
-        
+
     }//GEN-LAST:event_formComponentShown
 
-    public void checkDates(){
+    public void changeStatus() {
         dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String cd = dateFormat.format(new Date());
         Date currentDate = null;
@@ -876,35 +876,102 @@ public class ClientPanel extends javax.swing.JPanel {
 
         Date disconnectDate = null;
         for (Invoice invoice : invoices) {
-            try {
-                disconnectDate = dateFormat.parse(invoice.getPeriod());
-            } catch (ParseException ex) {
-                Logger.getLogger(ClientPanel.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            if (invoice.getReconnection() == 0) {
+                try {
+                    disconnectDate = dateFormat.parse(invoice.getPeriod());
+                } catch (ParseException ex) {
+                    Logger.getLogger(ClientPanel.class.getName()).log(Level.SEVERE, null, ex);
+                }
 
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(disconnectDate);
-            calendar.add(Calendar.DATE, 74);
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(disconnectDate);
+                calendar.add(Calendar.DATE, 74);
 
-            disconnectDate = calendar.getTime();
+                disconnectDate = calendar.getTime();
+                System.out.println(disconnectDate);
 
-            if (invoice.getStatus().equals("Overdue")) {
-                int disconnect = currentDate.compareTo(disconnectDate);
-                if (disconnect >= 0) {
-                    try {
-                        PreparedStatement updateStatement = connect.prepareStatement("UPDATE Client SET "
-                                + "client_status = 'Disconnected' WHERE client_id = ?");
-                        updateStatement.setInt(1, invoice.getClientId());
+                if (invoice.getStatus().equals("Overdue")) {
+                    int disconnect = currentDate.compareTo(disconnectDate);
+                    if (disconnect >= 0) {
+                        try {
+                            PreparedStatement updateStatement = connect.prepareStatement("UPDATE Client SET "
+                                    + "client_status = 'Disconnected' WHERE client_id = ?");
+                            updateStatement.setInt(1, invoice.getClientId());
 
-                        updateStatement.executeUpdate();
-                    } catch (SQLException ex) {
-                        Logger.getLogger(InvoicePanel.class.getName()).log(Level.SEVERE, null, ex);
+                            updateStatement.executeUpdate();
+                        } catch (SQLException ex) {
+                            Logger.getLogger(InvoicePanel.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+
+                        String suffix = accountUsername.substring(accountUsername.indexOf("_") + 1);
+                        if (suffix.equals("admin")) {
+                            PreparedStatement insertStatement;                           
+                            try {
+                                insertStatement = connect.prepareStatement("INSERT IGNORE INTO Invoice (invoice_id, "
+                                        + "invoice_period_date, invoice_reading, invoice_consumption, invoice_reconnection_charge, invoice_basic_charge, invoice_transitory_charge, invoice_environmental_charge, "
+                                        + "invoice_sewerage_charge, invoice_maintenance_charge, "
+                                        + "invoice_before_tax, invoice_tax, invoice_discount, invoice_amount, invoice_status, client_id, admin_id)"
+                                        + "VALUES (?, ?, ?, ?, 257.31, 0, 0, 0, 0, 0, 0, 0, 0, 257.31, 'Unpaid', ?, ?)");
+
+                                insertStatement.setInt(1, invoices.get(invoices.size() - 1).getId() + 1);
+                                insertStatement.setString(2, dateFormat.format(disconnectDate));
+                                insertStatement.setInt(3, invoice.getReading());
+                                insertStatement.setInt(4, invoice.getConsumption());                                
+                                insertStatement.setInt(5, invoice.getClientId());
+
+                                int adminId = 0;
+                                for (Admin admin : admins) {
+                                    if (accountUsername.equals(admin.getUsername())) {
+                                        adminId = admin.getId();
+                                    }
+                                }
+
+                                insertStatement.setInt(6, adminId);
+
+                                insertStatement.executeUpdate();                               
+                            } catch (SQLException ex) {
+                                Logger.getLogger(CreateInvoice.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+
+                            updateDatas();                                                                                                               
+                        } else if (suffix.equals("staff")) {
+                            PreparedStatement insertStatement;                            
+                            try {
+                                insertStatement = connect.prepareStatement("INSERT IGNORE INTO Invoice (invoice_id, "
+                                        + "invoice_period_date, invoice_reading, invoice_consumption, invoice_reconnection_charge, invoice_basic_charge, invoice_transitory_charge, invoice_environmental_charge, "
+                                        + "invoice_sewerage_charge, invoice_maintenance_charge, "
+                                        + "invoice_before_tax, invoice_tax, invoice_discount, invoice_amount, invoice_status, client_id, staff_id)"
+                                        + "VALUES (?, ?, ?, ?, 257.31, 0, 0, 0, 0, 0, 0, 0, 0, 257.31, 'Unpaid', ?, ?)");
+
+                                insertStatement.setInt(1,invoices.get(invoices.size() - 1).getId() + 1);
+                                insertStatement.setString(2, dateFormat.format(disconnectDate));
+                                insertStatement.setInt(3, invoice.getReading());
+                                insertStatement.setInt(4, invoice.getConsumption());                                
+                                insertStatement.setInt(5, invoice.getClientId());
+
+                                int staffId = 0;
+                                for (Staff staff : staffs) {
+                                    if (accountUsername.equals(staff.getUsername())) {
+                                        staffId = staff.getId();
+                                    }
+                                }
+
+                                insertStatement.setInt(6, staffId);
+
+                                insertStatement.executeUpdate();                                 
+                            } catch (SQLException ex) {
+                                Logger.getLogger(CreateInvoice.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+
+                            updateDatas();                                                                                 
+                        }
                     }
                 }
             }
+
         }
     }
-    
+
     public boolean checkTextFields() {
         if (lastname.getText().equals("") && firstname.getText().equals("") && address.getText().equals("") && phonenumber.getText().equals("")
                 && metersize.getText().equals("") && meterId.getText().equals("")) {
