@@ -99,7 +99,7 @@ class Invoice {
 
     public void setReconnection(double reconnection) {
         this.reconnection = reconnection;
-    }        
+    }
 
     public double getBasic() {
         return basic;
@@ -445,19 +445,22 @@ public class InvoicePanel extends javax.swing.JPanel {
             Date dueDate = null;
             try {
                 dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                dueDate = dateFormat.parse(invoices.get(i).getPeriod());
+                if (invoices.get(i).getPeriod() != null) {
+                    dueDate = dateFormat.parse(invoices.get(i).getPeriod());
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(dueDate);
+
+                    calendar.add(Calendar.DAY_OF_YEAR, 7);
+                    dueDate = calendar.getTime();
+
+                    dateFormat = new SimpleDateFormat("MMMM dd yyyy");
+                    row[2] = dateFormat.format(dueDate);
+                } else {
+                    row[2] = null;
+                }
             } catch (ParseException ex) {
                 Logger.getLogger(InvoicePanel.class.getName()).log(Level.SEVERE, null, ex);
             }
-
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(dueDate);
-
-            calendar.add(Calendar.DAY_OF_YEAR, 7);
-            dueDate = calendar.getTime();
-
-            dateFormat = new SimpleDateFormat("MMMM dd yyyy");
-            row[2] = dateFormat.format(dueDate);
 
             row[3] = chargeFormat.format(invoices.get(i).getAmount());
             row[4] = chargeFormat.format(invoices.get(i).getPayment());
@@ -569,36 +572,38 @@ public class InvoicePanel extends javax.swing.JPanel {
         Date dueDate = null;
 
         for (Invoice invoice : invoices) {
-            try {
-                dueDate = dateFormat.parse(invoice.getPeriod());
-            } catch (ParseException ex) {
-                Logger.getLogger(InvoicePanel.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            if (invoice.getReconnection() == 0) {
+                try {
+                    dueDate = dateFormat.parse(invoice.getPeriod());
+                } catch (ParseException ex) {
+                    Logger.getLogger(InvoicePanel.class.getName()).log(Level.SEVERE, null, ex);
+                }
 
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(dueDate);
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(dueDate);
 
-            calendar.add(Calendar.DAY_OF_YEAR, 7);
-            dueDate = calendar.getTime();
-            String dd = dateFormat.format(dueDate);
+                calendar.add(Calendar.DAY_OF_YEAR, 7);
+                dueDate = calendar.getTime();
+                String dd = dateFormat.format(dueDate);
 
-            try {
-                dueDate = dateFormat.parse(dd);
-            } catch (ParseException ex) {
-                Logger.getLogger(InvoicePanel.class.getName()).log(Level.SEVERE, null, ex);
-            }
+                try {
+                    dueDate = dateFormat.parse(dd);
+                } catch (ParseException ex) {
+                    Logger.getLogger(InvoicePanel.class.getName()).log(Level.SEVERE, null, ex);
+                }
 
-            if (invoice.getStatus().equals("Unpaid")) {
-                int overdue = currentDate.compareTo(dueDate);
-                if (overdue > 0) {
-                    try {
-                        PreparedStatement updateStatement = connect.prepareStatement("UPDATE Invoice SET "
-                                + "invoice_status = 'Overdue' WHERE invoice_id = ?");
-                        updateStatement.setInt(1, invoice.getId());
+                if (invoice.getStatus().equals("Unpaid")) {
+                    int overdue = currentDate.compareTo(dueDate);
+                    if (overdue > 0) {
+                        try {
+                            PreparedStatement updateStatement = connect.prepareStatement("UPDATE Invoice SET "
+                                    + "invoice_status = 'Overdue' WHERE invoice_id = ?");
+                            updateStatement.setInt(1, invoice.getId());
 
-                        updateStatement.executeUpdate();
-                    } catch (SQLException ex) {
-                        Logger.getLogger(InvoicePanel.class.getName()).log(Level.SEVERE, null, ex);
+                            updateStatement.executeUpdate();
+                        } catch (SQLException ex) {
+                            Logger.getLogger(InvoicePanel.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
                 }
             }

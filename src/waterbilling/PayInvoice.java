@@ -55,13 +55,17 @@ public class PayInvoice extends javax.swing.JFrame {
         dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date p = null;
         try {
-            p = dateFormat.parse((invoices.get(invoiceId).getPeriod()));
+            if (invoices.get(invoiceId).getPeriod() != null) {
+                p = dateFormat.parse(invoices.get(invoiceId).getPeriod());
+                dateFormat = new SimpleDateFormat("MMMM dd yyyy");
+                period.setText(dateFormat.format(p));
+            } else {
+                period.setText("");
+            }
+
         } catch (ParseException ex) {
             Logger.getLogger(PayInvoice.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        dateFormat = new SimpleDateFormat("MMMM dd yyyy");
-        period.setText(dateFormat.format(p));
 
         clientIndex = 0;
         for (Client client : clients) {
@@ -83,10 +87,14 @@ public class PayInvoice extends javax.swing.JFrame {
         consumption.setText(Integer.toString(invoices.get(invoiceId).getConsumption()));
 
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(p);
-        calendar.add(Calendar.MONTH, -1);
+        if (p != null) {
+            calendar.setTime(p);
+            calendar.add(Calendar.MONTH, -1);
 
-        period2.setText(dateFormat.format(calendar.getTime()) + " TO " + dateFormat.format(p));
+            period2.setText(dateFormat.format(calendar.getTime()) + " TO " + dateFormat.format(p));
+        }else{
+            period2.setText("");
+        }
 
         basic.setText(chargeFormat.format(invoices.get(invoiceId).getBasic()));
 
@@ -101,8 +109,8 @@ public class PayInvoice extends javax.swing.JFrame {
         beforeTax.setText(chargeFormat.format(invoices.get(invoiceId).getBefore()));
 
         tax.setText(chargeFormat.format(invoices.get(invoiceId).getTax()));
-        
-        if(invoices.get(invoiceId).getReconnection() != 0){
+
+        if (invoices.get(invoiceId).getReconnection() != 0) {
             reconnection.setText(chargeFormat.format(257.31));
         }
 
@@ -729,7 +737,7 @@ public class PayInvoice extends javax.swing.JFrame {
                     Logger.getLogger(PayInvoice.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 this.dispose();
-            }else {
+            } else {
                 JOptionPane.showMessageDialog(null, "Insufficient Amount", "Pay Invoice", JOptionPane.WARNING_MESSAGE);
                 return;
             }

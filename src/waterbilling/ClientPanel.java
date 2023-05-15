@@ -818,7 +818,7 @@ public class ClientPanel extends javax.swing.JPanel {
                                 Logger.getLogger(AdminPanel.class.getName()).log(Level.SEVERE, null, ex);
                             }
                             JOptionPane.showMessageDialog(null, "Client Deleted!", "Delete", JOptionPane.INFORMATION_MESSAGE);
-
+                            createInvoice.setEnabled(false);
                         }
                     }
                 } else {
@@ -846,7 +846,16 @@ public class ClientPanel extends javax.swing.JPanel {
 
     private void createInvoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createInvoiceActionPerformed
         Object client = table.getValueAt(row, 0);
-        new CreateInvoice(Integer.parseInt(client.toString()), accountUsername, accountPassword).setVisible(true);
+
+        for (Client c : clients) {
+            if (Integer.parseInt(client.toString()) == c.getId()) {
+                if (c.getStatus().equals("Disconnected")) {
+                    JOptionPane.showMessageDialog(null, "Pay Invoices first to get reconnected!", "Create Invoice", JOptionPane.WARNING_MESSAGE);
+                } else if (c.getStatus().equals("Connected")) {
+                    new CreateInvoice(Integer.parseInt(client.toString()), accountUsername, accountPassword).setVisible(true);
+                }
+            }
+        }
     }//GEN-LAST:event_createInvoiceActionPerformed
 
     private void refreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshActionPerformed
@@ -902,10 +911,33 @@ public class ClientPanel extends javax.swing.JPanel {
                         } catch (SQLException ex) {
                             Logger.getLogger(InvoicePanel.class.getName()).log(Level.SEVERE, null, ex);
                         }
+                    }
+                }
+            }
+        }
+        for (Client client : clients) {
+            if (client.getStatus().equals("Disconnected")) {
+                for (Invoice invoice : invoices) {
+                    if (client.getId() == invoice.getClientId() && invoice.getReconnection() != 0 && invoice.getStatus().equals("Unpaid")) {
+                        return;
+                    }
+                    if (client.getId() == invoice.getClientId() && invoice.getStatus().equals("Paid")) {
+                        try {
+                            PreparedStatement updateStatement = connect.prepareStatement("UPDATE Client SET "
+                                    + "client_status = 'Connected' WHERE client_id = ?");
+                            updateStatement.setInt(1, invoice.getClientId());
 
+                            updateStatement.executeUpdate();
+                        } catch (SQLException ex) {
+                            Logger.getLogger(InvoicePanel.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+                for (Meter meter : meters) {
+                    if (client.getMeterId().equals(meter.getId())) {
                         String suffix = accountUsername.substring(accountUsername.indexOf("_") + 1);
                         if (suffix.equals("admin")) {
-                            PreparedStatement insertStatement;                           
+                            PreparedStatement insertStatement;
                             try {
                                 insertStatement = connect.prepareStatement("INSERT IGNORE INTO Invoice (invoice_id, invoice_reading, "
                                         + "invoice_consumption, invoice_reconnection_charge, invoice_basic_charge, "
@@ -914,10 +946,15 @@ public class ClientPanel extends javax.swing.JPanel {
                                         + "invoice_before_tax, invoice_tax, invoice_discount, invoice_amount, invoice_status, client_id, admin_id)"
                                         + "VALUES (?, ?, ?, 257.31, 0, 0, 0, 0, 0, 0, 0, 0, 257.31, 'Unpaid', ?, ?)");
 
-                                insertStatement.setInt(1, invoices.get(invoices.size() - 1).getId() + 1);                                
-                                insertStatement.setInt(2, invoice.getReading());
-                                insertStatement.setInt(3, invoice.getConsumption());                                
-                                insertStatement.setInt(4, invoice.getClientId());
+                                if (!invoices.isEmpty()) {
+                                    insertStatement.setInt(1, invoices.get(invoices.size() - 1).getId() + 1);
+                                } else {
+                                    insertStatement.setInt(1, 1001);
+                                }
+
+                                insertStatement.setInt(2, meter.getReading());
+                                insertStatement.setInt(3, meter.getConsumption());
+                                insertStatement.setInt(4, client.getId());
 
                                 int adminId = 0;
                                 for (Admin admin : admins) {
@@ -928,14 +965,14 @@ public class ClientPanel extends javax.swing.JPanel {
 
                                 insertStatement.setInt(5, adminId);
 
-                                insertStatement.executeUpdate();                               
+                                insertStatement.executeUpdate();
                             } catch (SQLException ex) {
-                                Logger.getLogger(CreateInvoice.class.getName()).log(Level.SEVERE, null, ex);
+                                Logger.getLogger(ClientPanel.class.getName()).log(Level.SEVERE, null, ex);
                             }
 
-                            updateDatas();                                                                                                               
+                            updateDatas();
                         } else if (suffix.equals("staff")) {
-                            PreparedStatement insertStatement;                            
+                            PreparedStatement insertStatement;
                             try {
                                 insertStatement = connect.prepareStatement("INSERT IGNORE INTO Invoice (invoice_id,"
                                         + " invoice_reading, invoice_consumption, invoice_reconnection_charge, invoice_basic_charge, "
@@ -944,10 +981,10 @@ public class ClientPanel extends javax.swing.JPanel {
                                         + "invoice_before_tax, invoice_tax, invoice_discount, invoice_amount, invoice_status, client_id, staff_id)"
                                         + "VALUES (?, ?, ?, 257.31, 0, 0, 0, 0, 0, 0, 0, 0, 257.31, 'Unpaid', ?, ?)");
 
-                                insertStatement.setInt(1,invoices.get(invoices.size() - 1).getId() + 1);                                
-                                insertStatement.setInt(2, invoice.getReading());
-                                insertStatement.setInt(3, invoice.getConsumption());                                
-                                insertStatement.setInt(4, invoice.getClientId());
+                                insertStatement.setInt(1, invoices.get(invoices.size() - 1).getId() + 1);
+                                insertStatement.setInt(2, meter.getReading());
+                                insertStatement.setInt(3, meter.getConsumption());
+                                insertStatement.setInt(4, client.getId());
 
                                 int staffId = 0;
                                 for (Staff staff : staffs) {
@@ -958,17 +995,16 @@ public class ClientPanel extends javax.swing.JPanel {
 
                                 insertStatement.setInt(5, staffId);
 
-                                insertStatement.executeUpdate();                                 
+                                insertStatement.executeUpdate();
                             } catch (SQLException ex) {
-                                Logger.getLogger(CreateInvoice.class.getName()).log(Level.SEVERE, null, ex);
+                                Logger.getLogger(ClientPanel.class.getName()).log(Level.SEVERE, null, ex);
                             }
 
-                            updateDatas();                                                                                 
+                            updateDatas();
                         }
                     }
                 }
             }
-
         }
     }
 
