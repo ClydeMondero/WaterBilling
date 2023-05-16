@@ -1,6 +1,9 @@
 package waterbilling;
 
 import java.awt.Rectangle;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -23,6 +26,13 @@ import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
 import static waterbilling.ClientPanel.clients;
 import static waterbilling.ClientPanel.meters;
 import static waterbilling.AdminPanel.admins;
@@ -268,6 +278,7 @@ public class InvoicePanel extends javax.swing.JPanel {
         cancel = new javax.swing.JButton();
         payInvoice = new javax.swing.JButton();
         refresh = new javax.swing.JButton();
+        printReports = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(203, 243, 240));
         addMouseListener(new java.awt.event.MouseAdapter() {
@@ -339,6 +350,15 @@ public class InvoicePanel extends javax.swing.JPanel {
             }
         });
 
+        printReports.setBackground(new java.awt.Color(255, 159, 28));
+        printReports.setForeground(new java.awt.Color(255, 255, 255));
+        printReports.setText("Print Reports");
+        printReports.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                printReportsActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -348,6 +368,8 @@ public class InvoicePanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(refresh)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(printReports)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(listOfAcccountLabel)
                         .addGap(304, 304, 304))
@@ -373,7 +395,8 @@ public class InvoicePanel extends javax.swing.JPanel {
                 .addGap(15, 15, 15)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(listOfAcccountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(refresh))
+                    .addComponent(refresh)
+                    .addComponent(printReports))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 410, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cancel, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -624,11 +647,30 @@ public class InvoicePanel extends javax.swing.JPanel {
         showDataInTable();
     }//GEN-LAST:event_refreshActionPerformed
 
+    private void printReportsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printReportsActionPerformed
+        try {
+            JasperReport clientReport = (JasperReport) JRLoader.loadObject(getClass().getResourceAsStream("/waterbilling/InvoiceReport.jasper"));
+
+            JasperPrint jp = JasperFillManager.fillReport(clientReport, null, connect);
+
+            JasperViewer.viewReport(jp, true);
+
+            JasperExportManager.exportReportToPdfStream(
+                    jp, new FileOutputStream(new File("reports/invoicereport.pdf"))
+            );
+        } catch (JRException ex) {
+            Logger.getLogger(ClientPanel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ClientPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_printReportsActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancel;
     private javax.swing.JLabel listOfAcccountLabel;
     private javax.swing.JButton payInvoice;
+    private javax.swing.JButton printReports;
     private javax.swing.JButton refresh;
     private javax.swing.JScrollPane scrollpane;
     private javax.swing.JTextField search;

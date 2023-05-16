@@ -94,10 +94,6 @@ CREATE TABLE IF NOT EXISTS Client(
         FOREIGN KEY (meter_id) REFERENCES Meter(meter_id)        	
 )AUTO_INCREMENT = 1001;
 
-INSERT IGNORE INTO Client (client_id, client_lastname, client_firstname, client_middlename, client_address, client_phonenumber, 
-client_rateclass, meter_id, client_status) 
-VALUES (1001, 'Ragos', 'Ryan', 'M', 'Bustos, Bulacan', '0923358201', 'Residential', 123456, 'Connected');
-
 CREATE TABLE IF NOT EXISTS AdminsClients(		
         client_id INT NOT NULL,        
         admin_id INT NOT NULL,   
@@ -115,8 +111,6 @@ CREATE TABLE IF NOT EXISTS StaffsClients(
         FOREIGN KEY (staff_id) REFERENCES Staff(staff_id),
         UNIQUE (client_id, staff_id, action)
 );
-
-INSERT IGNORE INTO StaffsClients VALUES(1001, 1001, 'Created');
 
 CREATE TABLE IF NOT EXISTS Invoice(
 		invoice_id INT PRIMARY KEY AUTO_INCREMENT,                 	
