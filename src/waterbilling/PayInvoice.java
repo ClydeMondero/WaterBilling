@@ -20,8 +20,9 @@ import javax.swing.JOptionPane;
 import static waterbilling.ClientPanel.clients;
 import static waterbilling.ClientPanel.meters;
 import static waterbilling.AdminPanel.admins;
-import static waterbilling.StaffPanel.staffs;
+import static waterbilling.InvoicePanel.charges;
 import static waterbilling.InvoicePanel.invoices;
+import static waterbilling.StaffPanel.staffs;
 
 public class PayInvoice extends javax.swing.JFrame {
 
@@ -105,21 +106,21 @@ public class PayInvoice extends javax.swing.JFrame {
             period2.setText("");
         }
 
-        basic.setText(chargeFormat.format(invoices.get(invoiceId).getBasic()));
+        basic.setText(chargeFormat.format(charges.get(invoiceId).getBasic()));
 
-        transitory.setText(chargeFormat.format(invoices.get(invoiceId).getTransitory()));
+        transitory.setText(chargeFormat.format(charges.get(invoiceId).getTransitory()));
 
-        environmental.setText(chargeFormat.format(invoices.get(invoiceId).getEnvironmental()));
+        environmental.setText(chargeFormat.format(charges.get(invoiceId).getEnvironmental()));
 
-        sewerage.setText(chargeFormat.format(invoices.get(invoiceId).getSewerage()));
+        sewerage.setText(chargeFormat.format(charges.get(invoiceId).getSewerage()));
 
-        maintenance.setText(chargeFormat.format(invoices.get(invoiceId).getMaintenance()));
+        maintenance.setText(chargeFormat.format(charges.get(invoiceId).getMaintenance()));
 
         beforeTax.setText(chargeFormat.format(invoices.get(invoiceId).getBefore()));
 
         tax.setText(chargeFormat.format(invoices.get(invoiceId).getTax()));
 
-        if (invoices.get(invoiceId).getReconnection() != 0) {
+        if (charges.get(invoiceId).getReconnection() != 0) {
             reconnection.setText(chargeFormat.format(257.31));
         }
 
@@ -778,39 +779,42 @@ public class PayInvoice extends javax.swing.JFrame {
         return s;
     }
 
-    public void updateDatas() {
+     public void updateDatas() {
         try {
             Statement statement = connect.createStatement();
             Statement statement2 = connect.createStatement();
 
-            ResultSet selectStatementStaff = statement.executeQuery("SELECT * FROM Invoice\n"
-                    + "JOIN Client ON Invoice.client_id = Client.client_id\n"
+            ResultSet selectStatementStaff = statement.executeQuery("SELECT * FROM Invoice "
+                    + "JOIN Charge ON Invoice.charge_id = Charge.charge_id "
+                    + "JOIN Client ON Invoice.client_id = Client.client_id "
                     + "JOIN Staff ON Invoice.staff_id = Staff.staff_id ");
 
-            ResultSet selectStatementAdmin = statement2.executeQuery("SELECT * FROM Invoice\n"
-                    + "JOIN Client ON Invoice.client_id = Client.client_id\n"
+            ResultSet selectStatementAdmin = statement2.executeQuery("SELECT * FROM Invoice "
+                    +"JOIN Charge ON Invoice.charge_id = Charge.charge_id " 
+                    +"JOIN Client ON Invoice.client_id = Client.client_id "
                     + "JOIN Admin ON Invoice.admin_id = Admin.admin_id ");
 
             invoices.clear();
+            charges.clear();
             while (selectStatementStaff.next()) {
                 invoices.add(new Invoice(selectStatementStaff.getInt("invoice_id"), selectStatementStaff.getString("invoice_period_date"),
-                        selectStatementStaff.getInt("invoice_reading"), selectStatementStaff.getInt("invoice_consumption"), selectStatementStaff.getDouble("invoice_reconnection_charge"),
-                        selectStatementStaff.getDouble("invoice_basic_charge"), selectStatementStaff.getDouble("invoice_transitory_charge"),
-                        selectStatementStaff.getDouble("invoice_environmental_charge"), selectStatementStaff.getDouble("invoice_sewerage_charge"),
-                        selectStatementStaff.getDouble("invoice_maintenance_charge"), selectStatementStaff.getDouble("invoice_before_tax"), selectStatementStaff.getDouble("invoice_tax"),
-                        selectStatementStaff.getDouble("invoice_discount"), selectStatementStaff.getDouble("invoice_amount"),
+                        selectStatementStaff.getInt("invoice_reading"), selectStatementStaff.getInt("invoice_consumption"), selectStatementStaff.getDouble("invoice_before_tax"),
+                        selectStatementStaff.getDouble("invoice_tax"), selectStatementStaff.getDouble("invoice_discount"), selectStatementStaff.getDouble("invoice_amount"),
                         selectStatementStaff.getDouble("invoice_payment"), selectStatementStaff.getString("invoice_payment_date"), selectStatementStaff.getString("invoice_status"),
-                        selectStatementStaff.getInt("client_id"), selectStatementStaff.getInt("staff_id")));
+                        selectStatementStaff.getInt("charge_id"), selectStatementStaff.getInt("client_id"), selectStatementStaff.getInt("staff_id")));
+                charges.add(new Charge(selectStatementStaff.getInt("charge_id"), selectStatementStaff.getDouble("charge_reconnection"), selectStatementStaff.getDouble("charge_basic"),
+                        selectStatementStaff.getDouble("charge_transitory"), selectStatementStaff.getDouble("charge_environmental"), selectStatementStaff.getDouble("charge_sewerage"),
+                        selectStatementStaff.getDouble("charge_maintenance")));
             }
             while (selectStatementAdmin.next()) {
                 invoices.add(new Invoice(selectStatementAdmin.getInt("invoice_id"), selectStatementAdmin.getString("invoice_period_date"),
-                        selectStatementAdmin.getInt("invoice_reading"), selectStatementAdmin.getInt("invoice_consumption"), selectStatementAdmin.getDouble("invoice_reconnection_charge"),
-                        selectStatementAdmin.getDouble("invoice_basic_charge"), selectStatementAdmin.getDouble("invoice_transitory_charge"),
-                        selectStatementAdmin.getDouble("invoice_environmental_charge"), selectStatementAdmin.getDouble("invoice_sewerage_charge"),
-                        selectStatementAdmin.getDouble("invoice_maintenance_charge"), selectStatementAdmin.getDouble("invoice_before_tax"), selectStatementAdmin.getDouble("invoice_tax"),
-                        selectStatementAdmin.getDouble("invoice_discount"), selectStatementAdmin.getDouble("invoice_amount"),
+                        selectStatementAdmin.getInt("invoice_reading"), selectStatementAdmin.getInt("invoice_consumption"), selectStatementAdmin.getDouble("invoice_before_tax"),
+                        selectStatementAdmin.getDouble("invoice_tax"), selectStatementAdmin.getDouble("invoice_discount"), selectStatementAdmin.getDouble("invoice_amount"),
                         selectStatementAdmin.getDouble("invoice_payment"), selectStatementAdmin.getString("invoice_payment_date"), selectStatementAdmin.getString("invoice_status"),
-                        selectStatementAdmin.getInt("client_id"), selectStatementAdmin.getInt("admin_id")));
+                        selectStatementAdmin.getInt("charge_id"), selectStatementAdmin.getInt("client_id"), selectStatementAdmin.getInt("admin_id")));
+                charges.add(new Charge(selectStatementAdmin.getInt("charge_id"), selectStatementAdmin.getDouble("charge_reconnection"), selectStatementAdmin.getDouble("charge_basic"),
+                        selectStatementAdmin.getDouble("charge_transitory"), selectStatementAdmin.getDouble("charge_environmental"), selectStatementAdmin.getDouble("charge_sewerage"),
+                        selectStatementAdmin.getDouble("charge_maintenance")));
             }
         } catch (SQLException ex) {
             Logger.getLogger(AdminPanel.class.getName()).log(Level.SEVERE, null, ex);

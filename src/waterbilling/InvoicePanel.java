@@ -43,23 +43,17 @@ class Invoice {
     private int id;
     private String period;
     private int reading, consumption;
-    private double reconnection, basic, transitory, environmental, sewerage, maintenance, before, tax, discount, amount;
+    private double before, tax, discount, amount;
     private double payment;
     private String paymentDate;
     private String status;
-    private int clientId, officerId;
+    private int chargeId, clientId, officerId;
 
-    public Invoice(int id, String period, int reading, int consumption, double reconnection, double basic, double transitory, double environmental, double sewerage, double maintenance, double before, double tax, double discount, double amount, double payment, String paymentDate, String status, int clientId, int officerId) {
+    public Invoice(int id, String period, int reading, int consumption, double before, double tax, double discount, double amount, double payment, String paymentDate, String status, int chargeId, int clientId, int officerId) {
         this.id = id;
         this.period = period;
         this.reading = reading;
         this.consumption = consumption;
-        this.reconnection = reconnection;
-        this.basic = basic;
-        this.transitory = transitory;
-        this.environmental = environmental;
-        this.sewerage = sewerage;
-        this.maintenance = maintenance;
         this.before = before;
         this.tax = tax;
         this.discount = discount;
@@ -67,6 +61,7 @@ class Invoice {
         this.payment = payment;
         this.paymentDate = paymentDate;
         this.status = status;
+        this.chargeId = chargeId;
         this.clientId = clientId;
         this.officerId = officerId;
     }
@@ -101,54 +96,6 @@ class Invoice {
 
     public void setConsumption(int consumption) {
         this.consumption = consumption;
-    }
-
-    public double getReconnection() {
-        return reconnection;
-    }
-
-    public void setReconnection(double reconnection) {
-        this.reconnection = reconnection;
-    }
-
-    public double getBasic() {
-        return basic;
-    }
-
-    public void setBasic(double basic) {
-        this.basic = basic;
-    }
-
-    public double getTransitory() {
-        return transitory;
-    }
-
-    public void setTransitory(double transitory) {
-        this.transitory = transitory;
-    }
-
-    public double getEnvironmental() {
-        return environmental;
-    }
-
-    public void setEnvironmental(double environmental) {
-        this.environmental = environmental;
-    }
-
-    public double getSewerage() {
-        return sewerage;
-    }
-
-    public void setSewerage(double sewerage) {
-        this.sewerage = sewerage;
-    }
-
-    public double getMaintenance() {
-        return maintenance;
-    }
-
-    public void setMaintenance(double maintenance) {
-        this.maintenance = maintenance;
     }
 
     public double getBefore() {
@@ -207,6 +154,14 @@ class Invoice {
         this.status = status;
     }
 
+    public int getChargeId() {
+        return chargeId;
+    }
+
+    public void setChargeId(int chargeId) {
+        this.chargeId = chargeId;
+    }
+
     public int getClientId() {
         return clientId;
     }
@@ -222,6 +177,78 @@ class Invoice {
     public void setOfficerId(int officerId) {
         this.officerId = officerId;
     }
+}
+
+class Charge {
+
+    private int id;
+    private double reconnection, basic, transitory, environmental, sewerage, maintenance;
+
+    public Charge(int id, double reconnection, double basic, double transitory, double environmental, double sewerage, double maintenance) {
+        this.id = id;
+        this.reconnection = reconnection;
+        this.basic = basic;
+        this.transitory = transitory;
+        this.environmental = environmental;
+        this.sewerage = sewerage;
+        this.maintenance = maintenance;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public double getReconnection() {
+        return reconnection;
+    }
+
+    public void setReconnection(double reconnection) {
+        this.reconnection = reconnection;
+    }
+
+    public double getBasic() {
+        return basic;
+    }
+
+    public void setBasic(double basic) {
+        this.basic = basic;
+    }
+
+    public double getTransitory() {
+        return transitory;
+    }
+
+    public void setTransitory(double transitory) {
+        this.transitory = transitory;
+    }
+
+    public double getEnvironmental() {
+        return environmental;
+    }
+
+    public void setEnvironmental(double environmental) {
+        this.environmental = environmental;
+    }
+
+    public double getSewerage() {
+        return sewerage;
+    }
+
+    public void setSewerage(double sewerage) {
+        this.sewerage = sewerage;
+    }
+
+    public double getMaintenance() {
+        return maintenance;
+    }
+
+    public void setMaintenance(double maintenance) {
+        this.maintenance = maintenance;
+    }
 
 }
 
@@ -230,6 +257,7 @@ public class InvoicePanel extends javax.swing.JPanel {
     Connection connect = null;
 
     static ArrayList<Invoice> invoices = new ArrayList<>();
+    static ArrayList<Charge> charges = new ArrayList<>();
 
     String accountUsername, accountPassword;
 
@@ -417,34 +445,37 @@ public class InvoicePanel extends javax.swing.JPanel {
             Statement statement = connect.createStatement();
             Statement statement2 = connect.createStatement();
 
-            ResultSet selectStatementStaff = statement.executeQuery("SELECT * FROM Invoice\n"
-                    + "JOIN Client ON Invoice.client_id = Client.client_id\n"
+            ResultSet selectStatementStaff = statement.executeQuery("SELECT * FROM Invoice "
+                    + "JOIN Charge ON Invoice.charge_id = Charge.charge_id "
+                    + "JOIN Client ON Invoice.client_id = Client.client_id "
                     + "JOIN Staff ON Invoice.staff_id = Staff.staff_id ");
 
-            ResultSet selectStatementAdmin = statement2.executeQuery("SELECT * FROM Invoice\n"
-                    + "JOIN Client ON Invoice.client_id = Client.client_id\n"
+            ResultSet selectStatementAdmin = statement2.executeQuery("SELECT * FROM Invoice "
+                    +"JOIN Charge ON Invoice.charge_id = Charge.charge_id " 
+                    +"JOIN Client ON Invoice.client_id = Client.client_id "
                     + "JOIN Admin ON Invoice.admin_id = Admin.admin_id ");
 
             invoices.clear();
+            charges.clear();
             while (selectStatementStaff.next()) {
                 invoices.add(new Invoice(selectStatementStaff.getInt("invoice_id"), selectStatementStaff.getString("invoice_period_date"),
-                        selectStatementStaff.getInt("invoice_reading"), selectStatementStaff.getInt("invoice_consumption"), selectStatementStaff.getDouble("invoice_reconnection_charge"),
-                        selectStatementStaff.getDouble("invoice_basic_charge"), selectStatementStaff.getDouble("invoice_transitory_charge"),
-                        selectStatementStaff.getDouble("invoice_environmental_charge"), selectStatementStaff.getDouble("invoice_sewerage_charge"),
-                        selectStatementStaff.getDouble("invoice_maintenance_charge"), selectStatementStaff.getDouble("invoice_before_tax"), selectStatementStaff.getDouble("invoice_tax"),
-                        selectStatementStaff.getDouble("invoice_discount"), selectStatementStaff.getDouble("invoice_amount"),
+                        selectStatementStaff.getInt("invoice_reading"), selectStatementStaff.getInt("invoice_consumption"), selectStatementStaff.getDouble("invoice_before_tax"),
+                        selectStatementStaff.getDouble("invoice_tax"), selectStatementStaff.getDouble("invoice_discount"), selectStatementStaff.getDouble("invoice_amount"),
                         selectStatementStaff.getDouble("invoice_payment"), selectStatementStaff.getString("invoice_payment_date"), selectStatementStaff.getString("invoice_status"),
-                        selectStatementStaff.getInt("client_id"), selectStatementStaff.getInt("staff_id")));
+                        selectStatementStaff.getInt("charge_id"), selectStatementStaff.getInt("client_id"), selectStatementStaff.getInt("staff_id")));
+                charges.add(new Charge(selectStatementStaff.getInt("charge_id"), selectStatementStaff.getDouble("charge_reconnection"), selectStatementStaff.getDouble("charge_basic"),
+                        selectStatementStaff.getDouble("charge_transitory"), selectStatementStaff.getDouble("charge_environmental"), selectStatementStaff.getDouble("charge_sewerage"),
+                        selectStatementStaff.getDouble("charge_maintenance")));
             }
             while (selectStatementAdmin.next()) {
                 invoices.add(new Invoice(selectStatementAdmin.getInt("invoice_id"), selectStatementAdmin.getString("invoice_period_date"),
-                        selectStatementAdmin.getInt("invoice_reading"), selectStatementAdmin.getInt("invoice_consumption"), selectStatementAdmin.getDouble("invoice_reconnection_charge"),
-                        selectStatementAdmin.getDouble("invoice_basic_charge"), selectStatementAdmin.getDouble("invoice_transitory_charge"),
-                        selectStatementAdmin.getDouble("invoice_environmental_charge"), selectStatementAdmin.getDouble("invoice_sewerage_charge"),
-                        selectStatementAdmin.getDouble("invoice_maintenance_charge"), selectStatementAdmin.getDouble("invoice_before_tax"), selectStatementAdmin.getDouble("invoice_tax"),
-                        selectStatementAdmin.getDouble("invoice_discount"), selectStatementAdmin.getDouble("invoice_amount"),
+                        selectStatementAdmin.getInt("invoice_reading"), selectStatementAdmin.getInt("invoice_consumption"), selectStatementAdmin.getDouble("invoice_before_tax"),
+                        selectStatementAdmin.getDouble("invoice_tax"), selectStatementAdmin.getDouble("invoice_discount"), selectStatementAdmin.getDouble("invoice_amount"),
                         selectStatementAdmin.getDouble("invoice_payment"), selectStatementAdmin.getString("invoice_payment_date"), selectStatementAdmin.getString("invoice_status"),
-                        selectStatementAdmin.getInt("client_id"), selectStatementAdmin.getInt("admin_id")));
+                        selectStatementAdmin.getInt("charge_id"), selectStatementAdmin.getInt("client_id"), selectStatementAdmin.getInt("admin_id")));
+                charges.add(new Charge(selectStatementAdmin.getInt("charge_id"), selectStatementAdmin.getDouble("charge_reconnection"), selectStatementAdmin.getDouble("charge_basic"),
+                        selectStatementAdmin.getDouble("charge_transitory"), selectStatementAdmin.getDouble("charge_environmental"), selectStatementAdmin.getDouble("charge_sewerage"),
+                        selectStatementAdmin.getDouble("charge_maintenance")));
             }
         } catch (SQLException ex) {
             Logger.getLogger(AdminPanel.class.getName()).log(Level.SEVERE, null, ex);
@@ -588,10 +619,10 @@ public class InvoicePanel extends javax.swing.JPanel {
         checkDates();
 
         showDataInTable();
-        
-        if(invoices.isEmpty()){
+
+        if (invoices.isEmpty()) {
             printReports.setEnabled(false);
-        }else{
+        } else {
             printReports.setEnabled(true);
         }
     }//GEN-LAST:event_formComponentShown
@@ -609,37 +640,41 @@ public class InvoicePanel extends javax.swing.JPanel {
         Date dueDate = null;
 
         for (Invoice invoice : invoices) {
-            if (invoice.getReconnection() == 0) {
-                try {
-                    dueDate = dateFormat.parse(invoice.getPeriod());
-                } catch (ParseException ex) {
-                    Logger.getLogger(InvoicePanel.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(dueDate);
-
-                calendar.add(Calendar.DAY_OF_YEAR, 7);
-                dueDate = calendar.getTime();
-                String dd = dateFormat.format(dueDate);
-
-                try {
-                    dueDate = dateFormat.parse(dd);
-                } catch (ParseException ex) {
-                    Logger.getLogger(InvoicePanel.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
-                if (invoice.getStatus().equals("Unpaid")) {
-                    int overdue = currentDate.compareTo(dueDate);
-                    if (overdue > 0) {
+            for (Charge charge : charges) {
+                if (invoice.getChargeId() == charge.getId()) {
+                    if (charge.getReconnection() == 0) {
                         try {
-                            PreparedStatement updateStatement = connect.prepareStatement("UPDATE Invoice SET "
-                                    + "invoice_status = 'Overdue' WHERE invoice_id = ?");
-                            updateStatement.setInt(1, invoice.getId());
-
-                            updateStatement.executeUpdate();
-                        } catch (SQLException ex) {
+                            dueDate = dateFormat.parse(invoice.getPeriod());
+                        } catch (ParseException ex) {
                             Logger.getLogger(InvoicePanel.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTime(dueDate);
+
+                        calendar.add(Calendar.DAY_OF_YEAR, 7);
+                        dueDate = calendar.getTime();
+                        String dd = dateFormat.format(dueDate);
+
+                        try {
+                            dueDate = dateFormat.parse(dd);
+                        } catch (ParseException ex) {
+                            Logger.getLogger(InvoicePanel.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+
+                        if (invoice.getStatus().equals("Unpaid")) {
+                            int overdue = currentDate.compareTo(dueDate);
+                            if (overdue > 0) {
+                                try {
+                                    PreparedStatement updateStatement = connect.prepareStatement("UPDATE Invoice SET "
+                                            + "invoice_status = 'Overdue' WHERE invoice_id = ?");
+                                    updateStatement.setInt(1, invoice.getId());
+
+                                    updateStatement.executeUpdate();
+                                } catch (SQLException ex) {
+                                    Logger.getLogger(InvoicePanel.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                            }
                         }
                     }
                 }
@@ -651,10 +686,10 @@ public class InvoicePanel extends javax.swing.JPanel {
         checkDates();
 
         showDataInTable();
-        
-        if(invoices.isEmpty()){
+
+        if (invoices.isEmpty()) {
             printReports.setEnabled(false);
-        }else{
+        } else {
             printReports.setEnabled(true);
         }
     }//GEN-LAST:event_refreshActionPerformed

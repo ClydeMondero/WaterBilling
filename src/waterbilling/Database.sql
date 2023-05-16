@@ -94,6 +94,10 @@ CREATE TABLE IF NOT EXISTS Client(
         FOREIGN KEY (meter_id) REFERENCES Meter(meter_id)        	
 )AUTO_INCREMENT = 1001;
 
+INSERT IGNORE INTO Client (client_id, client_lastname, client_firstname, client_middlename, client_address, client_phonenumber, 
+client_rateclass,client_status, client_credit, meter_id) 
+VALUES (1001, 'Ragos', 'Ryan', 'M', 'Bustos, Bulacan', '092498173921', 'Residential', 'Connected', 0, 123456);
+
 CREATE TABLE IF NOT EXISTS AdminsClients(		
         client_id INT NOT NULL,        
         admin_id INT NOT NULL,   
@@ -112,6 +116,16 @@ CREATE TABLE IF NOT EXISTS StaffsClients(
         UNIQUE (client_id, staff_id, action)
 );
 
+CREATE TABLE IF NOT EXISTS Charge(
+        charge_id INT PRIMARY KEY AUTO_INCREMENT,
+        charge_reconnection DOUBLE,
+        charge_basic DOUBLE,
+        charge_transitory DOUBLE,
+        charge_environmental DOUBLE,
+        charge_sewerage DOUBLE,
+        charge_maintenance  DOUBLE
+)AUTO_INCREMENT = 1001;
+
 CREATE TABLE IF NOT EXISTS Invoice(
 		invoice_id INT PRIMARY KEY AUTO_INCREMENT,                 	
         invoice_period_date DATE,
@@ -119,21 +133,17 @@ CREATE TABLE IF NOT EXISTS Invoice(
         invoice_consumption INT,        
         invoice_payment DOUBLE,
         invoice_payment_date DATE,
-        invoice_status SET ('Paid', 'Unpaid', 'Overdue', 'Deleted'),
-        invoice_reconnection_charge DOUBLE,
-        invoice_basic_charge DOUBLE,
-        invoice_transitory_charge DOUBLE,
-        invoice_environmental_charge DOUBLE,
-        invoice_sewerage_charge DOUBLE,
-        invoice_maintenance_charge  DOUBLE,
+        invoice_status SET ('Paid', 'Unpaid', 'Overdue', 'Deleted'),        
         invoice_before_tax  DOUBLE,
         invoice_tax DOUBLE,
         invoice_discount DOUBLE,        
         invoice_amount DOUBLE,
+        charge_id INT NOT NULL,        
         client_id INT NOT NULL,        
         staff_id INT, 
         cashier_id INT,
         admin_id INT ,
+        FOREIGN KEY (charge_id) REFERENCES Charge(charge_id),
         FOREIGN KEY (client_id) REFERENCES Client(client_id),        
         FOREIGN KEY (staff_id) REFERENCES Staff(staff_id),
         FOREIGN KEY (cashier_id) REFERENCES Cashier (cashier_id),
@@ -151,6 +161,8 @@ SELECT * FROM Client;
 SELECT * FROM Meter;
 
 SELECT * FROM Invoice;
+
+SELECT * FROM Charge;
 
 SELECT admin_id, main_admin_action FROM Admin;
 

@@ -37,6 +37,7 @@ import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.view.JasperViewer;
 import static waterbilling.AdminPanel.admins;
+import static waterbilling.InvoicePanel.charges;
 import static waterbilling.StaffPanel.staffs;
 import static waterbilling.InvoicePanel.invoices;
 
@@ -633,7 +634,7 @@ public class ClientPanel extends javax.swing.JPanel {
             if (password != null) {
                 if (password.equals(accountPassword)) {
                     try {
-                        if (Integer.parseInt(id.getText()) > clients.get(clients.size() - 1).getId()) {
+                        if (!clients.isEmpty() && Integer.parseInt(id.getText()) > clients.get(clients.size() - 1).getId()) {
                             PreparedStatement insertStatement = connect.prepareStatement("INSERT IGNORE INTO Meter VALUES (?, ?, ?, ?, ?)");
                             insertStatement.setString(1, meterId.getText());
                             insertStatement.setDouble(2, Double.parseDouble(metersize.getText()));
@@ -903,10 +904,10 @@ public class ClientPanel extends javax.swing.JPanel {
         changeStatus();
 
         showDataInTable();
-        
-        if(clients.isEmpty()){
+
+        if (clients.isEmpty()) {
             printReports.setEnabled(false);
-        }else{
+        } else {
             printReports.setEnabled(true);
         }
     }//GEN-LAST:event_refreshActionPerformed
@@ -917,10 +918,10 @@ public class ClientPanel extends javax.swing.JPanel {
         changeStatus();
 
         showDataInTable();
-        
-        if(clients.isEmpty()){
+
+        if (clients.isEmpty()) {
             printReports.setEnabled(false);
-        }else{
+        } else {
             printReports.setEnabled(true);
         }
     }//GEN-LAST:event_formComponentShown
@@ -955,31 +956,35 @@ public class ClientPanel extends javax.swing.JPanel {
 
         Date disconnectDate = null;
         for (Invoice invoice : invoices) {
-            if (invoice.getReconnection() == 0) {
-                try {
-                    disconnectDate = dateFormat.parse(invoice.getPeriod());
-                } catch (ParseException ex) {
-                    Logger.getLogger(ClientPanel.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(disconnectDate);
-                calendar.add(Calendar.DATE, 74);
-
-                disconnectDate = calendar.getTime();
-                System.out.println(disconnectDate);
-
-                if (invoice.getStatus().equals("Overdue")) {
-                    int disconnect = currentDate.compareTo(disconnectDate);
-                    if (disconnect >= 0) {
+            for (Charge charge : charges) {
+                if (invoice.getChargeId() == charge.getId()) {
+                    if (charge.getReconnection() == 0) {
                         try {
-                            PreparedStatement updateStatement = connect.prepareStatement("UPDATE Client SET "
-                                    + "client_status = 'Disconnected' WHERE client_id = ?");
-                            updateStatement.setInt(1, invoice.getClientId());
+                            disconnectDate = dateFormat.parse(invoice.getPeriod());
+                        } catch (ParseException ex) {
+                            Logger.getLogger(ClientPanel.class.getName()).log(Level.SEVERE, null, ex);
+                        }
 
-                            updateStatement.executeUpdate();
-                        } catch (SQLException ex) {
-                            Logger.getLogger(InvoicePanel.class.getName()).log(Level.SEVERE, null, ex);
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTime(disconnectDate);
+                        calendar.add(Calendar.DATE, 74);
+
+                        disconnectDate = calendar.getTime();
+                        System.out.println(disconnectDate);
+
+                        if (invoice.getStatus().equals("Overdue")) {
+                            int disconnect = currentDate.compareTo(disconnectDate);
+                            if (disconnect >= 0) {
+                                try {
+                                    PreparedStatement updateStatement = connect.prepareStatement("UPDATE Client SET "
+                                            + "client_status = 'Disconnected' WHERE client_id = ?");
+                                    updateStatement.setInt(1, invoice.getClientId());
+
+                                    updateStatement.executeUpdate();
+                                } catch (SQLException ex) {
+                                    Logger.getLogger(InvoicePanel.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                            }
                         }
                     }
                 }
@@ -988,89 +993,136 @@ public class ClientPanel extends javax.swing.JPanel {
         for (Client client : clients) {
             if (client.getStatus().equals("Disconnected")) {
                 for (Invoice invoice : invoices) {
-                    if (client.getId() == invoice.getClientId() && invoice.getReconnection() != 0 && invoice.getStatus().equals("Unpaid")) {
-                        return;
-                    }
-                    if (client.getId() == invoice.getClientId() && invoice.getStatus().equals("Paid")) {
-                        try {
-                            PreparedStatement updateStatement = connect.prepareStatement("UPDATE Client SET "
-                                    + "client_status = 'Connected' WHERE client_id = ?");
-                            updateStatement.setInt(1, invoice.getClientId());
+                    for (Charge charge : charges) {
+                        if (invoice.getChargeId() == charge.getId()) {
+                            if (client.getId() == invoice.getClientId() && charge.getReconnection() != 0 && invoice.getStatus().equals("Unpaid")) {
+                                return;
+                            }
+                            if (client.getId() == invoice.getClientId() && invoice.getStatus().equals("Paid")) {
+                                try {
+                                    PreparedStatement updateStatement = connect.prepareStatement("UPDATE Client SET "
+                                            + "client_status = 'Connected' WHERE client_id = ?");
+                                    updateStatement.setInt(1, invoice.getClientId());
 
-                            updateStatement.executeUpdate();
-                        } catch (SQLException ex) {
-                            Logger.getLogger(InvoicePanel.class.getName()).log(Level.SEVERE, null, ex);
+                                    updateStatement.executeUpdate();
+                                } catch (SQLException ex) {
+                                    Logger.getLogger(InvoicePanel.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                            }
                         }
                     }
-                }
-                for (Meter meter : meters) {
-                    if (client.getMeterId().equals(meter.getId())) {
-                        String suffix = accountUsername.substring(accountUsername.indexOf("_") + 1);
-                        if (suffix.equals("admin")) {
-                            PreparedStatement insertStatement;
-                            try {
-                                insertStatement = connect.prepareStatement("INSERT IGNORE INTO Invoice (invoice_id, invoice_reading, "
-                                        + "invoice_consumption, invoice_reconnection_charge, invoice_basic_charge, "
-                                        + "invoice_transitory_charge, invoice_environmental_charge, "
-                                        + "invoice_sewerage_charge, invoice_maintenance_charge, "
-                                        + "invoice_before_tax, invoice_tax, invoice_discount, invoice_amount, invoice_status, client_id, admin_id)"
-                                        + "VALUES (?, ?, ?, 257.31, 0, 0, 0, 0, 0, 0, 0, 0, 257.31, 'Unpaid', ?, ?)");
+                    for (Meter meter : meters) {
+                        if (client.getMeterId().equals(meter.getId())) {
+                            String suffix = accountUsername.substring(accountUsername.indexOf("_") + 1);
+                            if (suffix.equals("admin")) {
+                                PreparedStatement insertStatement;
+                                try {
+                                    insertStatement = connect.prepareStatement("INSERT IGNORE INTO Invoice (invoice_id, invoice_reading, "
+                                            + "invoice_consumption, invoice_before_tax, invoice_tax, invoice_discount, "
+                                            + "invoice_amount, invoice_status, charge_id, client_id, admin_id)"
+                                            + "VALUES (?, ?, ?, 0, 0, 0, 257.31, 'Unpaid', ?, ?, ?)");
 
-                                if (!invoices.isEmpty()) {
-                                    insertStatement.setInt(1, invoices.get(invoices.size() - 1).getId() + 1);
-                                } else {
-                                    insertStatement.setInt(1, 1001);
-                                }
-
-                                insertStatement.setInt(2, meter.getReading());
-                                insertStatement.setInt(3, meter.getConsumption());
-                                insertStatement.setInt(4, client.getId());
-
-                                int adminId = 0;
-                                for (Admin admin : admins) {
-                                    if (accountUsername.equals(admin.getUsername())) {
-                                        adminId = admin.getId();
+                                    if (!invoices.isEmpty()) {
+                                        insertStatement.setInt(1, invoices.get(invoices.size() - 1).getId() + 1);
+                                    } else {
+                                        insertStatement.setInt(1, 1001);
                                     }
-                                }
 
-                                insertStatement.setInt(5, adminId);
+                                    insertStatement.setInt(2, meter.getReading());
+                                    insertStatement.setInt(3, meter.getConsumption());
 
-                                insertStatement.executeUpdate();
-                            } catch (SQLException ex) {
-                                Logger.getLogger(ClientPanel.class.getName()).log(Level.SEVERE, null, ex);
-                            }
+                                    insertStatement.setInt(5, client.getId());
 
-                            updateDatas();
-                        } else if (suffix.equals("staff")) {
-                            PreparedStatement insertStatement;
-                            try {
-                                insertStatement = connect.prepareStatement("INSERT IGNORE INTO Invoice (invoice_id,"
-                                        + " invoice_reading, invoice_consumption, invoice_reconnection_charge, invoice_basic_charge, "
-                                        + "invoice_transitory_charge, invoice_environmental_charge, "
-                                        + "invoice_sewerage_charge, invoice_maintenance_charge, "
-                                        + "invoice_before_tax, invoice_tax, invoice_discount, invoice_amount, invoice_status, client_id, staff_id)"
-                                        + "VALUES (?, ?, ?, 257.31, 0, 0, 0, 0, 0, 0, 0, 0, 257.31, 'Unpaid', ?, ?)");
-
-                                insertStatement.setInt(1, invoices.get(invoices.size() - 1).getId() + 1);
-                                insertStatement.setInt(2, meter.getReading());
-                                insertStatement.setInt(3, meter.getConsumption());
-                                insertStatement.setInt(4, client.getId());
-
-                                int staffId = 0;
-                                for (Staff staff : staffs) {
-                                    if (accountUsername.equals(staff.getUsername())) {
-                                        staffId = staff.getId();
+                                    if (!invoices.isEmpty()) {
+                                        insertStatement.setInt(4, invoices.get(invoices.size() - 1).getId() + 1);
+                                    } else {
+                                        insertStatement.setInt(4, 1001);
                                     }
+
+                                    int adminId = 0;
+                                    for (Admin admin : admins) {
+                                        if (accountUsername.equals(admin.getUsername())) {
+                                            adminId = admin.getId();
+                                        }
+                                    }
+
+                                    insertStatement.setInt(6, adminId);
+
+                                    insertStatement.executeUpdate();
+
+                                    insertStatement = connect.prepareStatement("INSERT IGNORE INTO Charge (charge_id, "
+                                            + "invoice_reconnection_charge, invoice_basic_charge, "
+                                            + "invoice_transitory_charge, invoice_environmental_charge, "
+                                            + "invoice_sewerage_charge, invoice_maintenance_charge)"
+                                            + "VALUES (?, 257.31, 0, 0, 0, 0, 0)");
+
+                                    if (!invoices.isEmpty()) {
+                                        insertStatement.setInt(1, invoices.get(invoices.size() - 1).getId() + 1);
+                                    } else {
+                                        insertStatement.setInt(1, 1001);
+                                    }
+
+                                    insertStatement.executeUpdate();
+                                } catch (SQLException ex) {
+                                    Logger.getLogger(ClientPanel.class.getName()).log(Level.SEVERE, null, ex);
                                 }
 
-                                insertStatement.setInt(5, staffId);
+                                updateDatas();
+                            } else if (suffix.equals("staff")) {
+                                 PreparedStatement insertStatement;
+                                try {
+                                    insertStatement = connect.prepareStatement("INSERT IGNORE INTO Invoice (invoice_id, invoice_reading, "
+                                            + "invoice_consumption, invoice_before_tax, invoice_tax, invoice_discount, "
+                                            + "invoice_amount, invoice_status, charge_id, client_id, staff_id)"
+                                            + "VALUES (?, ?, ?, 0, 0, 0, 257.31, 'Unpaid', ?, ?, ?)");
 
-                                insertStatement.executeUpdate();
-                            } catch (SQLException ex) {
-                                Logger.getLogger(ClientPanel.class.getName()).log(Level.SEVERE, null, ex);
+                                    if (!invoices.isEmpty()) {
+                                        insertStatement.setInt(1, invoices.get(invoices.size() - 1).getId() + 1);
+                                    } else {
+                                        insertStatement.setInt(1, 1001);
+                                    }
+
+                                    insertStatement.setInt(2, meter.getReading());
+                                    insertStatement.setInt(3, meter.getConsumption());
+
+                                    insertStatement.setInt(5, client.getId());
+
+                                    if (!invoices.isEmpty()) {
+                                        insertStatement.setInt(4, invoices.get(invoices.size() - 1).getId() + 1);
+                                    } else {
+                                        insertStatement.setInt(4, 1001);
+                                    }
+
+                                    int staffId = 0;
+                                    for (Staff staff : staffs) {
+                                        if (accountUsername.equals(staff.getUsername())) {
+                                            staffId = staff.getId();
+                                        }
+                                    }
+
+                                    insertStatement.setInt(6, staffId);
+
+                                    insertStatement.executeUpdate();
+
+                                    insertStatement = connect.prepareStatement("INSERT IGNORE INTO Charge (charge_id, "
+                                            + "invoice_reconnection_charge, invoice_basic_charge, "
+                                            + "invoice_transitory_charge, invoice_environmental_charge, "
+                                            + "invoice_sewerage_charge, invoice_maintenance_charge)"
+                                            + "VALUES (?, 257.31, 0, 0, 0, 0, 0)");
+
+                                    if (!invoices.isEmpty()) {
+                                        insertStatement.setInt(1, invoices.get(invoices.size() - 1).getId() + 1);
+                                    } else {
+                                        insertStatement.setInt(1, 1001);
+                                    }
+
+                                    insertStatement.executeUpdate();
+                                } catch (SQLException ex) {
+                                    Logger.getLogger(ClientPanel.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+
+                                updateDatas();
                             }
-
-                            updateDatas();
                         }
                     }
                 }

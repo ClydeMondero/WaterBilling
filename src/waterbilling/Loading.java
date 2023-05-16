@@ -30,20 +30,20 @@ public class Loading extends javax.swing.JFrame {
 
     
     public void run() {
-        for (int i = 0; i <= 100; i++) {
-            try {
-                Thread.sleep(50);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            int progress = i;
-            SwingUtilities.invokeLater(new Runnable() {
-                public void run() {
-                    loadingProgressBar.setValue(progress);
-                    loadingProgressBar.repaint();
-                }
-            });
-        }
+//        for (int i = 0; i <= 100; i++) {
+//            try {
+//                Thread.sleep(50);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//            int progress = i;
+//            SwingUtilities.invokeLater(new Runnable() {
+//                public void run() {
+//                    loadingProgressBar.setValue(progress);
+//                    loadingProgressBar.repaint();
+//                }
+//            });
+//        }
         
         dispose();
         new Login().setVisible(true);
