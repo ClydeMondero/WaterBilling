@@ -204,6 +204,7 @@ public class AdminPanel extends javax.swing.JPanel {
         delete = new javax.swing.JButton();
         search = new javax.swing.JTextField();
         refresh = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(203, 243, 240));
         setPreferredSize(new java.awt.Dimension(820, 540));
@@ -250,41 +251,32 @@ public class AdminPanel extends javax.swing.JPanel {
         createAccountLabel.setText("Create / Update Admin Account");
 
         idLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        idLabel.setForeground(new java.awt.Color(0, 0, 0));
         idLabel.setText("Account Id:");
 
         id.setText("Id");
 
         lastnameLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        lastnameLabel.setForeground(new java.awt.Color(0, 0, 0));
         lastnameLabel.setText("Last Name:");
 
         firstnameLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        firstnameLabel.setForeground(new java.awt.Color(0, 0, 0));
         firstnameLabel.setText("First Name:");
 
         middlenameLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        middlenameLabel.setForeground(new java.awt.Color(0, 0, 0));
         middlenameLabel.setText("Middle Name: ");
 
         addressLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        addressLabel.setForeground(new java.awt.Color(0, 0, 0));
         addressLabel.setText("Address:");
 
         phonenumberLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        phonenumberLabel.setForeground(new java.awt.Color(0, 0, 0));
         phonenumberLabel.setText("Phone Number:");
 
         usernameLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        usernameLabel.setForeground(new java.awt.Color(0, 0, 0));
         usernameLabel.setText("Username:");
 
         passwordLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        passwordLabel.setForeground(new java.awt.Color(0, 0, 0));
         passwordLabel.setText("Password:");
 
         statusLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        statusLabel.setForeground(new java.awt.Color(0, 0, 0));
         statusLabel.setText("Status: ");
 
         status.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Active", "Deactivated"}));
@@ -333,6 +325,8 @@ public class AdminPanel extends javax.swing.JPanel {
             }
         });
 
+        jLabel1.setIcon(new javax.swing.ImageIcon("C:\\Users\\PCB\\Documents\\Bachelor of Science in Information Technology\\2nd Year\\Object Oriented Programming\\WaterBilling\\images\\search.png")); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -357,7 +351,7 @@ public class AdminPanel extends javax.swing.JPanel {
                             .addComponent(username)
                             .addComponent(address, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(id))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 81, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(cancel, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -381,7 +375,9 @@ public class AdminPanel extends javax.swing.JPanel {
                         .addComponent(delete, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(49, 49, 49)
                         .addComponent(listOfAcccountLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(search, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
@@ -400,7 +396,10 @@ public class AdminPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(delete)
                     .addComponent(listOfAcccountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(search, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(search, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(16, 16, 16)
+                        .addComponent(jLabel1)))
                 .addGap(18, 18, 18)
                 .addComponent(scrollpane, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -741,6 +740,7 @@ public class AdminPanel extends javax.swing.JPanel {
     private javax.swing.JLabel firstnameLabel;
     private javax.swing.JLabel id;
     private javax.swing.JLabel idLabel;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JTextField lastname;
     private javax.swing.JLabel lastnameLabel;
     private javax.swing.JLabel listOfAcccountLabel;
