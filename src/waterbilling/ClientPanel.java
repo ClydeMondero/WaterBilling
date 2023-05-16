@@ -969,8 +969,7 @@ public class ClientPanel extends javax.swing.JPanel {
                         calendar.setTime(disconnectDate);
                         calendar.add(Calendar.DATE, 74);
 
-                        disconnectDate = calendar.getTime();
-                        System.out.println(disconnectDate);
+                        disconnectDate = calendar.getTime();                        
 
                         if (invoice.getStatus().equals("Overdue")) {
                             int disconnect = currentDate.compareTo(disconnectDate);

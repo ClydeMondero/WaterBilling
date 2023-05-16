@@ -220,7 +220,7 @@ public class MyAccount extends javax.swing.JPanel {
     }//GEN-LAST:event_cancelActionPerformed
 
     private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
-        if (checkUsernamePassword() == false) {
+        if (checkTextFields() == false) {
             return;
         }
 
@@ -450,9 +450,19 @@ public class MyAccount extends javax.swing.JPanel {
     }
    
 
-    public boolean checkUsernamePassword() {
-        if (username.getText().equals("") && password.getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "Username and Password is required!", "Username and Password", JOptionPane.ERROR_MESSAGE);
+    public boolean checkTextFields() {       
+        if (lastname.getText().equals("") && firstname.getText().equals("") && address.getText().equals("") && phonenumber.getText().equals("")
+                && username.getText().equals("") && password.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Fill up the required fields!", "My Account", JOptionPane.ERROR_MESSAGE);
+            return false;
+        } else if (lastname.getText().equals("") && firstname.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Name is required!", "Name", JOptionPane.ERROR_MESSAGE);
+            return false;
+        } else if (address.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Address is required!", "Address", JOptionPane.ERROR_MESSAGE);
+            return false;
+        } else if (phonenumber.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Phone Number is required!", "Phone Number", JOptionPane.ERROR_MESSAGE);
             return false;
         } else if (username.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Username is required!", "Username", JOptionPane.ERROR_MESSAGE);
@@ -461,7 +471,7 @@ public class MyAccount extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null, "Password is required!", "Password", JOptionPane.ERROR_MESSAGE);
             return false;
         }
-        return true;
+        return true;    
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
