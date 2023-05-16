@@ -432,6 +432,8 @@ public class ClientPanel extends javax.swing.JPanel {
             }
         });
 
+        printReports.setBackground(new java.awt.Color(255, 159, 28));
+        printReports.setForeground(new java.awt.Color(255, 255, 255));
         printReports.setText("Print Reports");
         printReports.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -502,7 +504,7 @@ public class ClientPanel extends javax.swing.JPanel {
                         .addComponent(createAccountLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(printReports)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(refresh)))
                 .addGap(32, 32, 32))
         );
@@ -901,6 +903,12 @@ public class ClientPanel extends javax.swing.JPanel {
         changeStatus();
 
         showDataInTable();
+        
+        if(clients.isEmpty()){
+            printReports.setEnabled(false);
+        }else{
+            printReports.setEnabled(true);
+        }
     }//GEN-LAST:event_refreshActionPerformed
 
     SimpleDateFormat dateFormat;
@@ -909,7 +917,12 @@ public class ClientPanel extends javax.swing.JPanel {
         changeStatus();
 
         showDataInTable();
-
+        
+        if(clients.isEmpty()){
+            printReports.setEnabled(false);
+        }else{
+            printReports.setEnabled(true);
+        }
     }//GEN-LAST:event_formComponentShown
 
     private void printReportsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printReportsActionPerformed

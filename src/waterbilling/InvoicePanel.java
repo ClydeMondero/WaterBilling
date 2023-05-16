@@ -588,6 +588,12 @@ public class InvoicePanel extends javax.swing.JPanel {
         checkDates();
 
         showDataInTable();
+        
+        if(invoices.isEmpty()){
+            printReports.setEnabled(false);
+        }else{
+            printReports.setEnabled(true);
+        }
     }//GEN-LAST:event_formComponentShown
 
     public void checkDates() {
@@ -645,6 +651,12 @@ public class InvoicePanel extends javax.swing.JPanel {
         checkDates();
 
         showDataInTable();
+        
+        if(invoices.isEmpty()){
+            printReports.setEnabled(false);
+        }else{
+            printReports.setEnabled(true);
+        }
     }//GEN-LAST:event_refreshActionPerformed
 
     private void printReportsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printReportsActionPerformed

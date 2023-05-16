@@ -1,33 +1,39 @@
 package waterbilling;
 
-
 import java.awt.Color;
+import java.awt.Image;
+import java.awt.Toolkit;
 import javax.swing.JPanel;
 
 public class Main extends javax.swing.JFrame {
 
+    Image icon = Toolkit.getDefaultToolkit().getImage("images\\icon.png");
     String accountUsername, accountPassword;
 
     public Main(String username, String password) {
+        this.setIconImage(icon);
+
         initComponents();
+
         this.getContentPane().setBackground(Color.decode("#2EC4B6"));
+
         this.accountUsername = username;
         this.accountPassword = password;
 
         usernameLabel.setText(accountUsername);
-        
+
         String suffix = accountUsername.substring(accountUsername.indexOf("_") + 1);
-        
-        if(!suffix.equals("cashier")){
-             mainTabbedPane.add("Clients", new ClientPanel(accountUsername, accountPassword));
-        }               
-        
+
+        if (!suffix.equals("cashier")) {
+            mainTabbedPane.add("Clients", new ClientPanel(accountUsername, accountPassword));
+        }
+
         mainTabbedPane.add("Invoices", new InvoicePanel(accountUsername, accountPassword));
-        
+
         if (suffix.equals("admin")) {
             mainTabbedPane.add("Cashier", new CashierPanel(accountUsername, accountPassword));
-            mainTabbedPane.add("Staffs", new StaffPanel(accountUsername, accountPassword));            
-        }       
+            mainTabbedPane.add("Staffs", new StaffPanel(accountUsername, accountPassword));
+        }
 
         if (accountUsername.equals("main_admin")) {
             mainTabbedPane.add("Admins", new AdminPanel(accountUsername, accountPassword));
