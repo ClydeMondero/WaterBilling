@@ -638,6 +638,20 @@ public class CreateInvoice extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    public boolean checkTextFields() {       
+        if (presentreading.getText().equals("") && consumption.getText().equals("")){
+            JOptionPane.showMessageDialog(null, "Fill up the required fields!", "Create Invoice", JOptionPane.ERROR_MESSAGE);
+            return false;
+        } else if (presentreading.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Present Reading is required!", "Present Reading", JOptionPane.ERROR_MESSAGE);
+            return false;
+        } else if (consumption.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Consumption is required!", "Consumption", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        return true;    
+    }
+    
     private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
         period.setDate(null);
         presentreading.setText("");

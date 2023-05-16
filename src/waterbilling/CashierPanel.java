@@ -704,7 +704,7 @@ public class CashierPanel extends javax.swing.JPanel {
     public boolean checkTextFields() {
         if (lastname.getText().equals("") && firstname.getText().equals("") && address.getText().equals("") && phonenumber.getText().equals("")
                 && username.getText().equals("") && password.getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "Fill up the required fields!", "Client", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Fill up the required fields!", "Cashier", JOptionPane.ERROR_MESSAGE);
             return false;
         } else if (lastname.getText().equals("") && firstname.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Name is required!", "Name", JOptionPane.ERROR_MESSAGE);
@@ -716,10 +716,10 @@ public class CashierPanel extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null, "Phone Number is required!", "Phone Number", JOptionPane.ERROR_MESSAGE);
             return false;
         } else if (username.getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "Username is required!", "Meter Size", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Username is required!", "Username", JOptionPane.ERROR_MESSAGE);
             return false;
         } else if (password.getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "Password is required!", "Meter Id", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Password is required!", "Password", JOptionPane.ERROR_MESSAGE);
             return false;
         }
         return true;

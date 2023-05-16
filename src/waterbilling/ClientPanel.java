@@ -599,6 +599,8 @@ public class ClientPanel extends javax.swing.JPanel {
         meterId.setText(meters.get(row).getId());
         meterreading.setText(Integer.toString(meters.get(row).getReading()));
         status.setSelectedItem(clients.get(row).getStatus());
+        
+        meterId.setEnabled(false);
     }//GEN-LAST:event_tableMouseClicked
 
     private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
@@ -606,6 +608,7 @@ public class ClientPanel extends javax.swing.JPanel {
         table.clearSelection();
         delete.setEnabled(false);
         createInvoice.setEnabled(false);
+        meterId.setEnabled(true);
     }//GEN-LAST:event_cancelActionPerformed
 
     private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
@@ -753,6 +756,7 @@ public class ClientPanel extends javax.swing.JPanel {
                                 clearTextFields();
                                 table.clearSelection();
                                 delete.setEnabled(false);
+                                meterId.setEnabled(true);
 
                                 JOptionPane.showMessageDialog(null, "Client Updated!", "Update", JOptionPane.INFORMATION_MESSAGE);
                             } else if (suffix.equals("staff")) {
@@ -796,6 +800,7 @@ public class ClientPanel extends javax.swing.JPanel {
                                 clearTextFields();
                                 table.clearSelection();
                                 delete.setEnabled(false);
+                                meterId.setEnabled(true);
 
                                 JOptionPane.showMessageDialog(null, "Client Updated!", "Update", JOptionPane.INFORMATION_MESSAGE);
                             }
@@ -882,6 +887,7 @@ public class ClientPanel extends javax.swing.JPanel {
             table.clearSelection();
             delete.setEnabled(false);
             createInvoice.setEnabled(false);
+            meterId.setEnabled(true);
         }
         this.requestFocus();
     }//GEN-LAST:event_formMouseClicked
@@ -923,7 +929,7 @@ public class ClientPanel extends javax.swing.JPanel {
             printReports.setEnabled(false);
         } else {
             printReports.setEnabled(true);
-        }
+        }                
     }//GEN-LAST:event_formComponentShown
 
     private void printReportsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printReportsActionPerformed
