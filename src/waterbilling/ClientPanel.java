@@ -1,5 +1,8 @@
 package waterbilling;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,6 +27,7 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
@@ -896,29 +900,19 @@ public class ClientPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_formComponentShown
 
     private void printReportsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printReportsActionPerformed
-//            try {
-//            JasperDesign design = JRXmlLoader.load("src/waterbilling/ClientReport.jrxml");
-//            
-//            JRDesignQuery selectQuery = new JRDesignQuery();
-//            String query = "SELECT * FROM Client JOIN  Meter ON Client.meter_id = Meter.meter_id";
-//            selectQuery.setText(query);
-//            
-//            design.setQuery(selectQuery);
-//            
-//            JasperReport clientReport = JasperCompileManager.compileReport(design);
-//            JasperPrint reportPrint = JasperFillManager.fillReport(clientReport, null, connect);
-//            JasperViewer.viewReport(reportPrint, false);
-//        } catch (JRException ex) {
-//            Logger.getLogger(ClientPanel.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-
         try {
             JasperReport clientReport = (JasperReport) JRLoader.loadObject(getClass().getResourceAsStream("/waterbilling/ClientReport.jasper"));
-            
+
             JasperPrint jp = JasperFillManager.fillReport(clientReport, null, connect);
-            
+
             JasperViewer.viewReport(jp, true);
+
+            JasperExportManager.exportReportToPdfStream(
+                    jp, new FileOutputStream(new File("reports/clientreport.pdf"))
+            );
         } catch (JRException ex) {
+            Logger.getLogger(ClientPanel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (FileNotFoundException ex) {
             Logger.getLogger(ClientPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_printReportsActionPerformed
