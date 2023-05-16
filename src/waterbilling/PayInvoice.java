@@ -1,6 +1,8 @@
 package waterbilling;
 
 import java.awt.Color;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -23,9 +25,11 @@ import static waterbilling.InvoicePanel.invoices;
 
 public class PayInvoice extends javax.swing.JFrame {
 
+    Image icon = Toolkit.getDefaultToolkit().getImage("images\\icon.png");
+
     int invoiceId;
     String accountUsername, accountPassword;
-    
+
     Connection connect = null;
 
     SimpleDateFormat dateFormat;
@@ -35,8 +39,12 @@ public class PayInvoice extends javax.swing.JFrame {
     int clientIndex;
 
     public PayInvoice(int id, String username, String password) {
+        this.setIconImage(icon);
+        
         initComponents();
- this.getContentPane().setBackground(Color.decode("#CBF3F0"));
+        
+        this.getContentPane().setBackground(Color.decode("#CBF3F0"));
+        
         invoiceId = id;
         accountUsername = username;
         accountPassword = password;
@@ -93,7 +101,7 @@ public class PayInvoice extends javax.swing.JFrame {
             calendar.add(Calendar.MONTH, -1);
 
             period2.setText(dateFormat.format(calendar.getTime()) + " TO " + dateFormat.format(p));
-        }else{
+        } else {
             period2.setText("");
         }
 

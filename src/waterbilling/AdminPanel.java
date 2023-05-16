@@ -1,6 +1,8 @@
 package waterbilling;
 
 import java.awt.Color;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -121,7 +123,7 @@ class Admin {
     
 }
 
-public class AdminPanel extends javax.swing.JPanel {
+public class AdminPanel extends javax.swing.JPanel {        
     
     static ArrayList<Admin> admins = new ArrayList<>();
     Connection connect = null;
@@ -130,7 +132,7 @@ public class AdminPanel extends javax.swing.JPanel {
 
     TableRowSorter<TableModel> sorter;
 
-    public AdminPanel(String username, String password) {
+    public AdminPanel(String username, String password) {               
         
         initComponents();
         

@@ -42,16 +42,24 @@ public class Main extends javax.swing.JFrame {
         if (!accountUsername.equals("main_admin")) {
             mainTabbedPane.add("My Account", new MyAccount(accountUsername, accountPassword));
         }
+        
+        
     }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel3 = new javax.swing.JLabel();
         usernameLabel = new javax.swing.JLabel();
         logoutButton = new javax.swing.JButton();
         mainTabbedPane = new javax.swing.JTabbedPane();
         homePanel = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+
+        jLabel3.setText("jLabel3");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -66,19 +74,50 @@ public class Main extends javax.swing.JFrame {
             }
         });
 
+        mainTabbedPane.setBackground(new java.awt.Color(255, 255, 255));
         mainTabbedPane.setPreferredSize(new java.awt.Dimension(820, 560));
 
+        homePanel.setBackground(new java.awt.Color(255, 191, 105));
         homePanel.setPreferredSize(new java.awt.Dimension(820, 540));
+
+        jLabel2.setIcon(new javax.swing.ImageIcon("C:\\Users\\PCB\\Documents\\Bachelor of Science in Information Technology\\2nd Year\\Object Oriented Programming\\WaterBilling\\images\\logo.png")); // NOI18N
+
+        jLabel1.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel1.setFont(new java.awt.Font("SansSerif", 1, 60)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("JAC");
+
+        jLabel4.setFont(new java.awt.Font("sansserif", 1, 48)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setText("Waterbilling System");
 
         javax.swing.GroupLayout homePanelLayout = new javax.swing.GroupLayout(homePanel);
         homePanel.setLayout(homePanelLayout);
         homePanelLayout.setHorizontalGroup(
             homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 820, Short.MAX_VALUE)
+            .addGroup(homePanelLayout.createSequentialGroup()
+                .addGroup(homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(homePanelLayout.createSequentialGroup()
+                        .addGap(270, 270, 270)
+                        .addComponent(jLabel2))
+                    .addGroup(homePanelLayout.createSequentialGroup()
+                        .addGap(326, 326, 326)
+                        .addComponent(jLabel1))
+                    .addGroup(homePanelLayout.createSequentialGroup()
+                        .addGap(170, 170, 170)
+                        .addComponent(jLabel4)))
+                .addContainerGap(192, Short.MAX_VALUE))
         );
         homePanelLayout.setVerticalGroup(
             homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(homePanelLayout.createSequentialGroup()
+                .addGap(36, 36, 36)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
+                .addComponent(jLabel2)
+                .addGap(35, 35, 35))
         );
 
         mainTabbedPane.addTab("Home", homePanel);
@@ -118,6 +157,10 @@ public class Main extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel homePanel;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JButton logoutButton;
     private javax.swing.JTabbedPane mainTabbedPane;
     private javax.swing.JLabel usernameLabel;

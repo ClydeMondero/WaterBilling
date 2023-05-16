@@ -1,6 +1,8 @@
 package waterbilling;
 
 import java.awt.Color;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.sql.Connection;
@@ -25,6 +27,8 @@ import static waterbilling.InvoicePanel.invoices;
 
 public class CreateInvoice extends javax.swing.JFrame {
 
+    Image icon = Toolkit.getDefaultToolkit().getImage("images\\icon.png");
+
     int client;
     String accountUsername, accountPassword;
 
@@ -37,8 +41,12 @@ public class CreateInvoice extends javax.swing.JFrame {
     Calendar calendar = Calendar.getInstance();
 
     public CreateInvoice(int id, String username, String password) {
+        this.setIconImage(icon);
+        
         initComponents();
+        
         this.getContentPane().setBackground(Color.decode("#CBF3F0"));
+        
         client = id;
         accountUsername = username;
         accountPassword = password;
@@ -692,7 +700,7 @@ public class CreateInvoice extends javax.swing.JFrame {
                                 adminId = admin.getId();
                             }
                         }
-                                                
+
                         insertStatement.setInt(16, adminId);
 
                         insertStatement.executeUpdate();
@@ -702,15 +710,14 @@ public class CreateInvoice extends javax.swing.JFrame {
 
                         updateStatement.setString(1, dateFormat.format(period.getDate()));
                         updateStatement.setInt(2, Integer.parseInt(presentreading.getText()));
-                        
-                        
+
                         int meterIndex = 0;
                         for (Meter meter : meters) {
-                            if(meter.getId().equals(meterId.getText())){
-                                 meterIndex = meters.indexOf(meter);
+                            if (meter.getId().equals(meterId.getText())) {
+                                meterIndex = meters.indexOf(meter);
                             }
                         }
-                        
+
                         updateStatement.setInt(3, meters.get(meterIndex).getConsumption() + Integer.parseInt(consumption.getText()));
                         updateStatement.setString(4, meterId.getText());
 
@@ -720,8 +727,8 @@ public class CreateInvoice extends javax.swing.JFrame {
                         Logger.getLogger(CreateInvoice.class.getName()).log(Level.SEVERE, null, ex);
                     }
 
-                    updateDatas();                                                           
-                    
+                    updateDatas();
+
                     this.dispose();
 
                     JOptionPane.showMessageDialog(null, "Invoice Created!", "Create Invoice", JOptionPane.INFORMATION_MESSAGE);
@@ -776,7 +783,7 @@ public class CreateInvoice extends javax.swing.JFrame {
                         Logger.getLogger(CreateInvoice.class.getName()).log(Level.SEVERE, null, ex);
                     }
 
-                    updateDatas();                  
+                    updateDatas();
 
                     this.dispose();
 
@@ -804,7 +811,7 @@ public class CreateInvoice extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_discountCheckBoxActionPerformed
 
-   public void updateDatas() {
+    public void updateDatas() {
         try {
             Statement statement = connect.createStatement();
             Statement statement2 = connect.createStatement();
