@@ -1,5 +1,8 @@
 package waterbilling;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -22,6 +25,17 @@ import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.design.JRDesignQuery;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import net.sf.jasperreports.view.JasperViewer;
 import static waterbilling.AdminPanel.admins;
 import static waterbilling.StaffPanel.staffs;
 import static waterbilling.InvoicePanel.invoices;
@@ -279,6 +293,7 @@ public class ClientPanel extends javax.swing.JPanel {
         meterreading = new javax.swing.JPasswordField();
         createInvoice = new javax.swing.JButton();
         refresh = new javax.swing.JButton();
+        printReports = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(203, 243, 240));
         addMouseListener(new java.awt.event.MouseAdapter() {
@@ -417,6 +432,13 @@ public class ClientPanel extends javax.swing.JPanel {
             }
         });
 
+        printReports.setText("Print Reports");
+        printReports.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                printReportsActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -479,6 +501,8 @@ public class ClientPanel extends javax.swing.JPanel {
                         .addGap(104, 104, 104)
                         .addComponent(createAccountLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(printReports)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(refresh)))
                 .addGap(32, 32, 32))
         );
@@ -499,7 +523,9 @@ public class ClientPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(createAccountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(createInvoice)
-                    .addComponent(refresh))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(refresh)
+                        .addComponent(printReports)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
@@ -831,7 +857,7 @@ public class ClientPanel extends javax.swing.JPanel {
                                 Logger.getLogger(AdminPanel.class.getName()).log(Level.SEVERE, null, ex);
                             }
                             JOptionPane.showMessageDialog(null, "Client Deleted!", "Delete", JOptionPane.INFORMATION_MESSAGE);
-
+                            createInvoice.setEnabled(false);
                         }
                     }
                 } else {
@@ -859,25 +885,52 @@ public class ClientPanel extends javax.swing.JPanel {
 
     private void createInvoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createInvoiceActionPerformed
         Object client = table.getValueAt(row, 0);
-        new CreateInvoice(Integer.parseInt(client.toString()), accountUsername, accountPassword).setVisible(true);
+
+        for (Client c : clients) {
+            if (Integer.parseInt(client.toString()) == c.getId()) {
+                if (c.getStatus().equals("Disconnected")) {
+                    JOptionPane.showMessageDialog(null, "Pay Invoices first to get reconnected!", "Create Invoice", JOptionPane.WARNING_MESSAGE);
+                } else if (c.getStatus().equals("Connected")) {
+                    new CreateInvoice(Integer.parseInt(client.toString()), accountUsername, accountPassword).setVisible(true);
+                }
+            }
+        }
     }//GEN-LAST:event_createInvoiceActionPerformed
 
     private void refreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshActionPerformed
-        checkDates();
-        
+        changeStatus();
+
         showDataInTable();
     }//GEN-LAST:event_refreshActionPerformed
 
     SimpleDateFormat dateFormat;
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
-        checkDates();
-        
+        changeStatus();
+
         showDataInTable();
-        
+
     }//GEN-LAST:event_formComponentShown
 
-    public void checkDates(){
+    private void printReportsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printReportsActionPerformed
+        try {
+            JasperReport clientReport = (JasperReport) JRLoader.loadObject(getClass().getResourceAsStream("/waterbilling/ClientReport.jasper"));
+
+            JasperPrint jp = JasperFillManager.fillReport(clientReport, null, connect);
+
+            JasperViewer.viewReport(jp, true);
+
+            JasperExportManager.exportReportToPdfStream(
+                    jp, new FileOutputStream(new File("reports/clientreport.pdf"))
+            );
+        } catch (JRException ex) {
+            Logger.getLogger(ClientPanel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ClientPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_printReportsActionPerformed
+
+    public void changeStatus() {
         dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String cd = dateFormat.format(new Date());
         Date currentDate = null;
@@ -889,35 +942,129 @@ public class ClientPanel extends javax.swing.JPanel {
 
         Date disconnectDate = null;
         for (Invoice invoice : invoices) {
-            try {
-                disconnectDate = dateFormat.parse(invoice.getPeriod());
-            } catch (ParseException ex) {
-                Logger.getLogger(ClientPanel.class.getName()).log(Level.SEVERE, null, ex);
+            if (invoice.getReconnection() == 0) {
+                try {
+                    disconnectDate = dateFormat.parse(invoice.getPeriod());
+                } catch (ParseException ex) {
+                    Logger.getLogger(ClientPanel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(disconnectDate);
+                calendar.add(Calendar.DATE, 74);
+
+                disconnectDate = calendar.getTime();
+                System.out.println(disconnectDate);
+
+                if (invoice.getStatus().equals("Overdue")) {
+                    int disconnect = currentDate.compareTo(disconnectDate);
+                    if (disconnect >= 0) {
+                        try {
+                            PreparedStatement updateStatement = connect.prepareStatement("UPDATE Client SET "
+                                    + "client_status = 'Disconnected' WHERE client_id = ?");
+                            updateStatement.setInt(1, invoice.getClientId());
+
+                            updateStatement.executeUpdate();
+                        } catch (SQLException ex) {
+                            Logger.getLogger(InvoicePanel.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
             }
+        }
+        for (Client client : clients) {
+            if (client.getStatus().equals("Disconnected")) {
+                for (Invoice invoice : invoices) {
+                    if (client.getId() == invoice.getClientId() && invoice.getReconnection() != 0 && invoice.getStatus().equals("Unpaid")) {
+                        return;
+                    }
+                    if (client.getId() == invoice.getClientId() && invoice.getStatus().equals("Paid")) {
+                        try {
+                            PreparedStatement updateStatement = connect.prepareStatement("UPDATE Client SET "
+                                    + "client_status = 'Connected' WHERE client_id = ?");
+                            updateStatement.setInt(1, invoice.getClientId());
 
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(disconnectDate);
-            calendar.add(Calendar.DATE, 74);
+                            updateStatement.executeUpdate();
+                        } catch (SQLException ex) {
+                            Logger.getLogger(InvoicePanel.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+                for (Meter meter : meters) {
+                    if (client.getMeterId().equals(meter.getId())) {
+                        String suffix = accountUsername.substring(accountUsername.indexOf("_") + 1);
+                        if (suffix.equals("admin")) {
+                            PreparedStatement insertStatement;
+                            try {
+                                insertStatement = connect.prepareStatement("INSERT IGNORE INTO Invoice (invoice_id, invoice_reading, "
+                                        + "invoice_consumption, invoice_reconnection_charge, invoice_basic_charge, "
+                                        + "invoice_transitory_charge, invoice_environmental_charge, "
+                                        + "invoice_sewerage_charge, invoice_maintenance_charge, "
+                                        + "invoice_before_tax, invoice_tax, invoice_discount, invoice_amount, invoice_status, client_id, admin_id)"
+                                        + "VALUES (?, ?, ?, 257.31, 0, 0, 0, 0, 0, 0, 0, 0, 257.31, 'Unpaid', ?, ?)");
 
-            disconnectDate = calendar.getTime();
+                                if (!invoices.isEmpty()) {
+                                    insertStatement.setInt(1, invoices.get(invoices.size() - 1).getId() + 1);
+                                } else {
+                                    insertStatement.setInt(1, 1001);
+                                }
 
-            if (invoice.getStatus().equals("Overdue")) {
-                int disconnect = currentDate.compareTo(disconnectDate);
-                if (disconnect >= 0) {
-                    try {
-                        PreparedStatement updateStatement = connect.prepareStatement("UPDATE Client SET "
-                                + "client_status = 'Disconnected' WHERE client_id = ?");
-                        updateStatement.setInt(1, invoice.getClientId());
+                                insertStatement.setInt(2, meter.getReading());
+                                insertStatement.setInt(3, meter.getConsumption());
+                                insertStatement.setInt(4, client.getId());
 
-                        updateStatement.executeUpdate();
-                    } catch (SQLException ex) {
-                        Logger.getLogger(InvoicePanel.class.getName()).log(Level.SEVERE, null, ex);
+                                int adminId = 0;
+                                for (Admin admin : admins) {
+                                    if (accountUsername.equals(admin.getUsername())) {
+                                        adminId = admin.getId();
+                                    }
+                                }
+
+                                insertStatement.setInt(5, adminId);
+
+                                insertStatement.executeUpdate();
+                            } catch (SQLException ex) {
+                                Logger.getLogger(ClientPanel.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+
+                            updateDatas();
+                        } else if (suffix.equals("staff")) {
+                            PreparedStatement insertStatement;
+                            try {
+                                insertStatement = connect.prepareStatement("INSERT IGNORE INTO Invoice (invoice_id,"
+                                        + " invoice_reading, invoice_consumption, invoice_reconnection_charge, invoice_basic_charge, "
+                                        + "invoice_transitory_charge, invoice_environmental_charge, "
+                                        + "invoice_sewerage_charge, invoice_maintenance_charge, "
+                                        + "invoice_before_tax, invoice_tax, invoice_discount, invoice_amount, invoice_status, client_id, staff_id)"
+                                        + "VALUES (?, ?, ?, 257.31, 0, 0, 0, 0, 0, 0, 0, 0, 257.31, 'Unpaid', ?, ?)");
+
+                                insertStatement.setInt(1, invoices.get(invoices.size() - 1).getId() + 1);
+                                insertStatement.setInt(2, meter.getReading());
+                                insertStatement.setInt(3, meter.getConsumption());
+                                insertStatement.setInt(4, client.getId());
+
+                                int staffId = 0;
+                                for (Staff staff : staffs) {
+                                    if (accountUsername.equals(staff.getUsername())) {
+                                        staffId = staff.getId();
+                                    }
+                                }
+
+                                insertStatement.setInt(5, staffId);
+
+                                insertStatement.executeUpdate();
+                            } catch (SQLException ex) {
+                                Logger.getLogger(ClientPanel.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+
+                            updateDatas();
+                        }
                     }
                 }
             }
         }
     }
-    
+
     public boolean checkTextFields() {
         if (lastname.getText().equals("") && firstname.getText().equals("") && address.getText().equals("") && phonenumber.getText().equals("")
                 && metersize.getText().equals("") && meterId.getText().equals("")) {
@@ -1050,6 +1197,7 @@ public class ClientPanel extends javax.swing.JPanel {
     private javax.swing.JLabel middlenameLabel;
     private javax.swing.JTextField phonenumber;
     private javax.swing.JLabel phonenumberLabel;
+    private javax.swing.JButton printReports;
     private javax.swing.JComboBox<String> rateclass;
     private javax.swing.JLabel rateclassLabel;
     private javax.swing.JButton refresh;

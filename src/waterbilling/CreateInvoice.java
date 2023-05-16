@@ -664,10 +664,10 @@ public class CreateInvoice extends javax.swing.JFrame {
                     PreparedStatement updateStatement;
                     try {
                         insertStatement = connect.prepareStatement("INSERT IGNORE INTO Invoice (invoice_id, "
-                                + "invoice_period_date, invoice_reading, invoice_consumption, invoice_basic_charge, invoice_transitory_charge, invoice_environmental_charge, "
+                                + "invoice_period_date, invoice_reading, invoice_consumption, invoice_reconnection_charge, invoice_basic_charge, invoice_transitory_charge, invoice_environmental_charge, "
                                 + "invoice_sewerage_charge, invoice_maintenance_charge, "
                                 + "invoice_before_tax, invoice_tax, invoice_discount, invoice_amount, invoice_status, client_id, admin_id)"
-                                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                                + "VALUES (?, ?, ?, ?, 0, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
                         insertStatement.setInt(1, Integer.parseInt(id.getText()));
 
@@ -730,10 +730,10 @@ public class CreateInvoice extends javax.swing.JFrame {
                     PreparedStatement updateStatement;
                     try {
                         insertStatement = connect.prepareStatement("INSERT IGNORE INTO Invoice (invoice_id, "
-                                + "invoice_period_date, invoice_reading, invoice_consumption, invoice_basic_charge, invoice_transitory_charge, invoice_environmental_charge, "
+                                + "invoice_period_date, invoice_reading, invoice_consumption, invoice_reconnection_charge, invoice_basic_charge, invoice_transitory_charge, invoice_environmental_charge, "
                                 + "invoice_sewerage_charge, invoice_maintenance_charge, "
                                 + "invoice_before_tax, invoice_tax, invoice_discount, invoice_amount, invoice_status, client_id, staff_id)"
-                                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                                + "VALUES (?, ?, ?, ?, 0, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
                         insertStatement.setInt(1, Integer.parseInt(id.getText()));
 
@@ -776,13 +776,7 @@ public class CreateInvoice extends javax.swing.JFrame {
                         Logger.getLogger(CreateInvoice.class.getName()).log(Level.SEVERE, null, ex);
                     }
 
-                    updateDatas();
-
-                    if (!invoices.isEmpty()) {
-                        id.setText(Integer.toString(invoices.get(invoices.size() - 1).getId() + 1));
-                    } else {
-                        this.id.setText("1002");
-                    }
+                    updateDatas();                  
 
                     this.dispose();
 
@@ -825,8 +819,8 @@ public class CreateInvoice extends javax.swing.JFrame {
 
             invoices.clear();
             while (selectStatementStaff.next()) {
-                invoices.add(new Invoice(selectStatementStaff.getInt("invoice_id"), selectStatementStaff.getString("invoice_period_date"), 
-                        selectStatementStaff.getInt("invoice_reading"), selectStatementStaff.getInt("invoice_consumption"),
+                invoices.add(new Invoice(selectStatementStaff.getInt("invoice_id"), selectStatementStaff.getString("invoice_period_date"),
+                        selectStatementStaff.getInt("invoice_reading"), selectStatementStaff.getInt("invoice_consumption"), selectStatementStaff.getDouble("invoice_reconnection_charge"),
                         selectStatementStaff.getDouble("invoice_basic_charge"), selectStatementStaff.getDouble("invoice_transitory_charge"),
                         selectStatementStaff.getDouble("invoice_environmental_charge"), selectStatementStaff.getDouble("invoice_sewerage_charge"),
                         selectStatementStaff.getDouble("invoice_maintenance_charge"), selectStatementStaff.getDouble("invoice_before_tax"), selectStatementStaff.getDouble("invoice_tax"),
@@ -836,10 +830,10 @@ public class CreateInvoice extends javax.swing.JFrame {
             }
             while (selectStatementAdmin.next()) {
                 invoices.add(new Invoice(selectStatementAdmin.getInt("invoice_id"), selectStatementAdmin.getString("invoice_period_date"),
-                        selectStatementAdmin.getInt("invoice_reading"), selectStatementAdmin.getInt("invoice_consumption"),
+                        selectStatementAdmin.getInt("invoice_reading"), selectStatementAdmin.getInt("invoice_consumption"), selectStatementAdmin.getDouble("invoice_reconnection_charge"),
                         selectStatementAdmin.getDouble("invoice_basic_charge"), selectStatementAdmin.getDouble("invoice_transitory_charge"),
-                        selectStatementAdmin.getDouble("invoice_environmental_charge"), selectStatementAdmin.getDouble("invoice_sewerage_charge")
-                        , selectStatementAdmin.getDouble("invoice_maintenance_charge"), selectStatementAdmin.getDouble("invoice_before_tax"), selectStatementAdmin.getDouble("invoice_tax"),
+                        selectStatementAdmin.getDouble("invoice_environmental_charge"), selectStatementAdmin.getDouble("invoice_sewerage_charge"),
+                        selectStatementAdmin.getDouble("invoice_maintenance_charge"), selectStatementAdmin.getDouble("invoice_before_tax"), selectStatementAdmin.getDouble("invoice_tax"),
                         selectStatementAdmin.getDouble("invoice_discount"), selectStatementAdmin.getDouble("invoice_amount"),
                         selectStatementAdmin.getDouble("invoice_payment"), selectStatementAdmin.getString("invoice_payment_date"), selectStatementAdmin.getString("invoice_status"),
                         selectStatementAdmin.getInt("client_id"), selectStatementAdmin.getInt("admin_id")));

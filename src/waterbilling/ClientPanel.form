@@ -97,6 +97,8 @@
                       <EmptySpace min="-2" pref="104" max="-2" attributes="0"/>
                       <Component id="createAccountLabel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
+                      <Component id="printReports" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="refresh" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -119,7 +121,10 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="createAccountLabel" min="-2" pref="49" max="-2" attributes="0"/>
                   <Component id="createInvoice" min="-2" max="-2" attributes="0"/>
-                  <Component id="refresh" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="refresh" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="printReports" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
@@ -487,6 +492,14 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="refreshActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="printReports">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Print Reports"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="printReportsActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>
