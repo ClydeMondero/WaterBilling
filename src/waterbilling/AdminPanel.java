@@ -1,5 +1,6 @@
 package waterbilling;
 
+import java.awt.Color;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -117,10 +118,11 @@ class Admin {
     public void setStatus(String status) {
         this.status = status;
     }
+    
 }
 
 public class AdminPanel extends javax.swing.JPanel {
-
+    
     static ArrayList<Admin> admins = new ArrayList<>();
     Connection connect = null;
 
@@ -129,8 +131,9 @@ public class AdminPanel extends javax.swing.JPanel {
     TableRowSorter<TableModel> sorter;
 
     public AdminPanel(String username, String password) {
+        
         initComponents();
-
+        
         connect = DatabaseConnection.connectDatabase();
 
         this.accountUsername = username;
@@ -200,6 +203,7 @@ public class AdminPanel extends javax.swing.JPanel {
         search = new javax.swing.JTextField();
         refresh = new javax.swing.JButton();
 
+        setBackground(new java.awt.Color(203, 243, 240));
         setPreferredSize(new java.awt.Dimension(820, 540));
         addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -213,6 +217,7 @@ public class AdminPanel extends javax.swing.JPanel {
         });
 
         listOfAcccountLabel.setFont(new java.awt.Font("sansserif", 1, 28)); // NOI18N
+        listOfAcccountLabel.setForeground(new java.awt.Color(46, 196, 182));
         listOfAcccountLabel.setText("List of Admin Accounts");
 
         table.setModel(new javax.swing.table.DefaultTableModel(
@@ -239,40 +244,52 @@ public class AdminPanel extends javax.swing.JPanel {
         scrollpane.setViewportView(table);
 
         createAccountLabel.setFont(new java.awt.Font("sansserif", 1, 28)); // NOI18N
+        createAccountLabel.setForeground(new java.awt.Color(46, 196, 182));
         createAccountLabel.setText("Create / Update Admin Account");
 
         idLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        idLabel.setForeground(new java.awt.Color(0, 0, 0));
         idLabel.setText("Account Id:");
 
         id.setText("Id");
 
         lastnameLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lastnameLabel.setForeground(new java.awt.Color(0, 0, 0));
         lastnameLabel.setText("Last Name:");
 
         firstnameLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        firstnameLabel.setForeground(new java.awt.Color(0, 0, 0));
         firstnameLabel.setText("First Name:");
 
         middlenameLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        middlenameLabel.setForeground(new java.awt.Color(0, 0, 0));
         middlenameLabel.setText("Middle Name: ");
 
         addressLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        addressLabel.setForeground(new java.awt.Color(0, 0, 0));
         addressLabel.setText("Address:");
 
         phonenumberLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        phonenumberLabel.setForeground(new java.awt.Color(0, 0, 0));
         phonenumberLabel.setText("Phone Number:");
 
         usernameLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        usernameLabel.setForeground(new java.awt.Color(0, 0, 0));
         usernameLabel.setText("Username:");
 
         passwordLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        passwordLabel.setForeground(new java.awt.Color(0, 0, 0));
         passwordLabel.setText("Password:");
 
         statusLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        statusLabel.setForeground(new java.awt.Color(0, 0, 0));
         statusLabel.setText("Status: ");
 
         status.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Active", "Deactivated"}));
         status.setMinimumSize(new java.awt.Dimension(60, 26));
 
+        cancel.setBackground(new java.awt.Color(255, 159, 28));
+        cancel.setForeground(new java.awt.Color(255, 255, 255));
         cancel.setText("Cancel");
         cancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -280,6 +297,8 @@ public class AdminPanel extends javax.swing.JPanel {
             }
         });
 
+        save.setBackground(new java.awt.Color(255, 159, 28));
+        save.setForeground(new java.awt.Color(255, 255, 255));
         save.setText("Save");
         save.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -287,6 +306,8 @@ public class AdminPanel extends javax.swing.JPanel {
             }
         });
 
+        delete.setBackground(new java.awt.Color(255, 159, 28));
+        delete.setForeground(new java.awt.Color(255, 255, 255));
         delete.setText("Delete Selected Rows");
         delete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -301,6 +322,8 @@ public class AdminPanel extends javax.swing.JPanel {
             }
         });
 
+        refresh.setBackground(new java.awt.Color(255, 159, 28));
+        refresh.setForeground(new java.awt.Color(255, 255, 255));
         refresh.setText("Refresh");
         refresh.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
