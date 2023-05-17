@@ -282,7 +282,6 @@ public class ClientPanel extends javax.swing.JPanel {
         metersizeLabel = new javax.swing.JLabel();
         metersize = new javax.swing.JTextField();
         meterIdLabel = new javax.swing.JLabel();
-        meterId = new javax.swing.JPasswordField();
         statusLabel = new javax.swing.JLabel();
         status = new javax.swing.JComboBox<>();
         cancel = new javax.swing.JButton();
@@ -292,11 +291,12 @@ public class ClientPanel extends javax.swing.JPanel {
         rateclassLabel = new javax.swing.JLabel();
         rateclass = new javax.swing.JComboBox<>();
         meterreadingLabel = new javax.swing.JLabel();
-        meterreading = new javax.swing.JPasswordField();
         createInvoice = new javax.swing.JButton();
         refresh = new javax.swing.JButton();
         printReports = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        meterId = new javax.swing.JTextField();
+        meterreading = new javax.swing.JTextField();
 
         setBackground(new java.awt.Color(203, 243, 240));
         addMouseListener(new java.awt.event.MouseAdapter() {
@@ -454,69 +454,73 @@ public class ClientPanel extends javax.swing.JPanel {
                 .addGap(40, 40, 40)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(scrollpane, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(delete, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(111, 111, 111)
-                        .addComponent(listOfAcccountLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(search, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(statusLabel)
-                                    .addComponent(idLabel)
-                                    .addComponent(lastnameLabel)
-                                    .addComponent(middlenameLabel)
-                                    .addComponent(metersizeLabel))
-                                .addGap(22, 22, 22))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(phonenumberLabel)
-                                .addGap(15, 15, 15)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(phonenumber)
-                            .addComponent(lastname, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
-                            .addComponent(middlename, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
-                            .addComponent(metersize, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(id, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(status, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(meterIdLabel)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(layout.createSequentialGroup()
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(firstnameLabel)
-                                        .addComponent(rateclassLabel))
-                                    .addGap(39, 39, 39)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(rateclass, 0, 214, Short.MAX_VALUE)
-                                        .addComponent(firstname)
-                                        .addComponent(address, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
-                                        .addComponent(meterId)))
-                                .addComponent(addressLabel)
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                    .addComponent(cancel, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(statusLabel)
+                                        .addComponent(idLabel)
+                                        .addComponent(lastnameLabel)
+                                        .addComponent(middlenameLabel)
+                                        .addComponent(metersizeLabel))
+                                    .addGap(22, 22, 22))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(phonenumberLabel)
+                                    .addGap(15, 15, 15)))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(phonenumber)
+                                .addComponent(lastname, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
+                                .addComponent(middlename, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
+                                .addComponent(metersize, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(id, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(status, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(meterIdLabel)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(firstnameLabel)
+                                            .addComponent(rateclassLabel))
+                                        .addGap(39, 39, 39)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(rateclass, 0, 214, Short.MAX_VALUE)
+                                            .addComponent(firstname)
+                                            .addComponent(address, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
+                                            .addComponent(meterId, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(addressLabel)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(cancel, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(save, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(meterreadingLabel)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(meterreading, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGroup(layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                    .addComponent(delete, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(111, 111, 111)
+                                    .addComponent(listOfAcccountLabel)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel1)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(save, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(meterreadingLabel)
-                                .addGap(18, 18, 18)
-                                .addComponent(meterreading))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(createInvoice)
-                        .addGap(104, 104, 104)
-                        .addComponent(createAccountLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
-                        .addComponent(printReports)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(refresh)))
-                .addGap(32, 32, 32))
+                                    .addComponent(search, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(createInvoice)
+                                    .addGap(104, 104, 104)
+                                    .addComponent(createAccountLabel)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+                                    .addComponent(printReports)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(refresh)))
+                            .addGap(3, 3, 3))))
+                .addGap(29, 29, 29))
         );
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {address, firstname, meterId, rateclass});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {address, firstname, rateclass});
 
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1269,9 +1273,9 @@ public class ClientPanel extends javax.swing.JPanel {
     private javax.swing.JTextField lastname;
     private javax.swing.JLabel lastnameLabel;
     private javax.swing.JLabel listOfAcccountLabel;
-    private javax.swing.JPasswordField meterId;
+    private javax.swing.JTextField meterId;
     private javax.swing.JLabel meterIdLabel;
-    private javax.swing.JPasswordField meterreading;
+    private javax.swing.JTextField meterreading;
     private javax.swing.JLabel meterreadingLabel;
     private javax.swing.JTextField metersize;
     private javax.swing.JLabel metersizeLabel;
