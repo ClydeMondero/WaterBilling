@@ -489,7 +489,7 @@ public class StaffPanel extends javax.swing.JPanel {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(permission)
                             .addComponent(show, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING))
+                            .addComponent(jLabel1))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(passwordLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
@@ -533,10 +533,7 @@ public class StaffPanel extends javax.swing.JPanel {
         password.setEnabled(false);
         password2.setText(staffs.get(row).getPassword());
         password2.setEnabled(false);
-        status.setSelectedItem(staffs.get(row).getStatus());
-
-        System.out.println(password2.getText());
-
+        status.setSelectedItem(staffs.get(row).getStatus());        
     }//GEN-LAST:event_tableMouseClicked
 
     private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed

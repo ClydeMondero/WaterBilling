@@ -213,6 +213,8 @@ public class CashierPanel extends javax.swing.JPanel {
         phonenumber = new javax.swing.JTextField();
         firstnameLabel = new javax.swing.JLabel();
         firstname = new javax.swing.JTextField();
+        show = new javax.swing.JToggleButton();
+        jLabel3 = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(203, 243, 240));
         addMouseListener(new java.awt.event.MouseAdapter() {
@@ -350,6 +352,15 @@ public class CashierPanel extends javax.swing.JPanel {
         firstnameLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         firstnameLabel.setText("First Name:");
 
+        show.setIcon(new javax.swing.ImageIcon(getClass().getResource("/waterbilling/images/eye.png"))); // NOI18N
+        show.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                showActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("Show Password");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -388,7 +399,12 @@ public class CashierPanel extends javax.swing.JPanel {
                                         .addGap(9, 9, 9)
                                         .addComponent(save, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(permission)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(permission)
+                                            .addGap(18, 18, 18)
+                                            .addComponent(show, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(jLabel3))
                                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -470,8 +486,11 @@ public class CashierPanel extends javax.swing.JPanel {
                             .addComponent(phonenumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(phonenumberLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(permission)
-                        .addGap(1, 1, 1)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(permission)
+                            .addComponent(jLabel3)
+                            .addComponent(show, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(passwordLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
                             .addComponent(password, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -739,6 +758,16 @@ public class CashierPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_permissionActionPerformed
 
+    private void showActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showActionPerformed
+        if (password.isEnabled() && password2.isEnabled()) {
+            if (show.isSelected()) {
+                password.setEchoChar((char) 0);
+            } else {
+                password.setEchoChar('*');
+            }
+        }
+    }//GEN-LAST:event_showActionPerformed
+
     public void updateFilter() {
         String text = search.getText();
         if (text.length() == 0) {
@@ -844,6 +873,7 @@ public class CashierPanel extends javax.swing.JPanel {
     private javax.swing.JLabel idLabel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JTextField lastname;
     private javax.swing.JLabel lastnameLabel;
     private javax.swing.JLabel listOfAcccountLabel;
@@ -860,6 +890,7 @@ public class CashierPanel extends javax.swing.JPanel {
     private javax.swing.JButton save;
     private javax.swing.JScrollPane scrollpane;
     private javax.swing.JTextField search;
+    private javax.swing.JToggleButton show;
     private javax.swing.JComboBox<String> status;
     private javax.swing.JLabel statusLabel;
     private javax.swing.JTable table;
