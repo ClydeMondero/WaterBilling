@@ -49,10 +49,6 @@
 				</textElement>
 				<text><![CDATA[Invoice Reports]]></text>
 			</staticText>
-			<image>
-				<reportElement x="159" y="17" width="39" height="34"/>
-				<imageExpression><![CDATA["C:\\Users\\PCB\\Documents\\Bachelor of Science in Information Technology\\2nd Year\\Object Oriented Programming\\WaterBilling\\src\\waterbilling\\images\\logo.png"]]></imageExpression>
-			</image>
 		</band>
 	</title>
 	<pageHeader>
