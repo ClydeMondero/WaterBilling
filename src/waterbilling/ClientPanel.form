@@ -222,7 +222,7 @@
                 <Column editable="false" title="Id" type="java.lang.Object"/>
                 <Column editable="false" title="Name" type="java.lang.Object"/>
                 <Column editable="false" title="Address" type="java.lang.Object"/>
-                <Column editable="false" title="Meter Number" type="java.lang.Object"/>
+                <Column editable="false" title="Meter Id" type="java.lang.Object"/>
                 <Column editable="false" title="Consumption" type="java.lang.Object"/>
                 <Column editable="false" title="Rate Class" type="java.lang.Object"/>
                 <Column editable="false" title="Status" type="java.lang.Object"/>

@@ -256,6 +256,7 @@ public class ClientPanel extends javax.swing.JPanel {
             this.id.setText("1001");
         }
 
+        meterreading.setText("0");
     }
 
     @SuppressWarnings("unchecked")
@@ -318,7 +319,7 @@ public class ClientPanel extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Id", "Name", "Address", "Meter Number", "Consumption", "Rate Class", "Status"
+                "Id", "Name", "Address", "Meter Id", "Consumption", "Rate Class", "Status"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -618,7 +619,7 @@ public class ClientPanel extends javax.swing.JPanel {
         table.clearSelection();
         delete.setEnabled(false);
         createInvoice.setEnabled(false);
-        meterId.setEnabled(true);
+        meterId.setEnabled(true);       
     }//GEN-LAST:event_cancelActionPerformed
 
     private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
@@ -633,7 +634,7 @@ public class ClientPanel extends javax.swing.JPanel {
                 isMeterIdDuplicate = true;
             }
         }
-        if (isMeterIdDuplicate && !model.getValueAt(row, 3).toString().equals(meterId.getText())) {
+        if (isMeterIdDuplicate) {
             JOptionPane.showMessageDialog(null, "Meter Id already exist!", "Invalid Meter Id", JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -897,7 +898,7 @@ public class ClientPanel extends javax.swing.JPanel {
             table.clearSelection();
             delete.setEnabled(false);
             createInvoice.setEnabled(false);
-            meterId.setEnabled(true);
+            meterId.setEnabled(true);            
         }
         this.requestFocus();
     }//GEN-LAST:event_formMouseClicked
@@ -1237,7 +1238,7 @@ public class ClientPanel extends javax.swing.JPanel {
         rateclass.setSelectedItem("Connected");
         metersize.setText("");
         meterId.setText("");
-        meterreading.setText("");
+        meterreading.setText("0");
         status.setSelectedItem("Active");
     }
 
