@@ -1240,40 +1240,27 @@ public class CreateInvoice extends javax.swing.JFrame {
     double metersize;
 
     public double computeMaintenanceCharge() {
-        switch (Double.toString(metersize)) {
-            case "0.5":
-                maintenancecharge = 1.50;
-                break;
-            case "0.75":
-                maintenancecharge = 2.00;
-                break;
-            case "1":
-                maintenancecharge = 3.00;
-                break;
-            case "1.25":
-                maintenancecharge = 4.00;
-                break;
-            case "2":
-                maintenancecharge = 6.00;
-                break;
-            case "3":
-                maintenancecharge = 10.00;
-                break;
-            case "4":
-                maintenancecharge = 20.00;
-                break;
-            case "6":
-                maintenancecharge = 35.00;
-                break;
-            case "8":
-                maintenancecharge = 50.00;
-                break;
-
-            default:
-
-                maintenancecharge = 0;
-                break;
-        }
+        if(metersize >=  0.5 && metersize <= 0.75){
+            maintenancecharge = 1.50;
+        }else if(metersize <=  0.75 && metersize <= 1){
+            maintenancecharge = 2.00;
+        }else if(metersize <=  1 && metersize <= 1.25){
+            maintenancecharge = 3.00;
+        }else if(metersize <=  1.25  && metersize <= 2){
+            maintenancecharge = 4.00;
+        }else if(metersize <=  2  && metersize <= 3){
+            maintenancecharge = 6.00;
+        }else if(metersize <= 3  && metersize <= 4){
+            maintenancecharge = 10.00;
+        }else if(metersize <= 4  && metersize <= 6){
+            maintenancecharge = 20.00;
+        }else if(metersize <= 6  && metersize <= 8){
+            maintenancecharge = 35.00;
+        }else if(metersize <= 8){
+            maintenancecharge = 50.00;
+        }else{
+            maintenancecharge = 0;
+        }                
         return maintenancecharge;
     }
 

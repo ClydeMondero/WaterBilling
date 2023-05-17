@@ -762,8 +762,10 @@ public class CashierPanel extends javax.swing.JPanel {
         if (password.isEnabled() && password2.isEnabled()) {
             if (show.isSelected()) {
                 password.setEchoChar((char) 0);
+                password2.setEchoChar((char) 0);
             } else {
                 password.setEchoChar('*');
+                password2.setEchoChar('*');
             }
         }
     }//GEN-LAST:event_showActionPerformed
