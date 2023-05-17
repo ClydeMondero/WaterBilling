@@ -15,6 +15,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.event.DocumentEvent;
@@ -91,71 +93,98 @@ public class CreateInvoice extends javax.swing.JFrame {
         calendar.add(Calendar.MONTH, -1);
         period2.setText(dateFormat.format(calendar.getTime()) + " TO " + dateFormat.format(period.getDate()));
 
-        consumption.getDocument().addDocumentListener(new DocumentListener() {
+        presentreading.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                computeBasicCharge();
-                basic.setText(chargeFormat.format(basiccharge));
-
-                computeTransitoryCharge();
-                transitory.setText(chargeFormat.format(transitorycharge));
-
-                computeEnvironmentalCharge();
-                environmental.setText(chargeFormat.format(environmentalcharge));
-
-                computeSewerageCharge();
-                sewerage.setText(chargeFormat.format(seweragecharge));
-
-                computeMaintenanceCharge();
-                maintenance.setText(chargeFormat.format(maintenancecharge));
-
-                computeTotalBeforeTax();
-                beforeTax.setText(chargeFormat.format(totalbeforetax));
-
-                computeTax();
-                tax.setText(chargeFormat.format(taxcharge));
-
-                computeTotalAmount();
-                amount.setText(chargeFormat.format(total));
+                if (!numbersOnly(presentreading.getText())) {
+                    JOptionPane.showMessageDialog(null, "Input numbers only!", "Present Reading", JOptionPane.WARNING_MESSAGE);
+                    clearLabels();
+                }
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                basic.setText(chargeFormat.format(0));
-                transitory.setText(chargeFormat.format(0));
-                environmental.setText(chargeFormat.format(0));
-                sewerage.setText(chargeFormat.format(0));
-                maintenance.setText(chargeFormat.format(0));
-                beforeTax.setText(chargeFormat.format(0));
-                tax.setText(chargeFormat.format(0));
-                amount.setText(chargeFormat.format(0));
+                clearLabels();
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                computeBasicCharge();
-                basic.setText(chargeFormat.format(basiccharge));
+                if (!numbersOnly(presentreading.getText())) {
+                    JOptionPane.showMessageDialog(null, "Input numbers only!", "Present Reading", JOptionPane.WARNING_MESSAGE);
+                    clearLabels();
+                }
+            }
 
-                computeTransitoryCharge();
-                transitory.setText(chargeFormat.format(transitorycharge));
+        });
 
-                computeEnvironmentalCharge();
-                environmental.setText(chargeFormat.format(environmentalcharge));
+        consumption.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                if (!numbersOnly(consumption.getText())) {
+                    JOptionPane.showMessageDialog(null, "Input numbers only!", "Consumption", JOptionPane.WARNING_MESSAGE);
+                    clearLabels();
+                } else {
+                    computeBasicCharge();
+                    basic.setText(chargeFormat.format(basiccharge));
 
-                computeSewerageCharge();
-                sewerage.setText(chargeFormat.format(seweragecharge));
+                    computeTransitoryCharge();
+                    transitory.setText(chargeFormat.format(transitorycharge));
 
-                computeMaintenanceCharge();
-                maintenance.setText(chargeFormat.format(maintenancecharge));
+                    computeEnvironmentalCharge();
+                    environmental.setText(chargeFormat.format(environmentalcharge));
 
-                computeTotalBeforeTax();
-                beforeTax.setText(chargeFormat.format(beforeTax));
+                    computeSewerageCharge();
+                    sewerage.setText(chargeFormat.format(seweragecharge));
 
-                computeTax();
-                tax.setText(chargeFormat.format(taxcharge));
+                    computeMaintenanceCharge();
+                    maintenance.setText(chargeFormat.format(maintenancecharge));
 
-                computeTotalAmount();
-                amount.setText(chargeFormat.format(total));
+                    computeTotalBeforeTax();
+                    beforeTax.setText(chargeFormat.format(totalbeforetax));
+
+                    computeTax();
+                    tax.setText(chargeFormat.format(taxcharge));
+
+                    computeTotalAmount();
+                    amount.setText(chargeFormat.format(total));
+                }
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                clearLabels();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                if (!numbersOnly(consumption.getText())) {
+                    JOptionPane.showMessageDialog(null, "Input numbers only!", "Consumption", JOptionPane.WARNING_MESSAGE);
+                    clearLabels();
+                } else {
+                    computeBasicCharge();
+                    basic.setText(chargeFormat.format(basiccharge));
+
+                    computeTransitoryCharge();
+                    transitory.setText(chargeFormat.format(transitorycharge));
+
+                    computeEnvironmentalCharge();
+                    environmental.setText(chargeFormat.format(environmentalcharge));
+
+                    computeSewerageCharge();
+                    sewerage.setText(chargeFormat.format(seweragecharge));
+
+                    computeMaintenanceCharge();
+                    maintenance.setText(chargeFormat.format(maintenancecharge));
+
+                    computeTotalBeforeTax();
+                    beforeTax.setText(chargeFormat.format(totalbeforetax));
+
+                    computeTax();
+                    tax.setText(chargeFormat.format(taxcharge));
+
+                    computeTotalAmount();
+                    amount.setText(chargeFormat.format(total));
+                }
             }
 
         });
@@ -310,25 +339,25 @@ public class CreateInvoice extends javax.swing.JFrame {
         basiclabel.setText("Basic Charge:");
 
         basic.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        basic.setText("₱0.0");
+        basic.setText("₱0.00");
 
         transitorylabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         transitorylabel.setText("Transitory Charge:");
 
         transitory.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        transitory.setText("₱0.0");
+        transitory.setText("₱0.00");
 
         environmentalLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         environmentalLabel.setText("Environmental Charge:");
 
         environmental.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        environmental.setText("₱0.0");
+        environmental.setText("₱0.00");
 
         maintenanceLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         maintenanceLabel.setText("Maintenance Charge:");
 
         maintenance.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        maintenance.setText("₱0.0");
+        maintenance.setText("₱0.00");
 
         invoicePeriod7.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
@@ -339,16 +368,16 @@ public class CreateInvoice extends javax.swing.JFrame {
         taxLabel.setText("Tax:");
 
         tax.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        tax.setText("₱0.0");
+        tax.setText("₱0.00");
 
         beforeTax.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        beforeTax.setText("₱0.0");
+        beforeTax.setText("₱0.00");
 
         amountLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         amountLabel.setText("Total Amount:");
 
         amount.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        amount.setText("₱0.0");
+        amount.setText("₱0.00");
 
         cancel.setBackground(new java.awt.Color(255, 159, 28));
         cancel.setForeground(new java.awt.Color(255, 255, 255));
@@ -372,7 +401,7 @@ public class CreateInvoice extends javax.swing.JFrame {
         sewerageLabel.setText("Sewerage Charge:");
 
         sewerage.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        sewerage.setText("₱0.0");
+        sewerage.setText("₱0.00");
 
         discountCheckBox.setText("Discount:");
         discountCheckBox.addActionListener(new java.awt.event.ActionListener() {
@@ -381,7 +410,7 @@ public class CreateInvoice extends javax.swing.JFrame {
             }
         });
 
-        discount.setText("₱0.0");
+        discount.setText("₱0.00");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -638,8 +667,19 @@ public class CreateInvoice extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    public boolean checkTextFields() {       
-        if (presentreading.getText().equals("") && consumption.getText().equals("")){
+    public void clearLabels() {
+        basic.setText(chargeFormat.format(0));
+        transitory.setText(chargeFormat.format(0));
+        environmental.setText(chargeFormat.format(0));
+        sewerage.setText(chargeFormat.format(0));
+        maintenance.setText(chargeFormat.format(0));
+        beforeTax.setText(chargeFormat.format(0));
+        tax.setText(chargeFormat.format(0));
+        amount.setText(chargeFormat.format(0));
+    }
+
+    public boolean checkTextFields() {
+        if (presentreading.getText().equals("") && consumption.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Fill up the required fields!", "Create Invoice", JOptionPane.ERROR_MESSAGE);
             return false;
         } else if (presentreading.getText().equals("")) {
@@ -648,10 +688,21 @@ public class CreateInvoice extends javax.swing.JFrame {
         } else if (consumption.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Consumption is required!", "Consumption", JOptionPane.ERROR_MESSAGE);
             return false;
-        }
-        return true;    
+        }else if (!numbersOnly(presentreading.getText()) || !numbersOnly(consumption.getText())) {
+                    JOptionPane.showMessageDialog(null, "Invalid input!", "Create Invoice", JOptionPane.ERROR_MESSAGE);
+                    presentreading.setText("");
+                    consumption.setText("");
+                    return false;
+                }
+        return true;
     }
-    
+
+    public static boolean numbersOnly(String input) {
+        Pattern pattern = Pattern.compile("\\d+");
+        Matcher matcher = pattern.matcher(input);
+        return matcher.matches();
+    }
+
     private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
         period.setDate(null);
         presentreading.setText("");
@@ -660,6 +711,10 @@ public class CreateInvoice extends javax.swing.JFrame {
     }//GEN-LAST:event_cancelActionPerformed
 
     private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
+        if (checkTextFields() == false) {
+            return;
+        }
+
         dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
         boolean isInvoicePeriodDuplicate = false;
@@ -836,7 +891,7 @@ public class CreateInvoice extends javax.swing.JFrame {
             amount.setText(chargeFormat.format(total));
         } else if (discountCheckBox.isSelected() == false) {
             discountcharge = 0;
-            discount.setText("₱0.0");
+            discount.setText("₱0.00");
 
             computeTotalAmount();
             amount.setText(chargeFormat.format(total));

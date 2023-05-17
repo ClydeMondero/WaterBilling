@@ -1,7 +1,8 @@
 package waterbilling;
 
-
 import java.awt.Color;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.sql.ResultSet;
@@ -16,13 +17,19 @@ import static waterbilling.AdminPanel.admins;
 import static waterbilling.StaffPanel.staffs;
 import static waterbilling.CashierPanel.cashiers;
 
-public class Login extends javax.swing.JFrame {   
+public class Login extends javax.swing.JFrame {
 
     Connection connect = null;
 
-    public Login() {
+    Image icon = Toolkit.getDefaultToolkit().getImage("images\\icon.png");
+
+    public Login() {       
+        setIconImage(icon);
+        
         initComponents();
+        
         this.getContentPane().setBackground(Color.decode("#CBF3F0"));
+        
         connect = DatabaseConnection.connectDatabase();
 
         try {
@@ -42,7 +49,7 @@ public class Login extends javax.swing.JFrame {
                 staffs.add(new Staff(selectStaff.getInt("staff_id"), selectStaff.getString("staff_username"), selectStaff.getString("staff_password"),
                         selectStaff.getString("staff_status")));
             }
-            
+
             ResultSet selectCashier = statement.executeQuery("SELECT cashier_id, cashier_username, cashier_password, cashier_status FROM Cashier WHERE cashier_status != 'Deleted'");
 
             cashiers.clear();
@@ -171,8 +178,8 @@ public class Login extends javax.swing.JFrame {
                         }
                         JOptionPane.showMessageDialog(null, "Login Failed! \nAttempt  " + loginCounter + " out of 3", "Login", JOptionPane.WARNING_MESSAGE);
                         username.setText("");
-                        password.setText("");                        
-                        if (loginCounter == 3 ) {
+                        password.setText("");
+                        if (loginCounter == 3) {
                             JOptionPane.showMessageDialog(null, "Account deactivated!", "Login", JOptionPane.ERROR_MESSAGE);
                             username.setText("");
                             password.setText("");
@@ -207,10 +214,10 @@ public class Login extends javax.swing.JFrame {
                         new Main(username.getText(), password.getText()).setVisible(true);
                         return;
                     } else {
-                         ++loginCounter;
+                        ++loginCounter;
                         JOptionPane.showMessageDialog(null, "Login Failed! \nAttempt  " + loginCounter + " out of 3", "Login", JOptionPane.WARNING_MESSAGE);
                         username.setText("");
-                        password.setText("");                       
+                        password.setText("");
                         if (loginCounter == 3) {
                             JOptionPane.showMessageDialog(null, "Account deactivated!", "Login", JOptionPane.ERROR_MESSAGE);
                             username.setText("");
@@ -236,7 +243,7 @@ public class Login extends javax.swing.JFrame {
                 }
             }
         }
-        
+
         for (int i = 0; i < cashiers.size(); i++) {
             if (username.getText().equals(cashiers.get(i).getUsername())) {
                 if (cashiers.get(i).getStatus().equals("Active")) {

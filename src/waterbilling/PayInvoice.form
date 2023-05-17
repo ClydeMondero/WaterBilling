@@ -571,7 +571,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Segoe UI" size="14" style="0"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="&#x20b1;0.0"/>
+        <Property name="text" type="java.lang.String" value="&#x20b1;0.00"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="transitorylabel">
@@ -587,7 +587,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Segoe UI" size="14" style="0"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="&#x20b1;0.0"/>
+        <Property name="text" type="java.lang.String" value="&#x20b1;0.00"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="environmentalLabel">
@@ -603,7 +603,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Segoe UI" size="14" style="0"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="&#x20b1;0.0"/>
+        <Property name="text" type="java.lang.String" value="&#x20b1;0.00"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="maintenanceLabel">
@@ -619,7 +619,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Segoe UI" size="14" style="0"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="&#x20b1;0.0"/>
+        <Property name="text" type="java.lang.String" value="&#x20b1;0.00"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="invoicePeriod7">
@@ -650,7 +650,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Segoe UI" size="14" style="0"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="&#x20b1;0.0"/>
+        <Property name="text" type="java.lang.String" value="&#x20b1;0.00"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="beforeTax">
@@ -658,7 +658,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Segoe UI" size="14" style="0"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="&#x20b1;0.0"/>
+        <Property name="text" type="java.lang.String" value="&#x20b1;0.00"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="totalamountLabel">
@@ -674,7 +674,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Segoe UI" size="14" style="0"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="&#x20b1;0.0"/>
+        <Property name="text" type="java.lang.String" value="&#x20b1;0.00"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="cancel">
@@ -724,12 +724,12 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Segoe UI" size="14" style="0"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="&#x20b1;0.0"/>
+        <Property name="text" type="java.lang.String" value="&#x20b1;0.00"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="discount">
       <Properties>
-        <Property name="text" type="java.lang.String" value="&#x20b1;0.0"/>
+        <Property name="text" type="java.lang.String" value="&#x20b1;0.00"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="period">
@@ -795,7 +795,7 @@
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="66" green="66" red="66" type="rgb"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="&#x20b1;0.0"/>
+        <Property name="text" type="java.lang.String" value="&#x20b1;0.00"/>
       </Properties>
     </Component>
   </SubComponents>
