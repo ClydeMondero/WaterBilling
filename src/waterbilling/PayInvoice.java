@@ -315,6 +315,7 @@ public class PayInvoice extends javax.swing.JFrame {
 
         cancel.setBackground(new java.awt.Color(255, 159, 28));
         cancel.setForeground(new java.awt.Color(255, 255, 255));
+        cancel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/waterbilling/images/cancel.png"))); // NOI18N
         cancel.setText("Cancel");
         cancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -324,6 +325,7 @@ public class PayInvoice extends javax.swing.JFrame {
 
         payButton.setBackground(new java.awt.Color(255, 159, 28));
         payButton.setForeground(new java.awt.Color(255, 255, 255));
+        payButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/waterbilling/images/cuba.png"))); // NOI18N
         payButton.setText("Pay");
         payButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -358,7 +360,7 @@ public class PayInvoice extends javax.swing.JFrame {
             }
         });
 
-        paymentLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        paymentLabel.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         paymentLabel.setForeground(new java.awt.Color(46, 196, 182));
         paymentLabel.setText("Payment:");
 

@@ -352,6 +352,7 @@ public class InvoicePanel extends javax.swing.JPanel {
 
         cancel.setBackground(new java.awt.Color(255, 159, 28));
         cancel.setForeground(new java.awt.Color(255, 255, 255));
+        cancel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/waterbilling/images/cancel.png"))); // NOI18N
         cancel.setText("Cancel");
         cancel.setEnabled(false);
         cancel.addActionListener(new java.awt.event.ActionListener() {
@@ -362,6 +363,7 @@ public class InvoicePanel extends javax.swing.JPanel {
 
         payInvoice.setBackground(new java.awt.Color(255, 159, 28));
         payInvoice.setForeground(new java.awt.Color(255, 255, 255));
+        payInvoice.setIcon(new javax.swing.ImageIcon(getClass().getResource("/waterbilling/images/cuba.png"))); // NOI18N
         payInvoice.setText("Pay Invoice");
         payInvoice.setEnabled(false);
         payInvoice.addActionListener(new java.awt.event.ActionListener() {
@@ -372,6 +374,7 @@ public class InvoicePanel extends javax.swing.JPanel {
 
         refresh.setBackground(new java.awt.Color(255, 159, 28));
         refresh.setForeground(new java.awt.Color(255, 255, 255));
+        refresh.setIcon(new javax.swing.ImageIcon(getClass().getResource("/waterbilling/images/refresh.png"))); // NOI18N
         refresh.setText("Refresh");
         refresh.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -381,6 +384,7 @@ public class InvoicePanel extends javax.swing.JPanel {
 
         printReports.setBackground(new java.awt.Color(255, 159, 28));
         printReports.setForeground(new java.awt.Color(255, 255, 255));
+        printReports.setIcon(new javax.swing.ImageIcon(getClass().getResource("/waterbilling/images/printing.png"))); // NOI18N
         printReports.setText("Print Reports");
         printReports.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

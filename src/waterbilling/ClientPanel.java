@@ -337,7 +337,7 @@ public class ClientPanel extends javax.swing.JPanel {
         });
         scrollpane.setViewportView(table);
 
-        createAccountLabel.setFont(new java.awt.Font("sansserif", 1, 28)); // NOI18N
+        createAccountLabel.setFont(new java.awt.Font("sansserif", 1, 24)); // NOI18N
         createAccountLabel.setForeground(new java.awt.Color(46, 196, 182));
         createAccountLabel.setText("Create / Update a Client ");
 
@@ -375,6 +375,7 @@ public class ClientPanel extends javax.swing.JPanel {
 
         cancel.setBackground(new java.awt.Color(255, 159, 28));
         cancel.setForeground(new java.awt.Color(255, 255, 255));
+        cancel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/waterbilling/images/cancel.png"))); // NOI18N
         cancel.setText("Cancel");
         cancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -384,6 +385,7 @@ public class ClientPanel extends javax.swing.JPanel {
 
         save.setBackground(new java.awt.Color(255, 159, 28));
         save.setForeground(new java.awt.Color(255, 255, 255));
+        save.setIcon(new javax.swing.ImageIcon(getClass().getResource("/waterbilling/images/save.png"))); // NOI18N
         save.setText("Save");
         save.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -393,7 +395,8 @@ public class ClientPanel extends javax.swing.JPanel {
 
         delete.setBackground(new java.awt.Color(255, 159, 28));
         delete.setForeground(new java.awt.Color(255, 255, 255));
-        delete.setText("Delete Selected Rows");
+        delete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/waterbilling/images/delete.png"))); // NOI18N
+        delete.setText("Delete Rows");
         delete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 deleteActionPerformed(evt);
@@ -419,6 +422,7 @@ public class ClientPanel extends javax.swing.JPanel {
 
         createInvoice.setBackground(new java.awt.Color(255, 159, 28));
         createInvoice.setForeground(new java.awt.Color(255, 255, 255));
+        createInvoice.setIcon(new javax.swing.ImageIcon(getClass().getResource("/waterbilling/images/add.png"))); // NOI18N
         createInvoice.setText("Create Invoice");
         createInvoice.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -428,6 +432,7 @@ public class ClientPanel extends javax.swing.JPanel {
 
         refresh.setBackground(new java.awt.Color(255, 159, 28));
         refresh.setForeground(new java.awt.Color(255, 255, 255));
+        refresh.setIcon(new javax.swing.ImageIcon(getClass().getResource("/waterbilling/images/refresh.png"))); // NOI18N
         refresh.setText("Refresh");
         refresh.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -437,6 +442,7 @@ public class ClientPanel extends javax.swing.JPanel {
 
         printReports.setBackground(new java.awt.Color(255, 159, 28));
         printReports.setForeground(new java.awt.Color(255, 255, 255));
+        printReports.setIcon(new javax.swing.ImageIcon(getClass().getResource("/waterbilling/images/printing.png"))); // NOI18N
         printReports.setText("Print Reports");
         printReports.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -503,15 +509,15 @@ public class ClientPanel extends javax.swing.JPanel {
                                 .addComponent(delete, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(111, 111, 111)
                                 .addComponent(listOfAcccountLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 90, Short.MAX_VALUE)
                                 .addComponent(jLabel1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(search, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(createInvoice)
-                                .addGap(104, 104, 104)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(createAccountLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(printReports)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(refresh)))

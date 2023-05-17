@@ -290,6 +290,7 @@ public class CashierPanel extends javax.swing.JPanel {
 
         cancel.setBackground(new java.awt.Color(255, 159, 28));
         cancel.setForeground(new java.awt.Color(255, 255, 255));
+        cancel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/waterbilling/images/cancel.png"))); // NOI18N
         cancel.setText("Cancel");
         cancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -299,6 +300,7 @@ public class CashierPanel extends javax.swing.JPanel {
 
         save.setBackground(new java.awt.Color(255, 159, 28));
         save.setForeground(new java.awt.Color(255, 255, 255));
+        save.setIcon(new javax.swing.ImageIcon(getClass().getResource("/waterbilling/images/save.png"))); // NOI18N
         save.setText("Save");
         save.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -308,7 +310,8 @@ public class CashierPanel extends javax.swing.JPanel {
 
         delete.setBackground(new java.awt.Color(255, 159, 28));
         delete.setForeground(new java.awt.Color(255, 255, 255));
-        delete.setText("Delete Selected Rows");
+        delete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/waterbilling/images/delete.png"))); // NOI18N
+        delete.setText("Delete Rows");
         delete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 deleteActionPerformed(evt);
@@ -324,6 +327,7 @@ public class CashierPanel extends javax.swing.JPanel {
 
         refresh.setBackground(new java.awt.Color(255, 159, 28));
         refresh.setForeground(new java.awt.Color(255, 255, 255));
+        refresh.setIcon(new javax.swing.ImageIcon(getClass().getResource("/waterbilling/images/refresh.png"))); // NOI18N
         refresh.setText("Refresh");
         refresh.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -342,7 +346,7 @@ public class CashierPanel extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(createAccountLabel)
-                        .addGap(85, 85, 85)
+                        .addGap(39, 39, 39)
                         .addComponent(refresh))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(40, 40, 40)
