@@ -820,6 +820,7 @@ public class PayInvoice extends javax.swing.JFrame {
         invoice += "Consumption : " + consumption.getText() + "\n\n";
         invoice += "Invoice Summary - - - - - - - - - - - - - - - - - - - - - - -\n\n";
         invoice += "Invoice Period : " + period2.getText() + "\n";
+        invoice += "Reconnection Charge: " + reconnection.getText() + "\n";
         invoice += "Basic Charge : " + basic.getText() + "\n";
         invoice += "Sewerage Charge : " + sewerage.getText() + "\n";
         invoice += "Transitory Charge : " + transitory.getText() + "\n";

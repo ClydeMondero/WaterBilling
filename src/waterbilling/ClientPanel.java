@@ -1,8 +1,11 @@
 package waterbilling;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -1147,6 +1150,46 @@ public class ClientPanel extends javax.swing.JPanel {
                                 }
 
                                 updateDatas();
+                            }
+                            String recconectionInvoice;
+                            recconectionInvoice = "- - - - - - - - - - -JAC Waterbiling System- - - - - - - - - - -\n\n";
+                            recconectionInvoice += "Invoice Id : " + invoices.get(invoices.size() - 1).getId() + 1 + "\n";
+                            dateFormat = new SimpleDateFormat("MMMM dd yyyy");
+                            recconectionInvoice += "Invoice Period : " + dateFormat.format(invoice.getPeriod()) + "\n\n";
+                            recconectionInvoice += "Client Information - - - - - - - - - - - - - - - - - - - - - - -\n\n";
+                            recconectionInvoice += "Client Id : " + client.getId() + "\n";
+                            recconectionInvoice += "Client Name : " + client.getLastname() + " " + client.getFirstname() + " " + client.getMiddlename() + "\n";
+                            recconectionInvoice += "Address : " + client.getAddress() + "\n";
+                            recconectionInvoice += "Rate Class : " + client.getRateclass() + "\n\n";
+                            recconectionInvoice += "Meter Information - - - - - - - - - - - - - - - - - - - - - - -\n\n";
+                            recconectionInvoice += "Meter Id : " + meter.getId() + "\n";
+                            recconectionInvoice += "Meter Reading Date : " + dateFormat.format(invoice.getPeriod()) + "\n";                            
+                            recconectionInvoice += "Meter Reading : " + meter.getReading() + "\n";
+                            recconectionInvoice += "Consumption : " + meter.getConsumption() + "\n\n";
+                            recconectionInvoice += "Invoice Summary - - - - - - - - - - - - - - - - - - - - - - -\n\n";
+                            recconectionInvoice += "Invoice Period :  " + dateFormat.format(invoice.getPeriod()) +"\n";
+                            recconectionInvoice += "Reconnection Charge: " + 257.31 + "\n";
+                            recconectionInvoice += "Basic Charge : " + 0 + "\n";
+                            recconectionInvoice += "Sewerage Charge : " + 0 + "\n";
+                            recconectionInvoice += "Transitory Charge : " + 0 + "\n";
+                            recconectionInvoice += "Environmental Charge : " + 0 + "\n";
+                            recconectionInvoice += "Maintenance Charge : " + 0 + "\n";
+                            recconectionInvoice += "Sub Total Amount : " + 257.31 + "\n";
+                            recconectionInvoice += "Tax : " +0 + "\n";
+                            recconectionInvoice += "Discount : " + 0 + "\n";
+                            recconectionInvoice += "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n\n";
+                            recconectionInvoice += "Total Amount : " + 257.31 + "\n";
+
+                            recconectionInvoice += "Payment Due Date: \n";
+
+                            JOptionPane.showMessageDialog(null, recconectionInvoice, "Invoice", JOptionPane.INFORMATION_MESSAGE);
+
+                            try {
+                                BufferedWriter writer = new BufferedWriter(new FileWriter("invoices/invoice " + id.getText() + ".txt"));
+                                writer.write(recconectionInvoice);
+                                writer.close();
+                            } catch (IOException ex) {
+                                Logger.getLogger(CreateInvoice.class.getName()).log(Level.SEVERE, null, ex);
                             }
                         }
                     }

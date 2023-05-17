@@ -670,7 +670,9 @@ public class InvoicePanel extends javax.swing.JPanel {
         } catch (ParseException ex) {
             Logger.getLogger(InvoicePanel.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        
+        System.out.println(currentDate);
+        
         Date dueDate = null;
 
         for (Invoice invoice : invoices) {
