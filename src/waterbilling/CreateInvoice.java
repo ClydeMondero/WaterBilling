@@ -3,6 +3,12 @@ package waterbilling;
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.sql.Connection;
@@ -11,6 +17,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.text.NumberFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.logging.Level;
@@ -21,6 +28,13 @@ import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
 import static waterbilling.ClientPanel.clients;
 import static waterbilling.ClientPanel.meters;
 import static waterbilling.AdminPanel.admins;
@@ -362,7 +376,7 @@ public class CreateInvoice extends javax.swing.JFrame {
         invoicePeriod7.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         beforetaxLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        beforetaxLabel.setText("Charges Before Tax:");
+        beforetaxLabel.setText("Sub Total Amount");
 
         taxLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         taxLabel.setText("Tax:");
@@ -438,66 +452,71 @@ public class CreateInvoice extends javax.swing.JFrame {
                                 .addComponent(invoicesummarySeparator))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(transitorylabel)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(transitory, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(188, 556, Short.MAX_VALUE))
-                                    .addGroup(layout.createSequentialGroup()
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addGroup(layout.createSequentialGroup()
-                                                        .addComponent(meterIdLabel)
-                                                        .addGap(18, 18, 18)
-                                                        .addComponent(meterId))
-                                                    .addGroup(layout.createSequentialGroup()
-                                                        .addComponent(previousreadingLabel)
-                                                        .addGap(18, 18, 18)
-                                                        .addComponent(previousreading)))
-                                                .addGap(32, 32, 32)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addGroup(layout.createSequentialGroup()
-                                                        .addComponent(meterreadingDateLabel)
-                                                        .addGap(18, 18, 18)
-                                                        .addComponent(meterreadingDate, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 179, Short.MAX_VALUE))
-                                                    .addGroup(layout.createSequentialGroup()
-                                                        .addComponent(presentreadingLabel)
-                                                        .addGap(18, 18, 18)
-                                                        .addComponent(presentreading, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                        .addComponent(consumptionLabel)
-                                                        .addGap(18, 18, 18)
-                                                        .addComponent(consumption, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addGap(17, 17, 17))))
                                             .addGroup(layout.createSequentialGroup()
-                                                .addComponent(serviceInformationLabel2)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(clientinformationseparator))
+                                                .addComponent(meterIdLabel)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(meterId))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(previousreadingLabel)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(previousreading)))
+                                        .addGap(32, 32, 32)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(meterreadingDateLabel)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(meterreadingDate, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 179, Short.MAX_VALUE))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(presentreadingLabel)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(presentreading, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(consumptionLabel)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(consumption, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(17, 17, 17))))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(serviceInformationLabel2)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(clientinformationseparator))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(idLabel)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(id)
+                                                .addGap(124, 124, 124)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(titleLabel)
+                                                    .addGroup(layout.createSequentialGroup()
+                                                        .addComponent(invoiceperiodLabel)
+                                                        .addGap(18, 18, 18)
+                                                        .addComponent(period, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))))
                                             .addGroup(layout.createSequentialGroup()
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                     .addGroup(layout.createSequentialGroup()
                                                         .addComponent(invoicePeriod2)
                                                         .addGap(18, 18, 18)
-                                                        .addComponent(period2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                        .addComponent(period2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                    .addGroup(layout.createSequentialGroup()
+                                                        .addComponent(transitorylabel)
+                                                        .addGap(18, 18, 18)
+                                                        .addComponent(transitory, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addGroup(layout.createSequentialGroup()
+                                                        .addComponent(environmentalLabel)
+                                                        .addGap(18, 18, 18)
+                                                        .addComponent(environmental, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                    .addGroup(layout.createSequentialGroup()
                                                         .addComponent(basiclabel)
                                                         .addGap(18, 18, 18)
-                                                        .addComponent(basic, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                    .addGroup(layout.createSequentialGroup()
-                                                        .addComponent(idLabel)
-                                                        .addGap(18, 18, 18)
-                                                        .addComponent(id)
-                                                        .addGap(124, 124, 124)
-                                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                            .addComponent(titleLabel)
-                                                            .addGroup(layout.createSequentialGroup()
-                                                                .addComponent(invoiceperiodLabel)
-                                                                .addGap(18, 18, 18)
-                                                                .addComponent(period, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                                                .addGap(0, 0, Short.MAX_VALUE)))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                                                        .addComponent(basic, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                        .addGap(0, 0, Short.MAX_VALUE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(invoicePeriod7))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -525,21 +544,15 @@ public class CreateInvoice extends javax.swing.JFrame {
                                         .addComponent(beforetaxLabel)
                                         .addGap(18, 18, 18)
                                         .addComponent(beforeTax, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(24, 24, 24)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(environmentalLabel)
-                                                .addGap(18, 18, 18)
-                                                .addComponent(environmental, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(taxLabel)
-                                                .addGap(18, 18, 18)
-                                                .addComponent(tax, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addComponent(discountCheckBox)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addComponent(discount, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addGap(30, 30, 30)
+                                        .addComponent(taxLabel)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(tax, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(discountCheckBox)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(discount, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(9, 9, 9)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addGroup(layout.createSequentialGroup()
                                                 .addComponent(amountLabel)
@@ -629,8 +642,6 @@ public class CreateInvoice extends javax.swing.JFrame {
                                     .addComponent(basic))
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(environmentalLabel)
-                                    .addComponent(environmental)
                                     .addComponent(transitorylabel)
                                     .addComponent(transitory))
                                 .addGap(27, 27, 27)))
@@ -651,7 +662,10 @@ public class CreateInvoice extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(maintenanceLabel)
-                            .addComponent(maintenance))
+                            .addComponent(maintenance)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(environmentalLabel)
+                                .addComponent(environmental)))
                         .addGap(27, 27, 27)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(amountLabel)
@@ -690,12 +704,12 @@ public class CreateInvoice extends javax.swing.JFrame {
         } else if (consumption.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Consumption is required!", "Consumption", JOptionPane.ERROR_MESSAGE);
             return false;
-        }else if (!numbersOnly(presentreading.getText()) || !numbersOnly(consumption.getText())) {
-                    JOptionPane.showMessageDialog(null, "Invalid input!", "Create Invoice", JOptionPane.ERROR_MESSAGE);
-                    presentreading.setText("");
-                    consumption.setText("");
-                    return false;
-                }
+        } else if (!numbersOnly(presentreading.getText()) || !numbersOnly(consumption.getText())) {
+            JOptionPane.showMessageDialog(null, "Invalid input!", "Create Invoice", JOptionPane.ERROR_MESSAGE);
+            presentreading.setText("");
+            consumption.setText("");
+            return false;
+        }
         return true;
     }
 
@@ -812,6 +826,9 @@ public class CreateInvoice extends javax.swing.JFrame {
                     this.dispose();
 
                     JOptionPane.showMessageDialog(null, "Invoice Created!", "Create Invoice", JOptionPane.INFORMATION_MESSAGE);
+
+                    printInvoice();
+
                 } else if (suffix.equals("staff")) {
                     PreparedStatement insertStatement;
                     PreparedStatement updateStatement;
@@ -877,12 +894,75 @@ public class CreateInvoice extends javax.swing.JFrame {
                     this.dispose();
 
                     JOptionPane.showMessageDialog(null, "Invoice Created!", "Create Invoice", JOptionPane.INFORMATION_MESSAGE);
+
+                    printInvoice();
                 }
             } else {
                 JOptionPane.showMessageDialog(null, "Incorrect password!", "Wrong Password", JOptionPane.ERROR_MESSAGE);
             }
         }
     }//GEN-LAST:event_saveActionPerformed
+
+    String invoice;
+
+    public void printInvoice() {
+        invoice = "- - - - - - - - - - -JAC Waterbiling System- - - - - - - - - - -\n\n";
+        invoice += "Invoice Id : " + id.getText() + "\n";
+        invoice += "Invoice Period : " + dateFormat.format(period.getDate()) + "\n\n";
+        invoice += "Client Information - - - - - - - - - - - - - - - - - - - - - - -\n\n";
+        invoice += "Client Id : " + clientId.getText() + "\n";
+        invoice += "Client Name : " + clientName.getText() + "\n";
+        invoice += "Address : " + address.getText() + "\n";
+        invoice += "Rate Class : " + rateclass.getText() + "\n\n";
+        invoice += "Meter Information - - - - - - - - - - - - - - - - - - - - - - -\n\n";
+        invoice += "Meter Id : " + meterId.getText() + "\n";
+        invoice += "Meter Reading Date : " + meterreadingDate.getText() + "\n";
+        invoice += "Previous Reading : " + previousreading.getText() + "\n";
+        invoice += "Present Reading : " + presentreading.getText() + "\n";
+        invoice += "Consumption : " + consumption.getText() + "\n\n";
+        invoice += "Invoice Summary - - - - - - - - - - - - - - - - - - - - - - -\n\n";
+        invoice += "Invoice Period : " + period2.getText() + "\n";
+        invoice += "Basic Charge : " + basic.getText() + "\n";
+        invoice += "Sewerage Charge : " + sewerage.getText() + "\n";
+        invoice += "Transitory Charge : " + transitory.getText() + "\n";
+        invoice += "Environmental Charge : " + environmental.getText() + "\n";
+        invoice += "Maintenance Charge : " + maintenance.getText() + "\n";
+        invoice += "Sub Total Amount : " + beforeTax.getText() + "\n";
+        invoice += "Tax : " + tax.getText() + "\n";
+        invoice += "Discount : " + discount.getText() + "\n";
+        invoice += "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n\n";
+        invoice += "Total Amount : " + amount.getText() + "\n";
+
+        Date dd = null;
+        String dueDate = "";
+        try {
+            dueDate = dateFormat.format(period.getDate());
+            dd = dateFormat.parse(dueDate);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(dd);
+
+            calendar.add(Calendar.DAY_OF_YEAR, 7);
+            dd = calendar.getTime();
+            
+            dateFormat = new SimpleDateFormat("MMMM dd yyyy");
+            dueDate = dateFormat.format(dd);
+
+        } catch (ParseException ex) {
+            Logger.getLogger(InvoicePanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        invoice += "Payment Due Date: " + dueDate + "\n";
+
+        JOptionPane.showMessageDialog(null, invoice, "Invoice", JOptionPane.INFORMATION_MESSAGE);
+
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter("invoices/invoice " + id.getText() + ".txt"));
+            writer.write(invoice);
+            writer.close();
+        } catch (IOException ex) {
+            Logger.getLogger(CreateInvoice.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     private void discountCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_discountCheckBoxActionPerformed
         if (discountCheckBox.isSelected() == true) {
@@ -1240,27 +1320,27 @@ public class CreateInvoice extends javax.swing.JFrame {
     double metersize;
 
     public double computeMaintenanceCharge() {
-        if(metersize >=  0.5 && metersize <= 0.75){
+        if (metersize >= 0.5 && metersize <= 0.75) {
             maintenancecharge = 1.50;
-        }else if(metersize <=  0.75 && metersize <= 1){
+        } else if (metersize <= 0.75 && metersize <= 1) {
             maintenancecharge = 2.00;
-        }else if(metersize <=  1 && metersize <= 1.25){
+        } else if (metersize <= 1 && metersize <= 1.25) {
             maintenancecharge = 3.00;
-        }else if(metersize <=  1.25  && metersize <= 2){
+        } else if (metersize <= 1.25 && metersize <= 2) {
             maintenancecharge = 4.00;
-        }else if(metersize <=  2  && metersize <= 3){
+        } else if (metersize <= 2 && metersize <= 3) {
             maintenancecharge = 6.00;
-        }else if(metersize <= 3  && metersize <= 4){
+        } else if (metersize <= 3 && metersize <= 4) {
             maintenancecharge = 10.00;
-        }else if(metersize <= 4  && metersize <= 6){
+        } else if (metersize <= 4 && metersize <= 6) {
             maintenancecharge = 20.00;
-        }else if(metersize <= 6  && metersize <= 8){
+        } else if (metersize <= 6 && metersize <= 8) {
             maintenancecharge = 35.00;
-        }else if(metersize <= 8){
+        } else if (metersize <= 8) {
             maintenancecharge = 50.00;
-        }else{
+        } else {
             maintenancecharge = 0;
-        }                
+        }
         return maintenancecharge;
     }
 

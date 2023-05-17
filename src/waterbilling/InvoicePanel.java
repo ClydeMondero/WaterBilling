@@ -1,9 +1,11 @@
 package waterbilling;
 
+import java.awt.Desktop;
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -465,8 +467,8 @@ public class InvoicePanel extends javax.swing.JPanel {
                     + "JOIN Staff ON Invoice.staff_id = Staff.staff_id ");
 
             ResultSet selectStatementAdmin = statement2.executeQuery("SELECT * FROM Invoice "
-                    +"JOIN Charge ON Invoice.charge_id = Charge.charge_id " 
-                    +"JOIN Client ON Invoice.client_id = Client.client_id "
+                    + "JOIN Charge ON Invoice.charge_id = Charge.charge_id "
+                    + "JOIN Client ON Invoice.client_id = Client.client_id "
                     + "JOIN Admin ON Invoice.admin_id = Admin.admin_id ");
 
             invoices.clear();
@@ -596,6 +598,24 @@ public class InvoicePanel extends javax.swing.JPanel {
     private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
         cancel.setEnabled(true);
         payInvoice.setEnabled(true);
+
+        int row = table.getSelectedRow();
+        String invoiceId = model.getValueAt(row, 1).toString();
+
+        File directory = new File("invoices/");
+
+        File[] matchingFiles = directory.listFiles((dir, name) -> name.equals("invoice " + invoiceId + ".txt"));
+
+        if (matchingFiles != null && matchingFiles.length > 0) {
+            File textFile = matchingFiles[0];
+            try {
+                Desktop desktop = Desktop.getDesktop();
+                if (desktop.isSupported(Desktop.Action.OPEN)) {
+                    desktop.open(textFile);
+                }
+            } catch (IOException e) {                
+            }
+        }
     }//GEN-LAST:event_tableMouseClicked
 
     private void payInvoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_payInvoiceActionPerformed
