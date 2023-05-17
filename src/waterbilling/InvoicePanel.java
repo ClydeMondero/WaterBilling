@@ -726,6 +726,8 @@ public class InvoicePanel extends javax.swing.JPanel {
         } else {
             printReports.setEnabled(true);
         }
+        
+        this.repaint();
     }//GEN-LAST:event_refreshActionPerformed
 
     private void printReportsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printReportsActionPerformed

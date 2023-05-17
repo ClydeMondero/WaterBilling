@@ -41,11 +41,11 @@ public class PayInvoice extends javax.swing.JFrame {
 
     public PayInvoice(int id, String username, String password) {
         this.setIconImage(icon);
-        
+
         initComponents();
-        
+
         this.getContentPane().setBackground(Color.decode("#CBF3F0"));
-        
+
         invoiceId = id;
         accountUsername = username;
         accountPassword = password;
@@ -192,6 +192,11 @@ public class PayInvoice extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(203, 243, 240));
+        addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                formMouseClicked(evt);
+            }
+        });
 
         titleLabel.setFont(new java.awt.Font("sansserif", 1, 28)); // NOI18N
         titleLabel.setForeground(new java.awt.Color(46, 196, 182));
@@ -354,9 +359,6 @@ public class PayInvoice extends javax.swing.JFrame {
         payment.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 paymentFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                paymentFocusLost(evt);
             }
         });
 
@@ -644,7 +646,10 @@ public class PayInvoice extends javax.swing.JFrame {
     }//GEN-LAST:event_cancelActionPerformed
 
     private void payButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_payButtonActionPerformed
-
+        if (clients.get(clientIndex).getCredit() != 0) {
+            payment.setText(chargeFormat.format(clients.get(clientIndex).getCredit() + Double.parseDouble(payment.getText())));
+        }
+        
         double payment = Double.parseDouble(removeCurrency(this.payment.getText()));
         double amount = Double.parseDouble(removeCurrency(this.amount.getText()));
         double credit = clients.get(clientIndex).getCredit();
@@ -665,7 +670,7 @@ public class PayInvoice extends javax.swing.JFrame {
                             Logger.getLogger(PayInvoice.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     } else if (option == JOptionPane.NO_OPTION) {
-                        JOptionPane.showMessageDialog(null, "Change: " + change, "Change", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Change: " + chargeFormat.format(change), "Change", JOptionPane.INFORMATION_MESSAGE);
                     } else {
                         return;
                     }
@@ -702,7 +707,7 @@ public class PayInvoice extends javax.swing.JFrame {
                             Logger.getLogger(PayInvoice.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     } else if (option == JOptionPane.NO_OPTION) {
-                        JOptionPane.showMessageDialog(null, "Change: " + change, "Change", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Change: " + chargeFormat.format(change), "Change", JOptionPane.INFORMATION_MESSAGE);
                     } else {
                         return;
                     }
@@ -744,7 +749,7 @@ public class PayInvoice extends javax.swing.JFrame {
                             Logger.getLogger(PayInvoice.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     } else if (option == JOptionPane.NO_OPTION) {
-                        JOptionPane.showMessageDialog(null, "Change: " + change, "Change", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Change: " + chargeFormat.format(change), "Change", JOptionPane.INFORMATION_MESSAGE);
                     } else {
                         return;
                     }
@@ -776,9 +781,11 @@ public class PayInvoice extends javax.swing.JFrame {
         payment.setText("");
     }//GEN-LAST:event_paymentFocusGained
 
-    private void paymentFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_paymentFocusLost
-        payment.setText(chargeFormat.format(Double.parseDouble(payment.getText())));
-    }//GEN-LAST:event_paymentFocusLost
+    private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
+        if (clients.get(clientIndex).getCredit() != 0) {
+            payment.setText(chargeFormat.format(clients.get(clientIndex).getCredit() + Double.parseDouble(payment.getText())));
+        }
+    }//GEN-LAST:event_formMouseClicked
 
     public String removeCurrency(String s) {
         s = s.replace("₱", "");
@@ -787,7 +794,7 @@ public class PayInvoice extends javax.swing.JFrame {
         return s;
     }
 
-     public void updateDatas() {
+    public void updateDatas() {
         try {
             Statement statement = connect.createStatement();
             Statement statement2 = connect.createStatement();
@@ -798,8 +805,8 @@ public class PayInvoice extends javax.swing.JFrame {
                     + "JOIN Staff ON Invoice.staff_id = Staff.staff_id ");
 
             ResultSet selectStatementAdmin = statement2.executeQuery("SELECT * FROM Invoice "
-                    +"JOIN Charge ON Invoice.charge_id = Charge.charge_id " 
-                    +"JOIN Client ON Invoice.client_id = Client.client_id "
+                    + "JOIN Charge ON Invoice.charge_id = Charge.charge_id "
+                    + "JOIN Client ON Invoice.client_id = Client.client_id "
                     + "JOIN Admin ON Invoice.admin_id = Admin.admin_id ");
 
             invoices.clear();
