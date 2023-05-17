@@ -166,12 +166,12 @@ public class Login extends javax.swing.JFrame {
                         new Main(username.getText(), password.getText()).setVisible(true);
                         return;
                     } else {
-                        JOptionPane.showMessageDialog(null, "Login Failed!", "Login", JOptionPane.WARNING_MESSAGE);
-                        username.setText("");
-                        password.setText("");
                         if (!admins.get(i).getUsername().equals("main_admin")) {
                             ++loginCounter;
                         }
+                        JOptionPane.showMessageDialog(null, "Login Failed! \nAttempt  " + loginCounter + " out of 3", "Login", JOptionPane.WARNING_MESSAGE);
+                        username.setText("");
+                        password.setText("");                        
                         if (loginCounter == 3 ) {
                             JOptionPane.showMessageDialog(null, "Account deactivated!", "Login", JOptionPane.ERROR_MESSAGE);
                             username.setText("");
@@ -207,10 +207,10 @@ public class Login extends javax.swing.JFrame {
                         new Main(username.getText(), password.getText()).setVisible(true);
                         return;
                     } else {
-                        JOptionPane.showMessageDialog(null, "Login Failed!", "Login", JOptionPane.WARNING_MESSAGE);
+                         ++loginCounter;
+                        JOptionPane.showMessageDialog(null, "Login Failed! \nAttempt  " + loginCounter + " out of 3", "Login", JOptionPane.WARNING_MESSAGE);
                         username.setText("");
-                        password.setText("");
-                        ++loginCounter;
+                        password.setText("");                       
                         if (loginCounter == 3) {
                             JOptionPane.showMessageDialog(null, "Account deactivated!", "Login", JOptionPane.ERROR_MESSAGE);
                             username.setText("");
