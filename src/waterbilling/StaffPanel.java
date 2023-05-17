@@ -195,12 +195,8 @@ public class StaffPanel extends javax.swing.JPanel {
         middlename = new javax.swing.JTextField();
         addressLabel = new javax.swing.JLabel();
         address = new javax.swing.JTextField();
-        phonenumberLabel = new javax.swing.JLabel();
-        phonenumber = new javax.swing.JTextField();
         usernameLabel = new javax.swing.JLabel();
         username = new javax.swing.JTextField();
-        passwordLabel = new javax.swing.JLabel();
-        password = new javax.swing.JPasswordField();
         statusLabel = new javax.swing.JLabel();
         status = new javax.swing.JComboBox<>();
         cancel = new javax.swing.JButton();
@@ -209,6 +205,15 @@ public class StaffPanel extends javax.swing.JPanel {
         search = new javax.swing.JTextField();
         refresh = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
+        phonenumberLabel = new javax.swing.JLabel();
+        phonenumber = new javax.swing.JTextField();
+        passwordLabel = new javax.swing.JLabel();
+        password = new javax.swing.JPasswordField();
+        passwordLabel2 = new javax.swing.JLabel();
+        password2 = new javax.swing.JPasswordField();
+        permission = new javax.swing.JCheckBox();
+        show = new javax.swing.JToggleButton();
+        jLabel1 = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(203, 243, 240));
         setPreferredSize(new java.awt.Dimension(820, 540));
@@ -271,14 +276,8 @@ public class StaffPanel extends javax.swing.JPanel {
         addressLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         addressLabel.setText("Address:");
 
-        phonenumberLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        phonenumberLabel.setText("Phone Number:");
-
         usernameLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         usernameLabel.setText("Username:");
-
-        passwordLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        passwordLabel.setText("Password:");
 
         statusLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         statusLabel.setText("Status: ");
@@ -335,17 +334,39 @@ public class StaffPanel extends javax.swing.JPanel {
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/waterbilling/images/search.png"))); // NOI18N
 
+        phonenumberLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        phonenumberLabel.setText("Phone Number:");
+
+        passwordLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        passwordLabel.setText("Password:");
+
+        passwordLabel2.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        passwordLabel2.setText("Confirm Password:");
+
+        permission.setFont(new java.awt.Font("sansserif", 0, 10)); // NOI18N
+        permission.setText("Update Passord Permission");
+        permission.setEnabled(false);
+        permission.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                permissionActionPerformed(evt);
+            }
+        });
+
+        show.setIcon(new javax.swing.ImageIcon(getClass().getResource("/waterbilling/images/eye.png"))); // NOI18N
+        show.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                showActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Show Password");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(209, 209, 209)
-                        .addComponent(createAccountLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(refresh))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(40, 40, 40)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -366,25 +387,35 @@ public class StaffPanel extends javax.swing.JPanel {
                                     .addComponent(address, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(id))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                         .addComponent(cancel, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(save, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(firstnameLabel)
+                                        .addGap(33, 33, 33)
+                                        .addComponent(firstname, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(passwordLabel2)
+                                                .addGap(2, 2, 2))
+                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(passwordLabel)
+                                                    .addComponent(phonenumberLabel))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(password2)
+                                            .addComponent(password)
+                                            .addComponent(phonenumber, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                     .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(passwordLabel)
-                                            .addComponent(firstnameLabel)
-                                            .addComponent(phonenumberLabel))
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addGap(6, 6, 6)
-                                                .addComponent(firstname, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                                    .addComponent(password)
-                                                    .addComponent(phonenumber, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
+                                        .addComponent(permission)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(show, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jLabel1))))
                             .addComponent(scrollpane, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -395,11 +426,16 @@ public class StaffPanel extends javax.swing.JPanel {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
                                 .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(search, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(search, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(209, 209, 209)
+                        .addComponent(createAccountLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(refresh)))
                 .addGap(32, 32, 32))
         );
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {address, firstname, lastname, middlename, password, phonenumber, status, username});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {address, firstname, lastname, middlename, status, username});
 
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -445,14 +481,24 @@ public class StaffPanel extends javax.swing.JPanel {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(firstname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(firstnameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE))
-                        .addGap(59, 59, 59)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(phonenumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(phonenumberLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE))
-                        .addGap(18, 18, 18)
+                        .addGap(8, 8, 8)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(permission)
+                            .addComponent(show, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(passwordLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
-                            .addComponent(password, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(password, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(passwordLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
+                            .addComponent(password2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(3, 3, 3)))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(status, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -480,18 +526,30 @@ public class StaffPanel extends javax.swing.JPanel {
         address.setText(staffs.get(row).getAddress());
         phonenumber.setText(staffs.get(row).getPhonNumber());
         username.setText(staffs.get(row).getUsername());
+
+        permission.setEnabled(true);
+
         password.setText(staffs.get(row).getPassword());
+        password.setEnabled(false);
+        password2.setText(staffs.get(row).getPassword());
+        password2.setEnabled(false);
         status.setSelectedItem(staffs.get(row).getStatus());
+
+        System.out.println(password2.getText());
+
     }//GEN-LAST:event_tableMouseClicked
 
     private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
-        clearTextFields();
-        table.clearSelection();
-        delete.setEnabled(false);
+        reset();
     }//GEN-LAST:event_cancelActionPerformed
 
     private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
         if (checkTextFields() == false) {
+            return;
+        }
+
+        if (!password.getText().equals(password2.getText())) {
+            JOptionPane.showMessageDialog(null, "Password don't match!", "Password Mismatch", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
@@ -580,9 +638,7 @@ public class StaffPanel extends javax.swing.JPanel {
 
                             id.setText(Integer.toString(staffs.get(staffs.size() - 1).getId() + 1));
 
-                            clearTextFields();
-                            table.clearSelection();
-                            delete.setEnabled(false);
+                            reset();
 
                             JOptionPane.showMessageDialog(null, "Account Updated!", "Update", JOptionPane.INFORMATION_MESSAGE);
                         }
@@ -599,9 +655,7 @@ public class StaffPanel extends javax.swing.JPanel {
 
     private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
         if (table.getSelectedRowCount() > 0) {
-            clearTextFields();
-            table.clearSelection();
-            delete.setEnabled(false);
+            reset();
         }
         this.requestFocus();
     }//GEN-LAST:event_formMouseClicked
@@ -668,6 +722,63 @@ public class StaffPanel extends javax.swing.JPanel {
         showDataInTable();
     }//GEN-LAST:event_formComponentShown
 
+    private void permissionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_permissionActionPerformed
+        if (permission.isSelected()) {
+            JPasswordField passwordField = new JPasswordField();
+            String p = null;
+            int option = JOptionPane.showConfirmDialog(null, passwordField, "Enter account password", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+            String permissionPassword = "";
+
+            for (Staff staff : staffs) {
+                if (staff.getId() == Integer.parseInt(model.getValueAt(row, 0).toString())) {
+                    permissionPassword = staff.getPassword();
+                }
+            }
+
+            if (option == JOptionPane.OK_OPTION) {
+                p = passwordField.getText();
+                if (p != null) {
+                    if (p.equals(permissionPassword)) {
+                        permission.setSelected(true);
+                        this.password.setEnabled(true);
+                        password2.setEnabled(true);
+                        JOptionPane.showMessageDialog(null, "Update password permitted!", "Update Password", JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        permission.setSelected(false);
+                        this.password.setEnabled(false);
+                        password2.setEnabled(false);
+                        JOptionPane.showMessageDialog(null, "Incorrect account password!", "Update Password", JOptionPane.WARNING_MESSAGE);
+                    }
+                }
+            }
+        } else {
+            permission.setSelected(false);
+            this.password.setEnabled(false);
+            password2.setEnabled(false);
+        }
+    }//GEN-LAST:event_permissionActionPerformed
+
+    private void showActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showActionPerformed
+        if (password.isEnabled() && password2.isEnabled()) {
+            if (show.isSelected()) {
+                password.setEchoChar((char) 0);
+            } else {
+                password.setEchoChar('*');
+            }
+        }
+    }//GEN-LAST:event_showActionPerformed
+
+    public void reset() {
+        clearTextFields();
+        table.clearSelection();
+        delete.setEnabled(false);
+        permission.setEnabled(false);
+        permission.setSelected(false);
+        password.setEnabled(true);
+        password2.setEnabled(true);
+    }
+
     public void clearTextFields() {
         if (!staffs.isEmpty()) {
             id.setText(Integer.toString(staffs.get(staffs.size() - 1).getId() + 1));
@@ -681,6 +792,7 @@ public class StaffPanel extends javax.swing.JPanel {
         phonenumber.setText("");
         username.setText("");
         password.setText("");
+        password2.setText("");
         status.setSelectedItem("Active");
     }
 
@@ -709,9 +821,11 @@ public class StaffPanel extends javax.swing.JPanel {
                         selectStatement.getString("staff_phonenumber"), selectStatement.getString("staff_username"), selectStatement.getString("staff_password"),
                         selectStatement.getString("staff_status")
                 ));
+
             }
         } catch (SQLException ex) {
-            Logger.getLogger(AdminPanel.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AdminPanel.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -770,6 +884,7 @@ public class StaffPanel extends javax.swing.JPanel {
     private javax.swing.JLabel firstnameLabel;
     private javax.swing.JLabel id;
     private javax.swing.JLabel idLabel;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JTextField lastname;
     private javax.swing.JLabel lastnameLabel;
@@ -777,13 +892,17 @@ public class StaffPanel extends javax.swing.JPanel {
     private javax.swing.JTextField middlename;
     private javax.swing.JLabel middlenameLabel;
     private javax.swing.JPasswordField password;
+    private javax.swing.JPasswordField password2;
     private javax.swing.JLabel passwordLabel;
+    private javax.swing.JLabel passwordLabel2;
+    private javax.swing.JCheckBox permission;
     private javax.swing.JTextField phonenumber;
     private javax.swing.JLabel phonenumberLabel;
     private javax.swing.JButton refresh;
     private javax.swing.JButton save;
     private javax.swing.JScrollPane scrollpane;
     private javax.swing.JTextField search;
+    private javax.swing.JToggleButton show;
     private javax.swing.JComboBox<String> status;
     private javax.swing.JLabel statusLabel;
     private javax.swing.JTable table;

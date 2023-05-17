@@ -120,11 +120,11 @@ class Admin {
     public void setStatus(String status) {
         this.status = status;
     }
-    
+
 }
 
-public class AdminPanel extends javax.swing.JPanel {        
-    
+public class AdminPanel extends javax.swing.JPanel {
+
     static ArrayList<Admin> admins = new ArrayList<>();
     Connection connect = null;
 
@@ -132,10 +132,10 @@ public class AdminPanel extends javax.swing.JPanel {
 
     TableRowSorter<TableModel> sorter;
 
-    public AdminPanel(String username, String password) {               
-        
+    public AdminPanel(String username, String password) {
+
         initComponents();
-        
+
         connect = DatabaseConnection.connectDatabase();
 
         this.accountUsername = username;
@@ -205,6 +205,9 @@ public class AdminPanel extends javax.swing.JPanel {
         search = new javax.swing.JTextField();
         refresh = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        passwordLabel2 = new javax.swing.JLabel();
+        password2 = new javax.swing.JPasswordField();
+        permission = new javax.swing.JCheckBox();
 
         setBackground(new java.awt.Color(203, 243, 240));
         setPreferredSize(new java.awt.Dimension(820, 540));
@@ -331,6 +334,18 @@ public class AdminPanel extends javax.swing.JPanel {
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/waterbilling/images/search.png"))); // NOI18N
 
+        passwordLabel2.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        passwordLabel2.setText("Confirm Password:");
+
+        permission.setFont(new java.awt.Font("sansserif", 0, 10)); // NOI18N
+        permission.setText("Update Passord Permission");
+        permission.setEnabled(false);
+        permission.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                permissionActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -356,25 +371,34 @@ public class AdminPanel extends javax.swing.JPanel {
                             .addComponent(address, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(id))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(cancel, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(13, 13, 13)
                                 .addComponent(save, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(passwordLabel)
-                                    .addComponent(firstnameLabel)
-                                    .addComponent(phonenumberLabel))
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(phonenumberLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(phonenumber, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                    .addGap(6, 6, 6)
+                                    .addComponent(passwordLabel2)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(password2, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(permission)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addGap(6, 6, 6)
-                                        .addComponent(firstname, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                            .addComponent(password)
-                                            .addComponent(phonenumber, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(passwordLabel)
+                                            .addComponent(firstnameLabel))
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGap(33, 33, 33)
+                                                .addComponent(firstname, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(password))))))))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addComponent(delete, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(49, 49, 49)
@@ -437,14 +461,21 @@ public class AdminPanel extends javax.swing.JPanel {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(firstname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(firstnameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE))
-                        .addGap(59, 59, 59)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(phonenumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(phonenumberLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE))
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(permission)
+                        .addGap(2, 2, 2)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(passwordLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
-                            .addComponent(password, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(password, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(passwordLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
+                            .addComponent(password2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(4, 4, 4)))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(status, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -472,18 +503,38 @@ public class AdminPanel extends javax.swing.JPanel {
         address.setText(admins.get(row).getAddress());
         phonenumber.setText(admins.get(row).getPhonNumber());
         username.setText(admins.get(row).getUsername());
+
+        permission.setEnabled(true);
+
         password.setText(admins.get(row).getPassword());
+        password.setEnabled(false);
+        password2.setText(admins.get(row).getPassword());
+        password2.setEnabled(false);
+
         status.setSelectedItem(admins.get(row).getStatus());
     }//GEN-LAST:event_tableMouseClicked
 
-    private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
+    public void reset() {
         clearTextFields();
         table.clearSelection();
         delete.setEnabled(false);
+        permission.setEnabled(false);
+        permission.setSelected(false);
+        password.setEnabled(true);
+        password2.setEnabled(true);
+    }
+
+    private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
+        reset();
     }//GEN-LAST:event_cancelActionPerformed
 
     private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
         if (checkTextFields() == false) {
+            return;
+        }
+
+        if (!password.getText().equals(password2.getText())) {
+            JOptionPane.showMessageDialog(null, "Password don't match!", "Password Mismatch", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
@@ -555,9 +606,7 @@ public class AdminPanel extends javax.swing.JPanel {
 
                             id.setText(Integer.toString(admins.get(admins.size() - 1).getId() + 1));
 
-                            clearTextFields();
-                            table.clearSelection();
-                            delete.setEnabled(false);
+                            reset();
 
                             JOptionPane.showMessageDialog(null, "Account Updated!", "Update", JOptionPane.INFORMATION_MESSAGE);
                         }
@@ -574,9 +623,7 @@ public class AdminPanel extends javax.swing.JPanel {
 
     private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
         if (table.getSelectedRowCount() > 0) {
-            clearTextFields();
-            table.clearSelection();
-            delete.setEnabled(false);
+            reset();
         }
         this.requestFocus();
     }//GEN-LAST:event_formMouseClicked
@@ -643,6 +690,44 @@ public class AdminPanel extends javax.swing.JPanel {
         showDataInTable();
     }//GEN-LAST:event_formComponentShown
 
+    private void permissionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_permissionActionPerformed
+        if (permission.isSelected()) {
+            JPasswordField passwordField = new JPasswordField();
+            String p = null;
+            int option = JOptionPane.showConfirmDialog(null, passwordField, "Enter account password", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+            String permissionPassword = "";
+
+            for (Admin admin : admins) {
+                if (admin.getId() == Integer.parseInt(model.getValueAt(row, 0).toString())) {
+                    permissionPassword = admin.getPassword();
+                }
+            }
+
+            if (option == JOptionPane.OK_OPTION) {
+                p = passwordField.getText();
+                if (p != null) {
+                    if (p.equals(permissionPassword)) {
+                        permission.setSelected(true);
+                        this.password.setEnabled(true);
+                        password2.setEnabled(true);
+                        JOptionPane.showMessageDialog(null, "Update password permitted!", "Update Password", JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        permission.setSelected(false);
+                        this.password.setEnabled(false);
+                        password2.setEnabled(false);
+                        JOptionPane.showMessageDialog(null, "Incorrect account password!", "Update Password", JOptionPane.WARNING_MESSAGE);
+                    }
+                }
+            }
+        } else {
+            permission.setSelected(false);
+            this.password.setEnabled(false);
+            password2.setEnabled(false);
+        }
+
+    }//GEN-LAST:event_permissionActionPerformed
+
     public void clearTextFields() {
         if (!admins.isEmpty()) {
             id.setText(Integer.toString(admins.get(admins.size() - 1).getId() + 1));
@@ -656,6 +741,7 @@ public class AdminPanel extends javax.swing.JPanel {
         phonenumber.setText("");
         username.setText("");
         password.setText("");
+        password2.setText("");
         status.setSelectedItem("Active");
     }
 
@@ -684,9 +770,11 @@ public class AdminPanel extends javax.swing.JPanel {
                         selectStatement.getString("admin_phonenumber"), selectStatement.getString("admin_username"), selectStatement.getString("admin_password"),
                         selectStatement.getString("admin_status")
                 ));
+
             }
         } catch (SQLException ex) {
-            Logger.getLogger(AdminPanel.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AdminPanel.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -711,7 +799,7 @@ public class AdminPanel extends javax.swing.JPanel {
         }
     }
 
-    public boolean checkTextFields() {       
+    public boolean checkTextFields() {
         if (lastname.getText().equals("") && firstname.getText().equals("") && address.getText().equals("") && phonenumber.getText().equals("")
                 && username.getText().equals("") && password.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Fill up the required fields!", "Admin", JOptionPane.ERROR_MESSAGE);
@@ -732,7 +820,7 @@ public class AdminPanel extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null, "Password is required!", "Password", JOptionPane.ERROR_MESSAGE);
             return false;
         }
-        return true;    
+        return true;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -752,7 +840,10 @@ public class AdminPanel extends javax.swing.JPanel {
     private javax.swing.JTextField middlename;
     private javax.swing.JLabel middlenameLabel;
     private javax.swing.JPasswordField password;
+    private javax.swing.JPasswordField password2;
     private javax.swing.JLabel passwordLabel;
+    private javax.swing.JLabel passwordLabel2;
+    private javax.swing.JCheckBox permission;
     private javax.swing.JTextField phonenumber;
     private javax.swing.JLabel phonenumberLabel;
     private javax.swing.JButton refresh;
