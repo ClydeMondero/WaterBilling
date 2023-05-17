@@ -67,6 +67,9 @@ public class Main extends javax.swing.JFrame {
         usernameLabel.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
         usernameLabel.setText("Username");
 
+        logoutButton.setBackground(new java.awt.Color(255, 159, 28));
+        logoutButton.setForeground(new java.awt.Color(255, 255, 255));
+        logoutButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/waterbilling/images/logout.png"))); // NOI18N
         logoutButton.setText("Logout");
         logoutButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

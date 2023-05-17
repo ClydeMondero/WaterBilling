@@ -43,15 +43,15 @@
 	<title>
 		<band height="79" splitType="Stretch">
 			<staticText>
-				<reportElement x="215" y="18" width="184" height="34"/>
+				<reportElement x="198" y="17" width="184" height="34"/>
 				<textElement>
 					<font size="24" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Invoice Reports]]></text>
 			</staticText>
 			<image>
-				<reportElement x="166" y="18" width="59" height="37"/>
-				<imageExpression><![CDATA["C:\\Users\\PCB\\Documents\\Bachelor of Science in Information Technology\\2nd Year\\Object Oriented Programming\\WaterBilling\\images\\logo.png"]]></imageExpression>
+				<reportElement x="159" y="17" width="39" height="34"/>
+				<imageExpression><![CDATA["C:\\Users\\PCB\\Documents\\Bachelor of Science in Information Technology\\2nd Year\\Object Oriented Programming\\WaterBilling\\src\\waterbilling\\images\\logo.png"]]></imageExpression>
 			</image>
 		</band>
 	</title>
