@@ -7,7 +7,7 @@ import javax.swing.JPanel;
 
 public class Main extends javax.swing.JFrame {
 
-    Image icon = Toolkit.getDefaultToolkit().getImage("images\\icon.png");
+    Image icon = Toolkit.getDefaultToolkit().getImage("src/waterbilling/images/icon.png");
     String accountUsername, accountPassword;
 
     public Main(String username, String password) {
@@ -75,12 +75,13 @@ public class Main extends javax.swing.JFrame {
         });
 
         mainTabbedPane.setBackground(new java.awt.Color(255, 255, 255));
+        mainTabbedPane.setBorder(null);
         mainTabbedPane.setPreferredSize(new java.awt.Dimension(820, 560));
 
         homePanel.setBackground(new java.awt.Color(255, 191, 105));
         homePanel.setPreferredSize(new java.awt.Dimension(820, 540));
 
-        jLabel2.setIcon(new javax.swing.ImageIcon("C:\\Users\\PCB\\Documents\\Bachelor of Science in Information Technology\\2nd Year\\Object Oriented Programming\\WaterBilling\\images\\logo.png")); // NOI18N
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/waterbilling/images/logo.png"))); // NOI18N
 
         jLabel1.setBackground(new java.awt.Color(255, 255, 255));
         jLabel1.setFont(new java.awt.Font("SansSerif", 1, 60)); // NOI18N

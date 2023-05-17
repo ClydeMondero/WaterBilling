@@ -9,7 +9,7 @@ import javax.swing.plaf.basic.BasicProgressBarUI;
 
 public class Loading extends javax.swing.JFrame {
     
-    Image icon = Toolkit.getDefaultToolkit().getImage("images\\icon.png");  
+    Image icon = Toolkit.getDefaultToolkit().getImage("src/waterbilling/images/icon.png"); 
     
     public Loading() {
         setIconImage(icon);

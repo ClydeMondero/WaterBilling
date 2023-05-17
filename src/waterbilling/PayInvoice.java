@@ -26,7 +26,7 @@ import static waterbilling.StaffPanel.staffs;
 
 public class PayInvoice extends javax.swing.JFrame {
 
-    Image icon = Toolkit.getDefaultToolkit().getImage("images\\icon.png");
+    Image icon = Toolkit.getDefaultToolkit().getImage("src/waterbilling/images/icon.png");
 
     int invoiceId;
     String accountUsername, accountPassword;

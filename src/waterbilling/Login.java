@@ -21,7 +21,7 @@ public class Login extends javax.swing.JFrame {
 
     Connection connect = null;
 
-    Image icon = Toolkit.getDefaultToolkit().getImage("images\\icon.png");
+    Image icon = Toolkit.getDefaultToolkit().getImage("src/waterbilling/images/icon.png");
 
     public Login() {       
         setIconImage(icon);
