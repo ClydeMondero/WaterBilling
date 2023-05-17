@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS Admin(
         
 )AUTO_INCREMENT = 1001;
 
-INSERT IGNORE INTO Admin VALUES (1001, 'Mondero', 'Clyde', 'Cruz', 'Baliuag, Bulacan', '09565317151', 'main_admin', '1234main', 'Active', 1001, 'Created');
+INSERT IGNORE INTO Admin VALUES (1001, 'Madrideo', 'Joseph', 'Manelese', 'Baliuag, Bulacan', '09565317151', 'main_admin', '1234main', 'Active', 1001, 'Created');
 
 CREATE TABLE IF NOT EXISTS Staff(
 	staff_id INT PRIMARY KEY AUTO_INCREMENT, 
@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS Staff(
         staff_status SET('Active', 'Deactivated', 'Deleted')        
 )AUTO_INCREMENT = 1001;
 
-INSERT IGNORE INTO Staff VALUES (1001, 'Madrideo', 'Joseph', 'Manelese', 'Baliuag, Bulacan', '09453268912', 'joseph_staff', '1234joseph', 'Active');
+INSERT IGNORE INTO Staff VALUES (1001, 'Mondero', 'Clyde', 'Cruz', 'Baliuag, Bulacan', '09453268912', 'clyde_staff', '1234clyde', 'Active');
 
 CREATE TABLE IF NOT EXISTS AdminsStaffs(		
         staff_id INT NOT NULL,        
@@ -174,4 +174,4 @@ SELECT * FROM AdminsClients;
 
 SELECT * FROM StaffsClients;
 
--- DROP DATABASE WaterBilling;
+DROP DATABASE WaterBilling;
