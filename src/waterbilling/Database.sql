@@ -174,4 +174,4 @@ SELECT * FROM AdminsClients;
 
 SELECT * FROM StaffsClients;
 
-DROP DATABASE WaterBilling;
+-- DROP DATABASE WaterBilling;
