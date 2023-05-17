@@ -1,7 +1,7 @@
 - - - - - - - - - - -JAC Waterbiling System- - - - - - - - - - -
 
 Invoice Id : 1004
-Invoice Period : 2023-10-17
+Invoice Period : June 18 2023
 
 Client Information - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -13,14 +13,14 @@ Rate Class : Residential
 Meter Information - - - - - - - - - - - - - - - - - - - - - - -
 
 Meter Id : 123456
-Meter Reading Date : June 17 2023
-Previous Reading : 2
-Present Reading : 4
-Consumption : 4
+Meter Reading Date : June 18 2023
+Previous Reading : 1
+Present Reading : 1
+Consumption : 1
 
 Invoice Summary - - - - - - - - - - - - - - - - - - - - - - -
 
-Invoice Period : May 17 2023 TO June 17 2023
+Invoice Period : May 18 2023 TO June 18 2023
 Basic Charge : ₱96.32
 Sewerage Charge : ₱0.00
 Transitory Charge : -₱0.53
@@ -32,4 +32,4 @@ Discount : ₱0.00
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 Total Amount : ₱119.74
-Payment Due Date: October 24 2023
+Payment Due Date: June 25 2023

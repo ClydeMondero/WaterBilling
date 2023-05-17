@@ -3,6 +3,9 @@ package waterbilling;
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -126,8 +129,23 @@ public class PayInvoice extends javax.swing.JFrame {
 
         amount.setText(chargeFormat.format(invoices.get(invoiceId).getAmount()));
 
-        if (clients.get(clientIndex).getCredit() != 0) {
-            payment.setText(chargeFormat.format(clients.get(clientIndex).getCredit()));
+        try {
+            Statement statement = connect.createStatement();
+
+            ResultSet selectCredit = statement.executeQuery("SELECT client_credit FROM Client WHERE client_id = " + Integer.parseInt(clientId.getText()));
+
+            double cc = 0;
+            
+            while(selectCredit.next()){
+                cc = selectCredit.getDouble("client_credit");
+            }
+            
+            
+            if (cc != 0) {
+                credit.setText(chargeFormat.format(cc));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(PayInvoice.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -189,14 +207,10 @@ public class PayInvoice extends javax.swing.JFrame {
         paymentLabel = new javax.swing.JLabel();
         reconnectionLabel = new javax.swing.JLabel();
         reconnection = new javax.swing.JLabel();
+        credit = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(203, 243, 240));
-        addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                formMouseClicked(evt);
-            }
-        });
 
         titleLabel.setFont(new java.awt.Font("sansserif", 1, 28)); // NOI18N
         titleLabel.setForeground(new java.awt.Color(46, 196, 182));
@@ -355,7 +369,7 @@ public class PayInvoice extends javax.swing.JFrame {
         taxLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         taxLabel1.setText("Discount:");
 
-        payment.setText("₱0.0");
+        payment.setText("₱0.00");
         payment.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 paymentFocusGained(evt);
@@ -373,6 +387,8 @@ public class PayInvoice extends javax.swing.JFrame {
         reconnection.setFont(new java.awt.Font("Segoe UI", 1, 10)); // NOI18N
         reconnection.setForeground(new java.awt.Color(102, 102, 102));
         reconnection.setText("₱0.00");
+
+        credit.setText("₱0.00");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -513,7 +529,9 @@ public class PayInvoice extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
                         .addComponent(paymentLabel)
                         .addGap(18, 18, 18)
-                        .addComponent(payment, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(payment, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(credit, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(12, 12, 12)))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -596,9 +614,8 @@ public class PayInvoice extends javax.swing.JFrame {
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                             .addComponent(environmentalLabel)
                                             .addComponent(environmental)
-                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                .addComponent(maintenanceLabel)
-                                                .addComponent(maintenance)))
+                                            .addComponent(maintenanceLabel)
+                                            .addComponent(maintenance))
                                         .addGap(27, 27, 27))
                                     .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -628,7 +645,9 @@ public class PayInvoice extends javax.swing.JFrame {
                             .addComponent(amount))))
                 .addGap(11, 11, 11)
                 .addComponent(invoicePeriod7)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(credit)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cancel, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(payButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -645,14 +664,11 @@ public class PayInvoice extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_cancelActionPerformed
 
+
     private void payButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_payButtonActionPerformed
-        if (clients.get(clientIndex).getCredit() != 0) {
-            payment.setText(chargeFormat.format(clients.get(clientIndex).getCredit() + Double.parseDouble(payment.getText())));
-        }
-        
         double payment = Double.parseDouble(removeCurrency(this.payment.getText()));
         double amount = Double.parseDouble(removeCurrency(this.amount.getText()));
-        double credit = clients.get(clientIndex).getCredit();
+        double credit = Double.parseDouble(removeCurrency(this.credit.getText()));
         if (payment != 0) {
             if (payment >= amount) {
                 if (payment > amount) {
@@ -669,8 +685,10 @@ public class PayInvoice extends javax.swing.JFrame {
                         } catch (SQLException ex) {
                             Logger.getLogger(PayInvoice.class.getName()).log(Level.SEVERE, null, ex);
                         }
+
+                        printInvoice(change, 0);
                     } else if (option == JOptionPane.NO_OPTION) {
-                        JOptionPane.showMessageDialog(null, "Change: " + chargeFormat.format(change), "Change", JOptionPane.INFORMATION_MESSAGE);
+                        printInvoice(0, change);
                     } else {
                         return;
                     }
@@ -706,8 +724,9 @@ public class PayInvoice extends javax.swing.JFrame {
                         } catch (SQLException ex) {
                             Logger.getLogger(PayInvoice.class.getName()).log(Level.SEVERE, null, ex);
                         }
+                        printInvoice(change, 0);
                     } else if (option == JOptionPane.NO_OPTION) {
-                        JOptionPane.showMessageDialog(null, "Change: " + chargeFormat.format(change), "Change", JOptionPane.INFORMATION_MESSAGE);
+                        printInvoice(0, change);
                     } else {
                         return;
                     }
@@ -748,8 +767,9 @@ public class PayInvoice extends javax.swing.JFrame {
                         } catch (SQLException ex) {
                             Logger.getLogger(PayInvoice.class.getName()).log(Level.SEVERE, null, ex);
                         }
+                        printInvoice(change, 0);
                     } else if (option == JOptionPane.NO_OPTION) {
-                        JOptionPane.showMessageDialog(null, "Change: " + chargeFormat.format(change), "Change", JOptionPane.INFORMATION_MESSAGE);
+                        printInvoice(0, change);
                     } else {
                         return;
                     }
@@ -781,11 +801,54 @@ public class PayInvoice extends javax.swing.JFrame {
         payment.setText("");
     }//GEN-LAST:event_paymentFocusGained
 
-    private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
-        if (clients.get(clientIndex).getCredit() != 0) {
-            payment.setText(chargeFormat.format(clients.get(clientIndex).getCredit() + Double.parseDouble(payment.getText())));
+    String invoice;
+
+    public void printInvoice(double credit, double change) {
+        invoice = "- - - - - - - - - - -JAC Waterbiling System- - - - - - - - - - -\n\n";
+        invoice += "Invoice Id : " + id.getText() + "\n";
+        dateFormat = new SimpleDateFormat("MMMM dd yyyy");
+        invoice += "Invoice Period : " + period.getText() + "\n\n";
+        invoice += "Client Information - - - - - - - - - - - - - - - - - - - - - - -\n\n";
+        invoice += "Client Id : " + clientId.getText() + "\n";
+        invoice += "Client Name : " + clientName.getText() + "\n";
+        invoice += "Address : " + address.getText() + "\n";
+        invoice += "Rate Class : " + rateclass.getText() + "\n\n";
+        invoice += "Meter Information - - - - - - - - - - - - - - - - - - - - - - -\n\n";
+        invoice += "Meter Id : " + meterId.getText() + "\n";
+        invoice += "Meter Reading Date : " + meterreadingDate.getText() + "\n";
+        invoice += "Meter Reading : " + meterreading.getText() + "\n";
+        invoice += "Consumption : " + consumption.getText() + "\n\n";
+        invoice += "Invoice Summary - - - - - - - - - - - - - - - - - - - - - - -\n\n";
+        invoice += "Invoice Period : " + period2.getText() + "\n";
+        invoice += "Basic Charge : " + basic.getText() + "\n";
+        invoice += "Sewerage Charge : " + sewerage.getText() + "\n";
+        invoice += "Transitory Charge : " + transitory.getText() + "\n";
+        invoice += "Environmental Charge : " + environmental.getText() + "\n";
+        invoice += "Maintenance Charge : " + maintenance.getText() + "\n";
+        invoice += "Sub Total Amount : " + beforeTax.getText() + "\n";
+        invoice += "Tax : " + tax.getText() + "\n";
+        invoice += "Discount : " + discount.getText() + "\n";
+        invoice += "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n\n";
+        invoice += "Total Amount : " + amount.getText() + "\n";
+        invoice += "Payment :" + payment.getText() + "\n";
+        invoice += "Credit Balance: " + chargeFormat.format(credit) + "\n";
+        invoice += "Change: " + chargeFormat.format(change) + "\n";
+
+        dateFormat = new SimpleDateFormat("MMMM dd yyyy");
+        String paymentDate = dateFormat.format(new Date());
+
+        invoice += "Payment Date: " + paymentDate + "\n";
+
+        JOptionPane.showMessageDialog(null, invoice, "Invoice", JOptionPane.INFORMATION_MESSAGE);
+
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter("invoices/invoice " + id.getText() + ".txt"));
+            writer.write(invoice);
+            writer.close();
+        } catch (IOException ex) {
+            Logger.getLogger(CreateInvoice.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_formMouseClicked
+    }
 
     public String removeCurrency(String s) {
         s = s.replace("₱", "");
@@ -853,6 +916,7 @@ public class PayInvoice extends javax.swing.JFrame {
     private javax.swing.JSeparator clientinformationseparator;
     private javax.swing.JLabel consumption;
     private javax.swing.JLabel consumptionLabel;
+    private javax.swing.JLabel credit;
     private javax.swing.JLabel discount;
     private javax.swing.JLabel environmental;
     private javax.swing.JLabel environmentalLabel;

@@ -630,7 +630,7 @@ public class InvoicePanel extends javax.swing.JPanel {
             }
         }
 
-        if (invoices.get(invoiceIndex).getStatus().equals("Unpaid")) {
+        if (invoices.get(invoiceIndex).getStatus().equals("Unpaid")) {                        
             new PayInvoice(Integer.parseInt(id.toString()), accountUsername, accountPassword).setVisible(true);
 
             cancel.setEnabled(false);
@@ -725,9 +725,7 @@ public class InvoicePanel extends javax.swing.JPanel {
             printReports.setEnabled(false);
         } else {
             printReports.setEnabled(true);
-        }
-        
-        this.repaint();
+        }                
     }//GEN-LAST:event_refreshActionPerformed
 
     private void printReportsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printReportsActionPerformed

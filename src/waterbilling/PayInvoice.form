@@ -11,9 +11,6 @@
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
     <SyntheticProperty name="generateCenter" type="boolean" value="true"/>
   </SyntheticProperties>
-  <Events>
-    <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="formMouseClicked"/>
-  </Events>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
@@ -202,7 +199,10 @@
                       <EmptySpace pref="21" max="32767" attributes="0"/>
                       <Component id="paymentLabel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="payment" min="-2" pref="180" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="payment" min="-2" pref="180" max="-2" attributes="0"/>
+                          <Component id="credit" min="-2" pref="100" max="-2" attributes="0"/>
+                      </Group>
                       <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -307,10 +307,8 @@
                                       <Group type="103" groupAlignment="3" attributes="0">
                                           <Component id="environmentalLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                                           <Component id="environmental" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Group type="103" alignment="3" groupAlignment="3" attributes="0">
-                                              <Component id="maintenanceLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="maintenance" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          </Group>
+                                          <Component id="maintenanceLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="maintenance" alignment="3" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
                                   </Group>
@@ -356,7 +354,9 @@
               </Group>
               <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
               <Component id="invoicePeriod7" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="28" max="32767" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
+              <Component id="credit" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="cancel" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
                   <Component id="payButton" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
@@ -779,7 +779,7 @@
     </Component>
     <Component class="javax.swing.JTextField" name="payment">
       <Properties>
-        <Property name="text" type="java.lang.String" value="&#x20b1;0.0"/>
+        <Property name="text" type="java.lang.String" value="&#x20b1;0.00"/>
       </Properties>
       <Events>
         <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="paymentFocusGained"/>
@@ -815,6 +815,11 @@
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="66" green="66" red="66" type="rgb"/>
         </Property>
+        <Property name="text" type="java.lang.String" value="&#x20b1;0.00"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="credit">
+      <Properties>
         <Property name="text" type="java.lang.String" value="&#x20b1;0.00"/>
       </Properties>
     </Component>

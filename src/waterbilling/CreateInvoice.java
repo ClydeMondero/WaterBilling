@@ -736,8 +736,39 @@ public class CreateInvoice extends javax.swing.JFrame {
         boolean isInvoicePeriodDuplicate = false;
 
         for (Invoice invoice : invoices) {
-            if (clientId.getText().equals(Integer.toString(invoice.getClientId())) && dateFormat.format(period.getDate()).equals(invoice.getPeriod())) {
-                isInvoicePeriodDuplicate = true;
+            if (clientId.getText().equals(Integer.toString(invoice.getClientId()))) {               
+                Date invoicePeriod = null;
+                try {
+                    invoicePeriod = dateFormat.parse(invoice.getPeriod());
+                } catch (ParseException ex) {
+                    Logger.getLogger(CreateInvoice.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+                String pp = dateFormat.format(period.getDate());
+                
+                Date choosedPeriod = null;
+                try {
+                    choosedPeriod = dateFormat.parse(pp);
+                } catch (ParseException ex) {
+                    Logger.getLogger(CreateInvoice.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                
+                Calendar invoiceCalendar = Calendar.getInstance();
+                invoiceCalendar.setTime(invoicePeriod);
+                int invoiceMonth = invoiceCalendar.get(Calendar.MONTH);
+                int invoiceYear = invoiceCalendar.get(Calendar.YEAR);
+
+                Calendar currentCalendar = Calendar.getInstance();
+                currentCalendar.setTime(choosedPeriod);
+                int currentMonth = currentCalendar.get(Calendar.MONTH);
+                int currentYear = currentCalendar.get(Calendar.YEAR);
+
+                
+                if (invoiceMonth == currentMonth && invoiceYear == currentYear) {
+                    isInvoicePeriodDuplicate = true;
+                    break; 
+                }
             }
         }
         if (isInvoicePeriodDuplicate == true) {
@@ -908,6 +939,7 @@ public class CreateInvoice extends javax.swing.JFrame {
     public void printInvoice() {
         invoice = "- - - - - - - - - - -JAC Waterbiling System- - - - - - - - - - -\n\n";
         invoice += "Invoice Id : " + id.getText() + "\n";
+        dateFormat = new SimpleDateFormat("MMMM dd yyyy");
         invoice += "Invoice Period : " + dateFormat.format(period.getDate()) + "\n\n";
         invoice += "Client Information - - - - - - - - - - - - - - - - - - - - - - -\n\n";
         invoice += "Client Id : " + clientId.getText() + "\n";
@@ -943,7 +975,7 @@ public class CreateInvoice extends javax.swing.JFrame {
 
             calendar.add(Calendar.DAY_OF_YEAR, 7);
             dd = calendar.getTime();
-            
+
             dateFormat = new SimpleDateFormat("MMMM dd yyyy");
             dueDate = dateFormat.format(dd);
 

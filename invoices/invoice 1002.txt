@@ -1,35 +1,37 @@
 - - - - - - - - - - -JAC Waterbiling System- - - - - - - - - - -
 
 Invoice Id : 1002
-Invoice Period : 2023-08-17
+Invoice Period : July 17 2023
 
 Client Information - - - - - - - - - - - - - - - - - - - - - - -
 
 Client Id : 1001
-Client Name : Ryan M Ragos 
+Client Name : Ryan M Ragos
 Address : Bustos, Bulacan
 Rate Class : Residential
 
 Meter Information - - - - - - - - - - - - - - - - - - - - - - -
 
 Meter Id : 123456
-Meter Reading Date : June 17 2023
-Previous Reading : 224
-Present Reading : 2
-Consumption : 11
+Meter Reading Date : July 17 2023
+Meter Reading : 1
+Consumption : 1
 
 Invoice Summary - - - - - - - - - - - - - - - - - - - - - - -
 
-Invoice Period : May 17 2023 TO June 17 2023
-Basic Charge : ₱184.19
+Invoice Period : June 17 2023 TO July 17 2023
+Basic Charge : ₱96.32
 Sewerage Charge : ₱0.00
-Transitory Charge : -₱1.01
-Environmental Charge : ₱36.64
+Transitory Charge : -₱0.53
+Environmental Charge : ₱19.16
 Maintenance Charge : ₱1.50
-Sub Total Amount : ₱221.31
-Tax : ₱6.25
+Sub Total Amount : ₱116.45
+Tax : ₱3.29
 Discount : ₱0.00
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-Total Amount : ₱227.56
-Payment Due Date: August 24 2023
+Total Amount : ₱119.74
+Payment :80
+Credit Balance: ₱40.52
+Change: ₱0.00
+Payment Date: May 18 2023
