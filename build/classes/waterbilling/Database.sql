@@ -137,7 +137,7 @@ CREATE TABLE IF NOT EXISTS Invoice(
         invoice_before_tax  DOUBLE,
         invoice_tax DOUBLE,
         invoice_discount DOUBLE,        
-        invoice_amount DOUBLE,
+        invoice_amount DOUBLE,  
         charge_id INT NOT NULL,        
         client_id INT NOT NULL,        
         staff_id INT, 

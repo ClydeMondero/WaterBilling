@@ -614,7 +614,7 @@ public class ClientPanel extends javax.swing.JPanel {
         meterId.setText(meters.get(row).getId());
         meterreading.setText(Integer.toString(meters.get(row).getReading()));
         status.setSelectedItem(clients.get(row).getStatus());
-        
+
         meterId.setEnabled(false);
     }//GEN-LAST:event_tableMouseClicked
 
@@ -623,7 +623,7 @@ public class ClientPanel extends javax.swing.JPanel {
         table.clearSelection();
         delete.setEnabled(false);
         createInvoice.setEnabled(false);
-        meterId.setEnabled(true);       
+        meterId.setEnabled(true);
     }//GEN-LAST:event_cancelActionPerformed
 
     private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
@@ -638,10 +638,6 @@ public class ClientPanel extends javax.swing.JPanel {
                 isMeterIdDuplicate = true;
             }
         }
-        if (isMeterIdDuplicate) {
-            JOptionPane.showMessageDialog(null, "Meter Id already exist!", "Invalid Meter Id", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
 
         JPasswordField passwordField = new JPasswordField();
         String password = null;
@@ -653,6 +649,10 @@ public class ClientPanel extends javax.swing.JPanel {
                 if (password.equals(accountPassword)) {
                     try {
                         if (!clients.isEmpty() && Integer.parseInt(id.getText()) > clients.get(clients.size() - 1).getId()) {
+                            if (isMeterIdDuplicate) {
+                                JOptionPane.showMessageDialog(null, "Meter Id already exist!", "Invalid Meter Id", JOptionPane.ERROR_MESSAGE);
+                                return;
+                            }
                             PreparedStatement insertStatement = connect.prepareStatement("INSERT IGNORE INTO Meter VALUES (?, ?, ?, ?, ?)");
                             insertStatement.setString(1, meterId.getText());
                             insertStatement.setDouble(2, Double.parseDouble(metersize.getText()));
@@ -902,7 +902,7 @@ public class ClientPanel extends javax.swing.JPanel {
             table.clearSelection();
             delete.setEnabled(false);
             createInvoice.setEnabled(false);
-            meterId.setEnabled(true);            
+            meterId.setEnabled(true);
         }
         this.requestFocus();
     }//GEN-LAST:event_formMouseClicked
@@ -944,7 +944,7 @@ public class ClientPanel extends javax.swing.JPanel {
             printReports.setEnabled(false);
         } else {
             printReports.setEnabled(true);
-        }                
+        }
     }//GEN-LAST:event_formComponentShown
 
     private void printReportsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printReportsActionPerformed
@@ -990,7 +990,7 @@ public class ClientPanel extends javax.swing.JPanel {
                         calendar.setTime(disconnectDate);
                         calendar.add(Calendar.DATE, 74);
 
-                        disconnectDate = calendar.getTime();                        
+                        disconnectDate = calendar.getTime();
 
                         if (invoice.getStatus().equals("Overdue")) {
                             int disconnect = currentDate.compareTo(disconnectDate);
@@ -1089,7 +1089,7 @@ public class ClientPanel extends javax.swing.JPanel {
 
                                 updateDatas();
                             } else if (suffix.equals("staff")) {
-                                 PreparedStatement insertStatement;
+                                PreparedStatement insertStatement;
                                 try {
                                     insertStatement = connect.prepareStatement("INSERT IGNORE INTO Invoice (invoice_id, invoice_reading, "
                                             + "invoice_consumption, invoice_before_tax, invoice_tax, invoice_discount, "
