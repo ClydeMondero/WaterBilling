@@ -155,7 +155,7 @@
 			<textField>
 				<reportElement x="381" y="10" width="79" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[$V{invoice_payment_1}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{invoice_payment_1} == null ? " " : $F{invoice_payment}.sum( double, double )]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="266" y="10" width="32" height="20"/>

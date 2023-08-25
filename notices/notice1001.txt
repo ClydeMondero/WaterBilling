@@ -1,0 +1,18 @@
+- - - - - - - - - - -JAC Waterbiling System- - - - - - - - - - -
+
+                    NOTICE OF DISCONNECTION
+
+Invoice Id : 1001
+Client Id : 1001
+Client Name : Ragos Ryan M
+Address : Bustos, Bulacan
+Meter Id: 123456
+
+You have a amount due of 119.74.
+We strongly advise you to pay your overdue invoices 
+before November 06 2023 to avoid the inconvenience of
+ a disconnected water service. 
+Please disregard if payment has been made. 
+
+Respectfully yours, 
+JAC Waterbilling System

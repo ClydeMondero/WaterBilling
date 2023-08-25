@@ -2,9 +2,11 @@ package waterbilling;
 
 import java.awt.Desktop;
 import java.awt.Rectangle;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -613,7 +615,7 @@ public class InvoicePanel extends javax.swing.JPanel {
                 if (desktop.isSupported(Desktop.Action.OPEN)) {
                     desktop.open(textFile);
                 }
-            } catch (IOException e) {                
+            } catch (IOException e) {
             }
         }
     }//GEN-LAST:event_tableMouseClicked
@@ -630,7 +632,7 @@ public class InvoicePanel extends javax.swing.JPanel {
             }
         }
 
-        if (invoices.get(invoiceIndex).getStatus().equals("Unpaid")) {                        
+        if (invoices.get(invoiceIndex).getStatus().equals("Unpaid")) {
             new PayInvoice(Integer.parseInt(id.toString()), accountUsername, accountPassword).setVisible(true);
 
             cancel.setEnabled(false);
@@ -670,16 +672,16 @@ public class InvoicePanel extends javax.swing.JPanel {
         } catch (ParseException ex) {
             Logger.getLogger(InvoicePanel.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        System.out.println(currentDate);
-        
+
         Date dueDate = null;
+        double amount = 0;
 
         for (Invoice invoice : invoices) {
             for (Charge charge : charges) {
                 if (invoice.getChargeId() == charge.getId()) {
                     if (charge.getReconnection() == 0) {
                         try {
+                            dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                             dueDate = dateFormat.parse(invoice.getPeriod());
                         } catch (ParseException ex) {
                             Logger.getLogger(InvoicePanel.class.getName()).log(Level.SEVERE, null, ex);
@@ -712,6 +714,68 @@ public class InvoicePanel extends javax.swing.JPanel {
                                 }
                             }
                         }
+
+                        try {
+                            dueDate = dateFormat.parse(invoice.getPeriod());
+                        } catch (ParseException ex) {
+                            Logger.getLogger(InvoicePanel.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+
+                        calendar = Calendar.getInstance();
+                        calendar.setTime(dueDate);
+
+                        calendar.add(Calendar.DATE, 67);
+                        dueDate = calendar.getTime();
+                        dd = dateFormat.format(dueDate);
+
+                        try {
+                            dueDate = dateFormat.parse(dd);
+                        } catch (ParseException ex) {
+                            Logger.getLogger(InvoicePanel.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+
+                        for (Client client : clients) {
+                            if (client.getId() == invoice.getClientId()) {
+                                if (invoice.getStatus().equals("Overdue")) {
+                                    int notice = currentDate.compareTo(dueDate);
+                                    if (notice > 0) {
+                                        amount = amount + invoice.getAmount();
+                                    }
+                                }
+                                String noticeOfDisconnection;
+
+                                noticeOfDisconnection = "- - - - - - - - - - -JAC Waterbiling System- - - - - - - - - - -\n\n";
+                                noticeOfDisconnection += "                    NOTICE OF DISCONNECTION\n\n";
+                                noticeOfDisconnection += "Invoice Id : " + invoice.getId() + "\n";
+                                noticeOfDisconnection += "Client Id : " + client.getId() + "\n";
+                                noticeOfDisconnection += "Client Name : " + client.getLastname() + " " + client.getFirstname() + " " + client.getMiddlename() + "\n";
+                                noticeOfDisconnection += "Address : " + client.getAddress() + "\n";
+                                noticeOfDisconnection += "Meter Id: " + client.getMeterId() + "\n\n";
+
+                                noticeOfDisconnection += "You have a amount due of " + amount + ".\n";
+
+                                calendar.add(Calendar.DATE, 74);
+                                dueDate = calendar.getTime();
+                                dateFormat = new SimpleDateFormat("MMMM dd yyyy");
+                                dd = dateFormat.format(dueDate);
+
+                                noticeOfDisconnection += "We strongly advise you to pay your overdue invoices \nbefore " + dd;
+                                noticeOfDisconnection += " to avoid the inconvenience of\n a disconnected water service. \n";
+                                noticeOfDisconnection += "Please disregard if payment has been made. \n\n";
+                                noticeOfDisconnection += "Respectfully yours, \n";
+                                noticeOfDisconnection += "JAC Waterbilling System";
+
+                                JOptionPane.showMessageDialog(null, noticeOfDisconnection, "Notice", JOptionPane.INFORMATION_MESSAGE);
+
+                                try {
+                                    BufferedWriter writer = new BufferedWriter(new FileWriter("notices/notice" + invoice.getId() + ".txt"));
+                                    writer.write(noticeOfDisconnection);
+                                    writer.close();
+                                } catch (IOException ex) {
+                                    Logger.getLogger(InvoicePanel.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -727,7 +791,7 @@ public class InvoicePanel extends javax.swing.JPanel {
             printReports.setEnabled(false);
         } else {
             printReports.setEnabled(true);
-        }                
+        }
     }//GEN-LAST:event_refreshActionPerformed
 
     private void printReportsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printReportsActionPerformed
